@@ -113,7 +113,7 @@ int main(void){
 
         // Set up shaders
 		Shader shader("shader.vert", "shader.frag");
-		Shader tileShader("tileShader.vert", "shader.frag");
+		Shader tileShader("tileShader.vert", "tileShader.frag");
 
 		setallTexture();
 
@@ -128,10 +128,11 @@ int main(void){
 		
 
         // Run the main loop
+		glm::vec3 position = glm::vec3();
 		double lastTime = glfwGetTime();
         while (!glfwWindowShouldClose(window.getWindow())){
             // Clear background
-			window.clear(viewport_background_color_g);
+			window.clear(glm::vec3(0.0f, .1f, 0.0f));
 
             // Select proper shader program to use
 			tileShader.enable();
@@ -153,7 +154,10 @@ int main(void){
 			// Update entities
 
 			// Render entitie
-			map.render(tileShader);
+			map.render(tileShader, position);
+			position += glm::vec3(1.0f, 1.0f, 0.0f) * (float) deltaTime;
+
+			//HELP
 
 		//	glDrawArrays(GL_TRIANGLES, 0, 6); // if glDrawArrays be used, glDrawElements will be ignored 
 
