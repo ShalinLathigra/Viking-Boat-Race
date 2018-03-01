@@ -14,12 +14,12 @@
 class GameEntity {
 public:
 	GameEntity(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
-
+	float PI = 3.14159265358979;
 	virtual void update(double deltaTime) = 0;
 	void render(Shader &shader);
 protected:
 	glm::vec3 position, scale;
-	float rotationAmount;
+	float rotationAmount;//IN DEGREES
 
 	GLuint texture;
 	GLint numElements;
