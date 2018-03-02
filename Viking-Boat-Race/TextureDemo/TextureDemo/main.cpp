@@ -132,7 +132,7 @@ int main(void){
         // Run the main loop
 		glm::vec3 position = glm::vec3();
 		double lastTime = glfwGetTime();
-		Car player = Car(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size,12,10);
+		Car player = Car(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size,12,10);
         while (!glfwWindowShouldClose(window.getWindow())){
             // Clear background
 			window.clear(glm::vec3(0.0f, .1f, 0.0f));
@@ -175,13 +175,13 @@ int main(void){
 				player.drive(deltaTime,1);
 			}
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
-				player.turn(1);
+				player.turn(1,deltaTime);
 			}
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_S) == GLFW_PRESS) {
 				player.drive(deltaTime, 2);
 			}
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_D) == GLFW_PRESS) {
-				player.turn(2);
+				player.turn(2,deltaTime);
 			}
 
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
