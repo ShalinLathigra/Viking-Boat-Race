@@ -14,6 +14,7 @@
 #include "Shader.h"
 #include "Window.h"
 #include "Map.h"
+#include "Car.h"
 // Macro for printing exceptions
 #define PrintException(exception_object)\
 	std::cerr << exception_object.what() << std::endl
@@ -25,7 +26,7 @@ const unsigned int window_height_g = 800;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
 // Global texture info
-GLuint tex[1];
+GLuint tex[2];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -86,9 +87,9 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[3];
-	glGenTextures(1, tex);
+	glGenTextures(2, tex);
 	setthisTexture(tex[0], "tiles.png");
-
+	setthisTexture(tex[1], "blueships1.png");
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
 
@@ -112,14 +113,15 @@ int main(void){
 		int size = CreateSquare();
 
         // Set up shaders
+		//Shader tileShader("tileShader.vert", "tileShader.frag");
 		Shader shader("shader.vert", "shader.frag");
-		Shader tileShader("tileShader.vert", "tileShader.frag");
+		//Shader tileShader("tileShader.vert", "tileShader.frag");
 
 		setallTexture();
 
 		// Setup game objects
-		Map map = *new Map();
-		map.populateData("map.txt", tex[0], size);
+		//Map map = *new Map();
+		//map.populateData("map.txt", tex[0], size);
 		//map.addRow();
 		//map.addTile(&Tile::Tile(glm::vec3(0.00f, 0.0f, 0.0f), glm::vec3(.125f, .125f, .125f), tex[0], size, glm::vec2(0.0f, 0.0f)));
 		//map.addTile(&Tile::Tile(glm::vec3(.125f, 0.0f, 0.0f), glm::vec3(.125f, .125f, .125f), tex[0], size, glm::vec2(1.0f, 0.0f)));
@@ -130,13 +132,14 @@ int main(void){
         // Run the main loop
 		glm::vec3 position = glm::vec3();
 		double lastTime = glfwGetTime();
+		Car player = Car(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size,12,10);
         while (!glfwWindowShouldClose(window.getWindow())){
             // Clear background
 			window.clear(glm::vec3(0.0f, .1f, 0.0f));
 
             // Select proper shader program to use
-			tileShader.enable();
-
+			//tileShader.enable();
+			shader.enable();
 			// Get mouse position relative to screenspace [-1, 1]
 			//if (agent.getState() != Agent::State::WANDER) {
 			//	double mouseX, mouseY;
@@ -154,8 +157,6 @@ int main(void){
 			// Update entities
 
 			// Render entitie
-			map.render(tileShader, position);
-			position += glm::vec3(1.0f, 1.0f, 0.0f) * (float) deltaTime;
 
 			//HELP
 
@@ -164,8 +165,29 @@ int main(void){
             // Update other events like input handling
             glfwPollEvents();
 
+
+			player.render(shader);
+			player.update(deltaTime);
             // Push buffer drawn in the background onto the display
             glfwSwapBuffers(window.getWindow());
+
+			if (glfwGetKey(window.getWindow(), GLFW_KEY_W) == GLFW_PRESS) {//these ifs are used to get keyboard input;
+				player.drive(deltaTime,1);
+			}
+			if (glfwGetKey(window.getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
+				player.turn(1);
+			}
+			if (glfwGetKey(window.getWindow(), GLFW_KEY_S) == GLFW_PRESS) {
+				player.drive(deltaTime, 2);
+			}
+			if (glfwGetKey(window.getWindow(), GLFW_KEY_D) == GLFW_PRESS) {
+				player.turn(2);
+			}
+
+			if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
+				
+			}
+
         }
     }
     catch (std::exception &e){

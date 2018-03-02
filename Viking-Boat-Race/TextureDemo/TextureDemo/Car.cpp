@@ -10,14 +10,26 @@ Car::Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmoun
 
 }
 void Car::update(double deltaTime){
-	position += velocity * (float)deltaTime;
-}
-void Car::drive(double deltaTime) {
 	float forceX = (2.0f * cos(rotationAmount *(PI / 180.0f)))*deltaTime;
 	float forceY = (2.0f * sin(rotationAmount *(PI / 180.0f)))*deltaTime;
 	glm::vec3 forces = glm::vec3(forceX, forceY, 0);
-	velocity += forces;
+
+	position += velocity *forces* (float)deltaTime;
+	std::cout << velocity.x << " and " << velocity.y << std::endl;
 }
+void Car::drive(double deltaTime,int dir) {
+	//float forceX = (2.0f * cos(rotationAmount *(PI / 180.0f)))*deltaTime;
+	//float forceY = (2.0f * sin(rotationAmount *(PI / 180.0f)))*deltaTime;
+	//glm::vec3 forces = glm::vec3(forceX, forceY, 0);
+	if (velocity.x < MAX_VELOCITY && dir == 1) {
+		velocity += glm::vec3(0.1,0.1,0.0);
+		
+	}
+	else if (velocity.x > 0-MAX_VELOCITY&&dir == 2) {
+		velocity -= glm::vec3(0.1, 0.1, 0.0);
+	}
+}
+//void Car::render(Shader &s) :GameEntity(s) {}
 
 void Car::turn(int d) {
 	if (d == 1) {//turn left
