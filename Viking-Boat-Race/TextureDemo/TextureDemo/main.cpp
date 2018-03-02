@@ -26,7 +26,7 @@ const unsigned int window_height_g = 800;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
 // Global texture info
-GLuint tex[3];
+GLuint tex[2];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -87,11 +87,9 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[3];
-	glGenTextures(3, tex);
-	setthisTexture(tex[0], "tiles.png");
+	glGenTextures(2, tex);
+	setthisTexture(tex[0], "mapImage.png");
 	setthisTexture(tex[1], "blueships1.png");
-	//Map
-	setthisTexture(tex[2], "mapImage.png");
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
 
@@ -120,21 +118,12 @@ int main(void){
 		setallTexture();
 
 		// Setup game objects
-		//Map map = *new Map();
-		//map.populateData("map.txt", tex[0], size);
-		//map.addRow();
-		//map.addTile(&Tile::Tile(glm::vec3(0.00f, 0.0f, 0.0f), glm::vec3(.125f, .125f, .125f), tex[0], size, glm::vec2(0.0f, 0.0f)));
-		//map.addTile(&Tile::Tile(glm::vec3(.125f, 0.0f, 0.0f), glm::vec3(.125f, .125f, .125f), tex[0], size, glm::vec2(1.0f, 0.0f)));
-		//map.addTile(&Tile::Tile(glm::vec3(.250f, 0.0f, 0.0f),  glm::vec3(.125f, .125f, .125f), tex[0], size, glm::vec2(2.0f, 0.0f)));
-		//map.addTile(&Tile::Tile(glm::vec3(.375f, 0.0f, 0.0f),  glm::vec3(.125f, .125f, .125f), tex[0], size, glm::vec2(3.0f, 0.0f)));
-		
+		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(4.5f, 4.5f, 4.5f), 0.0f, tex[0], size);
+		Car player = Car(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
 
         // Run the main loop
 		glm::vec3 position = glm::vec3();
 		double lastTime = glfwGetTime();
-		//MAP
-		Map map = Map::Map(tex[2], size);
-		Car player = Car(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size,12,10);
 
 
         while (!glfwWindowShouldClose(window.getWindow())){
@@ -181,7 +170,8 @@ int main(void){
 
 			// Render entities
 			player.render(shader);
-			map.render(shader, player.getPosition(), .5f);
+			map.SetPosition(player.getPosition());
+			map.render(shader);
 			//HELP
 
 		//	glDrawArrays(GL_TRIANGLES, 0, 6); // if glDrawArrays be used, glDrawElements will be ignored 

@@ -14,6 +14,7 @@ public:
 private:
 	glm::vec3 velocity;
 	glm::vec3 forces;
+	float rotationSpeed;
 	int health;
 	float mass;
 	

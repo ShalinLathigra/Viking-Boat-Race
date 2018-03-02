@@ -1,5 +1,15 @@
 #include "Map.h"
 
+Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
+	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements) 
+{
+}
+
+void Map::SetPosition(glm::vec3 pos) { position = -2.0f * pos; }
+void Map::update(double deltaTime)
+{
+}
+
 void Map::populateData(char * fileName) {
 	std::string mapString = ResourceManager::LoadTextFile(fileName);
 	glm::vec2 uvOffset;
@@ -28,23 +38,6 @@ void Map::populateData(char * fileName) {
 			addTile(Tile::Tile(Tile::TileProp::RAMP, -.5f, 2));
 		}
 	}
-}
-void Map::render(Shader & shader, const glm::vec3 playerPosition, float sin)
-{
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	// Setup the transformation matrix for the shader 
-	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), -playerPosition);
-	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(sin, sin, sin));
-	glm::mat4 transformationMatrix = translationMatrix * scaleMatrix;
-	shader.setUniformMat4("x", transformationMatrix);
-
-	// Draw the entity
-	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
-}
-Map::Map(GLint n, GLuint tex) : numElements(n), texture(tex)
-{
-	startPositions = std::vector<glm::vec3>();
 }
 Map::~Map()
 {

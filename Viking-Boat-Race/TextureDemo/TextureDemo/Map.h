@@ -18,7 +18,7 @@ public:
 };
 
 #define TILESCALE .0625f
-class Map
+class Map : public GameEntity
 {
 private:
 	GLuint texture;
@@ -28,12 +28,16 @@ private:
 	std::vector<glm::vec3> startPositions;
 	std::vector<glm::vec3> aiFlags;
 public:
+	Map(glm::vec3 & entityPos, glm::vec3 & entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
+	~Map();
+
+	void update(double deltaTime) override;
+	void SetPosition(glm::vec3 pos);
+
+
 	inline void addRow() { data.push_back(std::vector<Tile>()); }
 	inline void addTile(Tile t) { data[data.size() - 1].push_back(t); }
 	void populateData(char * fileName);
-	void render(Shader & shader, const glm::vec3 playerPosition, float scale);
-	Map(GLint n, GLuint tex);
-	~Map();
 
 
 };
