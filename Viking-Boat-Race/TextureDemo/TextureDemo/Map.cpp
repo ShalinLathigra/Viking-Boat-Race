@@ -1,27 +1,6 @@
 #include "Map.h"
 
-void Tile::SetUniforms(Shader & shader, glm::vec3 offset) 
-{
-	shader.setUniform2f("uvPosition", uvOffset);
-	
-	shader.setUniform2f("offset", glm::vec2(offset.x, -offset.y));
-
-	shader.setUniformMat4("x",glm::mat4(1.0f));
-}
-Tile::Tile(glm::vec3 &entityPos, glm::vec3 &entityScale, GLuint entityTexture, GLint entityNumElements, glm::vec2 uvOffset)
-	: GameEntity(entityPos, entityScale, 0.0f, entityTexture, entityNumElements), uvOffset(uvOffset)
-{
-}
-void Tile::update(double deltaTime)
-{
-}
-Tile::~Tile()
-{
-}
-
-
-
-void Map::populateData(char * fileName, GLuint tex, GLint size) {
+void Map::populateData(char * fileName) {
 	std::string mapString = ResourceManager::LoadTextFile(fileName);
 	glm::vec2 uvOffset;
 	addRow();
@@ -29,40 +8,43 @@ void Map::populateData(char * fileName, GLuint tex, GLint size) {
 
 	for (std::string::iterator iter = mapString.begin(); iter != mapString.end(); ++iter) {
 		if (*iter == '\n') { addRow(); }
-		else if (*iter == ' ') { addTile(Tile::Tile(glm::vec3((float)(data[data.size() - 1].size() - 1.0f) * TILESCALE, -(float)(data.size() - 1.0f) * TILESCALE, 0.0f), glm::vec3(TILESCALE, TILESCALE, TILESCALE), tex, size, glm::vec2(0.0f, 0.0f))); }
+		else if (*iter == ' ') { addTile(Tile::Tile()); }
 		else if (*iter - '0' >= 1 && *iter - '0' <= 3 || isalpha(*iter)) {
-			addTile(Tile::Tile(glm::vec3((float)(data[data.size() - 1].size() - 1.0f) * TILESCALE, -(float)(data.size() - 1.0f) * TILESCALE, 0.0f), glm::vec3(TILESCALE, TILESCALE, TILESCALE), tex, size, glm::vec2(1.0f, 0.0f))); 
-			data[data.size() - 1][data[data.size() - 1].size() - 1].flag[0] = -1;
-			data[data.size() - 1][data[data.size() - 1].size() - 1].flag[1] = -1;
+			addTile(Tile::Tile(Tile::TileProp::ROAD, .1f, 0));
 
 			if (isalpha(*iter)) {
-				data[data.size() - 1][data[data.size() - 1].size() - 1].flag[0] = 1;
 				if (*iter >= 97) {
-					data[data.size() - 1][data[data.size() - 1].size() - 1].flag[1] = *iter - 'a';
+					aiFlags.push_back(glm::vec3((float)(data[data.size() - 1].size() - 1.0f) * TILESCALE, -(float)(data.size() - 1.0f) * TILESCALE, 0.0f));
 				}
 				else {
-					data[data.size() - 1][data[data.size() - 1].size() - 1].flag[1] = *iter - 'A' + 26;
+					startPositions.push_back(glm::vec3((float)(data[data.size() - 1].size() - 1.0f) * TILESCALE, -(float)(data.size() - 1.0f) * TILESCALE, 0.0f));
 				}
 			}
 		}
 		else if (*iter == '#') {
-			addTile(Tile::Tile(glm::vec3((float)(data[data.size() - 1].size() - 1.0f) * TILESCALE, -(float)(data.size() - 1.0f) * TILESCALE, 0.0f), glm::vec3(TILESCALE, TILESCALE, TILESCALE), tex, size, glm::vec2(3.0f, 0.0f)));
-			data[data.size() - 1][data[data.size() - 1].size() - 1].flag[0] = 1;
-			data[data.size() - 1][data[data.size() - 1].size() - 1].flag[1] = -1;
+			addTile(Tile::Tile(Tile::TileProp::WALL, 1.0f, -2));
+		}
+		else if (*iter == '|' || *iter == '-') {
+			addTile(Tile::Tile(Tile::TileProp::RAMP, -.5f, 2));
 		}
 	}
 }
-void Map::render(Shader & shader, glm::vec3 playerPosition)
+void Map::render(Shader & shader, const glm::vec3 playerPosition, float sin)
 {
-	for (std::vector<std::vector<Tile>>::iterator iter = data.begin(); iter != data.end(); ++iter) {
-		for (std::vector<Tile>::iterator itr = iter->begin(); itr != iter->end(); itr++) {
-			(itr)->SetUniforms(shader, playerPosition);
-			(itr)->render(shader);
-		}
-	}
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	// Setup the transformation matrix for the shader 
+	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), -playerPosition);
+	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(sin, sin, sin));
+	glm::mat4 transformationMatrix = translationMatrix * scaleMatrix;
+	shader.setUniformMat4("x", transformationMatrix);
+
+	// Draw the entity
+	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
 }
-Map::Map()
+Map::Map(GLint n, GLuint tex) : numElements(n), texture(tex)
 {
+	startPositions = std::vector<glm::vec3>();
 }
 Map::~Map()
 {

@@ -26,24 +26,20 @@ void Car::update(double deltaTime){
 }
 void Car::drive(double deltaTime,int dir) {
 	
-	if(dir==1&&speed<500){//velocity.x < MAX_VELOCITY && dir == 1) {
+	if(dir==1&&speed<300){//velocity.x < MAX_VELOCITY && dir == 1) {
 		//velocity += glm::vec3(0.1,0.1,0.0);
 		speed += 1;
 		//forces += 20.0f*f;
 	}
-	else if (dir == 2&&speed>-500){//velocity.x > 0-MAX_VELOCITY&&dir == 2) {
+	else if (dir == 2&&speed>0){//velocity.x > 0-MAX_VELOCITY&&dir == 2) {
 		//forces -= 20.0f*f;
-		speed -= 1;
+		speed -= 2;
 	}
 	//std::cout << speed << std::endl;
 }
 //void Car::render(Shader &s) :GameEntity(s) {}
 
 void Car::turn(int d,float deltaTime) {
-	float forceX = cos(rotationAmount *(PI / 180.0f))*deltaTime;
-	float forceY = sin(rotationAmount *(PI / 180.0f))*deltaTime;
-	glm::vec3 f = glm::vec3(forceX, forceY, 0);
-	
 	if (d == 1) {//turn left
 		rotationAmount += 1;
 	}

@@ -108,10 +108,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\Shalin\Documents\GitHub\Viking-Boat-Race\Viking-Boat-Race\Libraries\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\Shalin\Documents\GitHub\Viking-Boat-Race\Viking-Boat-Race\Libraries\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glew32d.lib;glew32s.lib;glew32sd.lib;glfw3.lib;glfw3d.lib;SOIL.lib;SOILd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -170,11 +173,9 @@
   <ItemGroup>
     <None Include="shader.frag" />
     <None Include="shader.vert" />
-    <None Include="tileShader.frag" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="map.txt" />
-    <Text Include="tileShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
