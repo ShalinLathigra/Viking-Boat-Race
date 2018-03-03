@@ -10,13 +10,15 @@
 
 #define G .05f
 #define m2 500.0f
+#define PI 3.14159265358979
 
 class GameEntity {
 public:
 	GameEntity(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
-	float PI = 3.14159265358979;
+
 	virtual void update(double deltaTime) = 0;
 	void render(Shader &shader);
+	inline float getAngle() { return rotationAmount; }
 	inline void SetPosition(glm::vec3 p) { position = p; }
 	inline const glm::vec3 getPosition() { return position; }
 protected:

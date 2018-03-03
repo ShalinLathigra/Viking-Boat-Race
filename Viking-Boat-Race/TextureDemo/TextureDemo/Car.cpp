@@ -14,7 +14,7 @@ Car::Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmoun
 	rotationSpeed = 0.0f;
 }
 void Car::update(double deltaTime){
-	//std::cout << "(" << position.x << ", " << position.y << ")" << std::endl;
+	std::cout << "(" << position.x << ", " << position.y << ")" << std::endl;
 	
 	glm::vec3 momentum = 1.2f*velocity * mass;
 	forces += momentum;
@@ -30,18 +30,12 @@ void Car::update(double deltaTime){
 }
 void Car::ReflectY()
 {
-//	glm::vec2 direction = glm::vec2(cos(rotationAmount), sin(rotationAmount));
-//	rotationAmount = atan(-direction.y / direction.x) * 180 / PI;
 	rotationAmount *= -1.0f;
 	speed *= .25f;
 }
 void Car::ReflectX()
 {
-//	glm::vec2 direction = glm::vec2(cos(rotationAmount), sin(rotationAmount));
-//	rotationAmount = atan(direction.y / -direction.x) * 180 / PI;
-	std::cout << rotationAmount;
 	rotationAmount = 180 - rotationAmount;
-	std::cout << " " << rotationAmount << std::endl;
 	speed *= .25f;
 }
 void Car::drive(double deltaTime,int dir) {

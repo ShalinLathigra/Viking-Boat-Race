@@ -23,11 +23,12 @@ void Map::populateData(char * fileName) {
 
 			if (isalpha(*iter)) {
 				if (*iter >= 97) {
-					aiFlags.push_back(glm::vec3((float)(data[data.size() - 1].size() - 1.0f) * TILESCALE, -(float)(data.size() - 1.0f) * TILESCALE, 0.0f));
+					aiFlags[*iter - 97] = glm::vec3((float)(data[data.size() - 1].size() - 1.0f) * TILESCALE, -(float)(data.size() - 1.0f) * TILESCALE, 0.0f);
+					std::cout << *iter << ": (" << aiFlags[*iter - 97].x << ", " << aiFlags[*iter - 97].y << ")" << std::endl;
 				}
 				else {
-					startPositions.push_back(glm::vec3((float)(data[data.size() - 1].size() - 1.0f) * TILESCALE, -(float)(data.size() - 1.0f) * TILESCALE, 0.0f));
-					std::cout << *iter << ": (" << startPositions[startPositions.size() - 1].x << ", " << startPositions[startPositions.size() - 1].y << ", " << startPositions[startPositions.size() - 1].z << ")" << std::endl;
+					startPositions[*iter - 45] = glm::vec3((float)(data[data.size() - 1].size() - 1.0f) * TILESCALE, -(float)(data.size() - 1.0f) * TILESCALE, 0.0f);
+					std::cout << *iter << ": (" << startPositions[*iter - 45].x << ", " << startPositions[*iter - 45].y << ")" << std::endl;
 				}
 			}
 		}
@@ -60,6 +61,19 @@ int Map::CheckBounds(Car * c)
 
 int Map::CheckWallCollisions(Car * c) {
 	glm::vec3 carPos = c->getPosition();
+	glm::vec3 carVel = glm::vec3(c->speed * cos(c->getAngle()), c->speed * sin(c->getAngle()), 0.0f);
+
+	carPos += glm::vec3(4.0f, 2.0f, 0.0f);
+
+	//need to add to carPos, 1/2 of the total size of the map
+	//then multiply that by PIXEL_SIZE and cast to int to get the central position of the car
 
 	return 0;
+}
+
+int Map::getNextIndex(int index) {
+	if (index == aiFlags.size() - 1) {
+		return 0;
+	} 
+	return ++index;
 }
