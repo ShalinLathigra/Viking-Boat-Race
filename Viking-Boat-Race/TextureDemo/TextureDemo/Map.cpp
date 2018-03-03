@@ -5,7 +5,6 @@ Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmoun
 {
 }
 
-void Map::SetPosition(glm::vec3 pos) { position = -2.0f * pos; }
 void Map::update(double deltaTime)
 {
 }
@@ -28,6 +27,7 @@ void Map::populateData(char * fileName) {
 				}
 				else {
 					startPositions.push_back(glm::vec3((float)(data[data.size() - 1].size() - 1.0f) * TILESCALE, -(float)(data.size() - 1.0f) * TILESCALE, 0.0f));
+					std::cout << *iter << ": (" << startPositions[startPositions.size() - 1].x << ", " << startPositions[startPositions.size() - 1].y << ", " << startPositions[startPositions.size() - 1].z << ")" << std::endl;
 				}
 			}
 		}
@@ -41,4 +41,25 @@ void Map::populateData(char * fileName) {
 }
 Map::~Map()
 {
+}
+
+int Map::CheckBounds(Car * c)
+{
+	if (c->getPosition().y >= MAP_HEIGHT + .1f || c->getPosition().y <= -MAP_HEIGHT - .1f) {
+		c->ReflectY();
+		c->SetPosition(glm::vec3(c->getPosition().x, (c->getPosition().y >= MAP_HEIGHT) ? MAP_HEIGHT + .05f : -MAP_HEIGHT - .05f, 0.0f));
+		return 1;
+	}
+	if (c->getPosition().x >= MAP_WIDTH + .25f || c->getPosition().x <= -MAP_WIDTH - .3f) {
+		c->ReflectX();
+		c->SetPosition(glm::vec3((c->getPosition().x >= MAP_WIDTH) ? MAP_WIDTH + .245f : -MAP_WIDTH - .295f, c->getPosition().y, 0.0f));
+		return 1;
+	}
+	return 0;
+}
+
+int Map::CheckWallCollisions(Car * c) {
+	glm::vec3 carPos = c->getPosition();
+
+	return 0;
 }

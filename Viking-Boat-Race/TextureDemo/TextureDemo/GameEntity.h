@@ -17,8 +17,8 @@ public:
 	float PI = 3.14159265358979;
 	virtual void update(double deltaTime) = 0;
 	void render(Shader &shader);
-
-	inline const glm::vec3 getPosition(){ return position; }
+	inline void SetPosition(glm::vec3 p) { position = p; }
+	inline const glm::vec3 getPosition() { return position; }
 protected:
 	glm::vec3 position, scale;
 	float rotationAmount;//IN DEGREES

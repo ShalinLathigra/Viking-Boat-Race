@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "GameEntity.h"
+#include "Car.h"
 #include "ResourceManager.h"
 
 class Tile
@@ -18,6 +19,8 @@ public:
 };
 
 #define TILESCALE .0625f
+#define MAP_WIDTH 4.0f
+#define MAP_HEIGHT 2.0f
 class Map : public GameEntity
 {
 private:
@@ -31,13 +34,14 @@ public:
 	Map(glm::vec3 & entityPos, glm::vec3 & entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
 	~Map();
 
-	void update(double deltaTime) override;
-	void SetPosition(glm::vec3 pos);
+	int CheckBounds(Car * c);
 
+	int CheckWallCollisions(Car * c);
+
+	void update(double deltaTime) override;
+	inline void SetPosition(glm::vec3 pos) { position = -1.0f * pos; }
 
 	inline void addRow() { data.push_back(std::vector<Tile>()); }
 	inline void addTile(Tile t) { data[data.size() - 1].push_back(t); }
 	void populateData(char * fileName);
-
-
 };

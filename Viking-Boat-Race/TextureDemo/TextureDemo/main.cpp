@@ -118,9 +118,9 @@ int main(void){
 		setallTexture();
 
 		// Setup game objects
-		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(4.5f, 4.5f, 4.5f), 0.0f, tex[0], size);
+		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f * 4.5f, 1.0f * 4.5f, 1.0f * 4.5f), 0.0f, tex[0], size);
+		map.populateData("map.txt");
 		Car player = Car(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-
         // Run the main loop
 		glm::vec3 position = glm::vec3();
 		double lastTime = glfwGetTime();
@@ -167,9 +167,9 @@ int main(void){
 
 			// Update entities
 			player.update(deltaTime);
-
+			map.CheckBounds(&player);
 			// Render entities
-			player.render(shader);
+			player.draw(shader);
 			map.SetPosition(player.getPosition());
 			map.render(shader);
 			//HELP
