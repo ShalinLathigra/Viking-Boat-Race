@@ -15,6 +15,7 @@
 #include "Window.h"
 #include "Map.h"
 #include "Car.h"
+#include "Opponent.h"
 // Macro for printing exceptions
 #define PrintException(exception_object)\
 	std::cerr << exception_object.what() << std::endl
@@ -119,7 +120,11 @@ int main(void){
 
 		// Setup game objects
 		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(4.5f, 4.5f, 4.5f), 0.0f, tex[0], size);
-		Car player = Car(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Car player = Car(glm::vec3(0.65f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent enemy0 = Opponent(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent enemy1 = Opponent(glm::vec3(-1.1f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent enemy2 = Opponent(glm::vec3(-1.2f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent enemy3 = Opponent(glm::vec3(-1.3f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
 
         // Run the main loop
 		glm::vec3 position = glm::vec3();
@@ -164,13 +169,33 @@ int main(void){
 
 			}
 
+			enemy0.controller(deltaTime, 0.0f);
+			enemy1.controller(deltaTime, 0.0f);
+			enemy2.controller(deltaTime, 0.0f);
+			enemy3.controller(deltaTime, 0.0f);
 
 			// Update entities
 			player.update(deltaTime);
+			enemy0.update(deltaTime);
+			enemy1.update(deltaTime);
+			enemy2.update(deltaTime);
+			enemy3.update(deltaTime);
+
+		
 
 			// Render entities
 			player.render(shader);
+			enemy0.render(shader);
+			enemy1.render(shader);
+			enemy2.render(shader);
+			enemy3.render(shader);
+
 			map.SetPosition(player.getPosition());
+			enemy0.SetPosition(player.getPosition());
+			enemy1.SetPosition(player.getPosition());
+			enemy2.SetPosition(player.getPosition());
+			enemy3.SetPosition(player.getPosition());
+			//map.SetPosition(enemy0.getPosition());
 			map.render(shader);
 			//HELP
 

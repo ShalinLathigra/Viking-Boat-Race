@@ -11,7 +11,7 @@ public:
 	const float MAX_VELOCITY = 175;
 	void update(double deltaTime) override;
 	int speed;
-private:
+protected:
 	glm::vec3 velocity;
 	glm::vec3 forces;
 	float rotationSpeed;

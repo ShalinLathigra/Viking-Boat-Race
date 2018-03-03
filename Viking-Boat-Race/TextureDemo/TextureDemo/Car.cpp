@@ -39,6 +39,9 @@ void Car::drive(double deltaTime,int dir) {
 		//forces -= 20.0f*f;
 		speed -= 2;
 	}
+	else if (speed < 0) {
+		speed = 0;
+	}
 	//std::cout << speed << std::endl;
 }
 //void Car::render(Shader &s) :GameEntity(s) {}
