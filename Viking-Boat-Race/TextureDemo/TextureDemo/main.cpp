@@ -119,7 +119,7 @@ int main(void){
 		setallTexture();
 
 		// Setup game objects
-		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(4.5f, 4.5f, 4.5f), 0.0f, tex[0], size);
+		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 9.0f), 0.0f, tex[0], size);
 		Car player = Car(glm::vec3(0.65f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
 		Opponent enemy0 = Opponent(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
 		Opponent enemy1 = Opponent(glm::vec3(-1.1f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);

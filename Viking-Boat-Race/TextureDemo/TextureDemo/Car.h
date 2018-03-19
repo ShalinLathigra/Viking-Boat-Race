@@ -10,7 +10,7 @@ public:
 	void attack(int weaponType);
 	const float MAX_VELOCITY = 175;
 	void update(double deltaTime) override;
-	int speed;
+	float speed;
 
 	void render(Shader & shader, glm::vec3 offset);
 protected:
