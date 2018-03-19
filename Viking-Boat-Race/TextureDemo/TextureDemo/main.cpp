@@ -184,13 +184,14 @@ int main(void){
 		
 
 			// Render entities
-			player.render(shader);
-			enemy0.render(shader);
-			enemy1.render(shader);
-			enemy2.render(shader);
-			enemy3.render(shader);
+			player.render(shader, player.getPosition());
+			enemy0.render(shader, player.getPosition());
+			enemy1.render(shader, player.getPosition());
+			enemy2.render(shader, player.getPosition());
+			enemy3.render(shader, player.getPosition());
 
 			map.SetPosition(player.getPosition());
+
 			enemy0.SetPosition(player.getPosition());
 			enemy1.SetPosition(player.getPosition());
 			enemy2.SetPosition(player.getPosition());

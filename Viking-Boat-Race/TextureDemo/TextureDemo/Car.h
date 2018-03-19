@@ -11,6 +11,8 @@ public:
 	const float MAX_VELOCITY = 175;
 	void update(double deltaTime) override;
 	int speed;
+
+	void render(Shader & shader, glm::vec3 offset);
 protected:
 	glm::vec3 velocity;
 	glm::vec3 forces;

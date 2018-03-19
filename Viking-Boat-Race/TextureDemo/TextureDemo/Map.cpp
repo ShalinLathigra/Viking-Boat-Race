@@ -5,7 +5,7 @@ Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmoun
 {
 }
 
-void Map::SetPosition(glm::vec3 pos) { position = -2.0f * pos; }
+void Map::SetPosition(glm::vec3 pos) { position = -1.0f * pos; }
 void Map::update(double deltaTime)
 {
 }

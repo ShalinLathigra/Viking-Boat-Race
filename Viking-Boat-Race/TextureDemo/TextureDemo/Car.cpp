@@ -28,6 +28,13 @@ void Car::update(double deltaTime){
 	//std::cout << velocity.x << " and " << velocity.y << std::endl;
 	forces = glm::vec3(0,0,0);
 }
+void Car::render(Shader & shader, glm::vec3 offset)
+{
+	position -= offset;
+	GameEntity::render(shader);
+	position += offset;
+}
+
 void Car::drive(double deltaTime,int dir) {
 	
 	if(dir==1&&speed<MAX_SPEED){//velocity.x < MAX_VELOCITY && dir == 1) {
