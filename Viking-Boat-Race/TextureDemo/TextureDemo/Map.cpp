@@ -39,6 +39,14 @@ void Map::populateData(char * fileName) {
 		}
 	}
 }
+void Map::CalculateCarCollisions(Car * A)
+{
+}
 Map::~Map()
+{
+}
+
+Wall::Wall(glm::vec3 pos, glm::vec3 dim)
+	: topLeftPosition(pos), dimensions(dim)
 {
 }

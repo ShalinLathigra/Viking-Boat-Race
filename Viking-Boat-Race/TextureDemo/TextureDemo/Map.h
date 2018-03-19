@@ -2,6 +2,7 @@
 #include <vector>
 #include "GameEntity.h"
 #include "ResourceManager.h"
+#include "Car.h"
 
 class Tile
 {
@@ -34,10 +35,17 @@ public:
 	void update(double deltaTime) override;
 	void SetPosition(glm::vec3 pos);
 
-
 	inline void addRow() { data.push_back(std::vector<Tile>()); }
 	inline void addTile(Tile t) { data[data.size() - 1].push_back(t); }
 	void populateData(char * fileName);
 
+	void CalculateCarCollisions(Car * A);
+};
 
+class Wall {
+	glm::vec3 topLeftPosition;
+	glm::vec3 dimensions;
+	glm::vec3 normal;
+	Wall(glm::vec3 pos, glm::vec3 dim);
+	inline glm::vec3 getNormal() { return normal; }
 };
