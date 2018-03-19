@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  main.cpp
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\gameentity.h(17): warning C4305: 'initializing': truncation from 'double' to 'float'
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(159): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
@@ -43,3 +44,6 @@ SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with
 SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'C:\Users\Shalin\Documents\GitHub\Viking-Boat-Race\Viking-Boat-Race\TextureDemo\Debug\SOIL.pdb'; linking object as if no debug info
 glew32s.lib(glew.obj) : warning LNK4099: PDB 'glew_static.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\Shalin\Documents\GitHub\Viking-Boat-Race\Viking-Boat-Race\TextureDemo\Debug\glew_static.pdb'; linking object as if no debug info
   TextureDemo.vcxproj -> C:\Users\Shalin\Documents\GitHub\Viking-Boat-Race\Viking-Boat-Race\TextureDemo\Debug\TextureDemo.exe
+=======
+﻿  TextureDemo.vcxproj -> C:\Users\maxge\Documents\GitHub\Viking-Boat-Race\Viking-Boat-Race\TextureDemo\Debug\TextureDemo.exe
+>>>>>>> 6927d4728b01232c8ef893af7eef42874d809ecc

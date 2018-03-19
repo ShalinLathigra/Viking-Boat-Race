@@ -1,2 +1,6 @@
 #TargetFrameworkVersion=v4.0:PlatformToolSet=v141:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=10.0.16299.0
+<<<<<<< HEAD
 Debug|Win32|C:\Users\Shalin\Documents\GitHub\Viking-Boat-Race\Viking-Boat-Race\TextureDemo\|
+=======
+Debug|Win32|C:\Users\maxge\Documents\GitHub\Viking-Boat-Race\Viking-Boat-Race\TextureDemo\|
+>>>>>>> 6927d4728b01232c8ef893af7eef42874d809ecc
