@@ -39,6 +39,9 @@ void Map::populateData(char * fileName) {
 		else if (*iter == '|' || *iter == '-') {
 			addTile(Tile::Tile(Tile::TileProp::RAMP, -.5f, 2));
 		}
+		else if (*iter == '#') {
+			addTile(Tile::Tile(Tile::TileProp::WALL, -.5f, 2));
+		}
 	}
 }
 void Map::calculateCarCollisions(Car * A)
@@ -108,18 +111,32 @@ Tile::TileProp Map::getPropertyUnder(Car * A)
 {
 	//64 wide
 	//32 tall
-	float col = (A->getPosition().x + 9.0f) / TILEWIDTH;		//x
+	int col = (int)(64.0f * (A->getPosition().x + 9.0f) / 18.0f);		//x
 	//coord = -9.0f + scale * x
 	//x = (coord + 9.0f) / scale
-	float row = -(A->getPosition().y - 4.5f) / TILEHEIGHT;		//y
+	int row = (int)(-32.0f * (A->getPosition().y - 4.5f) / 9.0f);		//y
 	//coord = 4.5f - scale * x
 	//scale = -(coord - 4.5f) / scale
-	//std::cout << col << " " << row << std::endl;
-
-	//if (row < data.size() && col< data[0].size()) {
-	//	return data[row][col].prop;
-	//}
-	return Tile::TileProp::HOLE;
+	//return Tile::TileProp::HOLE;
+	if (data[row][col].prop == Tile::TileProp::ROUGH) {
+		std::cout << "Rough" << std::endl;
+	}
+	else if (data[row][col].prop == Tile::TileProp::ROAD) {
+		std::cout << "Road" << std::endl;
+	}
+	else if (data[row][col].prop == Tile::TileProp::RAMP) {
+		std::cout << "Ramp" << std::endl;
+	}
+	else if (data[row][col].prop == Tile::TileProp::WALL) {
+		std::cout << "Wall" << std::endl;
+	}
+	else if (data[row][col].prop == Tile::TileProp::HOLE) {
+		std::cout << "Hole" << std::endl;
+	}
+	else if (data[row][col].prop == Tile::TileProp::SLICK) {
+		std::cout << "Slick" << std::endl;
+	}
+	return data[row][col].prop;
 }
 Map::~Map()
 {
@@ -131,6 +148,7 @@ Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmoun
 	float xScale = 18.0f / 64.0f;
 
 	walls.push_back(Wall::Wall(glm::vec3(-9.0f + xScale * 11.0f, 4.5f - yScale * 11.5f, 0.0f), glm::vec3(xScale * 42.0f, yScale * 10.0f, 0.0f)));
+	populateData("map.txt");
 }
 
 Wall::Wall(glm::vec3 pos, glm::vec3 dim)

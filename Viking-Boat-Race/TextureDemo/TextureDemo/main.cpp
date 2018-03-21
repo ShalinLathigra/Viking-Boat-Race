@@ -27,7 +27,7 @@ const unsigned int window_height_g = 800;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
 // Global texture info
-GLuint tex[2];
+GLuint tex[3];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -88,9 +88,10 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[3];
-	glGenTextures(2, tex);
+	glGenTextures(3, tex);
 	setthisTexture(tex[0], "mapImage.png");
-	setthisTexture(tex[1], "blueships1.png");
+	setthisTexture(tex[1], "car.png");
+	setthisTexture(tex[2], "other.png");
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
 
@@ -121,10 +122,10 @@ int main(void){
 		// Setup game objects
 		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 9.0f), 0.0f, tex[0], size);
 		Car* player = new Car(glm::vec3(0.0f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy0 = new Opponent(glm::vec3(0.0f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy1 = new Opponent(glm::vec3(0.1f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy2 = new Opponent(glm::vec3(0.2f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy3 = new Opponent(glm::vec3(0.3f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent* enemy0 = new Opponent(glm::vec3(0.0f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
+		Opponent* enemy1 = new Opponent(glm::vec3(0.1f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
+		Opponent* enemy2 = new Opponent(glm::vec3(0.2f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
+		Opponent* enemy3 = new Opponent(glm::vec3(0.3f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
 
         // Run the main loop
 		glm::vec3 position = glm::vec3();
@@ -179,18 +180,18 @@ int main(void){
 
 			}
 
-			for (int i = 0; i < allCars.size(); i++) {
-				allCars[i]->checkCollisions(allCars, deltaTime);
-				map.calculateCarCollisions(allCars[i]);
-				allCars[i]->update(deltaTime);
-			
-				allCars[i]->render(shader, player->getPosition());
-			}
+			//for (int i = 0; i < allCars.size(); i++) {
+			//	allCars[i]->checkCollisions(allCars, deltaTime);
+			//	map.calculateCarCollisions(allCars[i]);
+			//	allCars[i]->update(deltaTime);
+			//
+			//	allCars[i]->render(shader, player->getPosition());
+			//}
 
-			//map.getPropertyUnder(player);
-			//map.calculateCarCollisions(player);
-			//player->update(deltaTime);
-			//player->render(shader, player->getPosition());
+			map.getPropertyUnder(player);
+			map.calculateCarCollisions(player);
+			player->update(deltaTime);
+			player->render(shader, player->getPosition());
 
 			// Update entities
 			/*

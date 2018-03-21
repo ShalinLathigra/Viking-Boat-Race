@@ -1,4 +1,4 @@
-﻿  Opponent.cpp
+﻿  Map.cpp
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\gameentity.h(17): warning C4305: 'initializing': truncation from 'double' to 'float'
   SOIL.lib(SOIL.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
