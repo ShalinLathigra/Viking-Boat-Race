@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <algorithm>
 #include "GameEntity.h"
 #include "ResourceManager.h"
 #include "Car.h"
@@ -20,7 +21,7 @@ class Tile
 protected:
 public:
 	enum class TileProp {
-		ROAD, ROUGH, RAMP, WALL, HOLE
+		ROAD, ROUGH, RAMP, WALL, HOLE, SLICK
 	};
 	TileProp prop;
 	float friction;
@@ -31,7 +32,9 @@ public:
 
 #define COLLISION_DISTANCE .1f
 #define RESTITUTION .95f
-#define TILESCALE .0625f
+#define TILEWIDTH 18.0f / 64.0f
+#define TILEHEIGHT 9.0f / 32.0f
+
 class Map : public GameEntity
 {
 private:
@@ -55,4 +58,6 @@ public:
 	void populateData(char * fileName);
 
 	void calculateCarCollisions(Car * A);
+	Tile::TileProp getPropertyUnder(Car * A);
+	Tile::TileProp getPropertyAt(glm::vec3 position);
 };

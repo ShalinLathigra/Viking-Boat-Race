@@ -187,6 +187,7 @@ int main(void){
 			//	allCars[i]->render(shader, player->getPosition());
 			//}
 
+			map.getPropertyUnder(player);
 			map.calculateCarCollisions(player);
 			player->update(deltaTime);
 			player->render(shader, player->getPosition());
