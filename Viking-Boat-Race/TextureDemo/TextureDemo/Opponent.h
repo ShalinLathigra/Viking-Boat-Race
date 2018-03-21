@@ -9,6 +9,7 @@ public:
 	void update(double deltaTime);
 	void controller(float deltaTime, float skillMod);
 	void SetPosition(glm::vec3 position);
+	void render(Shader & shader);
 private:
 	glm::vec3 cameraPos;
 };

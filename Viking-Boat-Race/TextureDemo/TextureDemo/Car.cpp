@@ -87,9 +87,8 @@ void Car::turn(int d,float deltaTime) {
 	}
 }
 
-void Car::setVel(glm::vec3 vel) 
+void Car::applyImpulse(glm::vec3 impulse) 
 {
-	float newAngle = atan2(vel.y, vel.x);
-	rotationAmount = newAngle;
-	velocity = vel;
+	momentum += impulse;
+	velocity = momentum / mass;
 }

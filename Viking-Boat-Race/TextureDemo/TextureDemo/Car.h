@@ -20,10 +20,10 @@ public:
 	void render(Shader & shader, glm::vec3 offset);
 
 	inline glm::vec3 getVel() { return velocity; }
-	void setVel(glm::vec3 vel);
+	void applyImpulse(glm::vec3 impulse);
 
-	inline void addForce(glm::vec3 force) { forces += force; }
 	inline void setPosition(glm::vec3 pos) { position = pos; }
+
 
 protected:
 	glm::vec3 velocity;

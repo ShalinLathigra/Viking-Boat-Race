@@ -48,11 +48,11 @@ public:
 	~Map();
 
 	void update(double deltaTime) override;
-	void SetPosition(glm::vec3 pos);
+	void setPosition(glm::vec3 pos);
 
 	inline void addRow() { data.push_back(std::vector<Tile>()); }
 	inline void addTile(Tile t) { data[data.size() - 1].push_back(t); }
 	void populateData(char * fileName);
 
-	void CalculateCarCollisions(Car * A);
+	void calculateCarCollisions(Car * A);
 };

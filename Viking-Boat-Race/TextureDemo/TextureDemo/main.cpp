@@ -179,13 +179,19 @@ int main(void){
 
 			}
 
-			for (int i = 0; i < allCars.size(); i++) {
-				allCars[i]->update(deltaTime);
-				allCars[i]->render(shader, player->getPosition());
-			}
+			//for (int i = 0; i < allCars.size(); i++) {
+			//	allCars[i]->checkCollisions(allCars, deltaTime);
+			//	map.calculateCarCollisions(allCars[i]);
+			//	allCars[i]->update(deltaTime);
+			//
+			//	allCars[i]->render(shader, player->getPosition());
+			//}
+
+			map.calculateCarCollisions(player);
+			player->update(deltaTime);
+			player->render(shader, player->getPosition());
 
 			// Update entities
-			map.CalculateCarCollisions(player);
 			/*
 			player.update(deltaTime);
 			enemy0.update(deltaTime);
@@ -204,7 +210,7 @@ int main(void){
 			enemy3.render(shader, player.getPosition());
 			*/
 
-			map.SetPosition(player->getPosition());
+			map.setPosition(player->getPosition());
 			for (int i = 0; i < enemies.size(); i++) {
 				enemies[i]->SetPosition(player->getPosition());
 			}
