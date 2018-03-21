@@ -1,8 +1,6 @@
 ﻿GameEntity.obj : error LNK2019: unresolved external symbol __imp_glBindTexture referenced in function "public: void __cdecl GameEntity::render(class Shader &)" (?render@GameEntity@@QEAAXAEAVShader@@@Z)
 main.obj : error LNK2001: unresolved external symbol __imp_glBindTexture
-Map.obj : error LNK2001: unresolved external symbol __imp_glBindTexture
 GameEntity.obj : error LNK2019: unresolved external symbol __imp_glDrawElements referenced in function "public: void __cdecl GameEntity::render(class Shader &)" (?render@GameEntity@@QEAAXAEAVShader@@@Z)
-Map.obj : error LNK2001: unresolved external symbol __imp_glDrawElements
 main.obj : error LNK2019: unresolved external symbol __imp_glBlendFunc referenced in function main
 main.obj : error LNK2019: unresolved external symbol __imp_glDepthFunc referenced in function main
 main.obj : error LNK2019: unresolved external symbol __imp_glEnable referenced in function main

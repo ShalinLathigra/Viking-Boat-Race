@@ -1,9 +1,5 @@
 #include "Map.h"
 
-Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
-	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements) 
-{
-}
 
 void Map::SetPosition(glm::vec3 pos) { position = -1.0f * pos; }
 void Map::update(double deltaTime)
@@ -41,12 +37,30 @@ void Map::populateData(char * fileName) {
 }
 void Map::CalculateCarCollisions(Car * A)
 {
+	float minX = topLeft.x;
+	float maxX = -minX;
+	float minY = -topLeft.y;
+	float maxY = -minY;
+
+	if (A->getPosition().x < minX + 4.0f * COLLISION_DISTANCE) { /*std::cout << "A" << std::endl; */A->setPosition(glm::vec3(minX + 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f)); }
+	if (A->getPosition().x > maxX - 4.0f * COLLISION_DISTANCE) { /*std::cout << "B" << std::endl; */A->setPosition(glm::vec3(maxX - 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f)); }
+	if (A->getPosition().y < minY + 4.0f * COLLISION_DISTANCE) { /*std::cout << "C" << std::endl; */A->setPosition(glm::vec3(A->getPosition().x, minY + 4.0f * COLLISION_DISTANCE, 0.0f)); }
+	if (A->getPosition().y > maxY - 4.0f * COLLISION_DISTANCE) { /*std::cout << "D" << std::endl; */A->setPosition(glm::vec3(A->getPosition().x, maxY - 4.0f * COLLISION_DISTANCE, 0.0f)); }
+
+
 }
 Map::~Map()
 {
 }
+Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
+	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), topLeft(glm::vec3(-9.0f+1.0f/32.0f, 4.5f+1.0f/32.0f, 0.0f))
+{
+	float dim = 1.0f / 32.0f;
+
+	walls.push_back(Wall::Wall(glm::vec3(dim * 11.0f, dim * 12.0f, 0.0f), glm::vec3(dim * 41.0f, dim * 10.0f, 0.0f)));
+}
 
 Wall::Wall(glm::vec3 pos, glm::vec3 dim)
-	: topLeftPosition(pos), dimensions(dim)
+	: originPosition(pos), dimensions(dim)
 {
 }

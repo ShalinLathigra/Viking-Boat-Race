@@ -4,6 +4,17 @@
 #include "ResourceManager.h"
 #include "Car.h"
 
+class Wall {
+
+private:
+	glm::vec3 originPosition;
+	glm::vec3 dimensions;
+public:
+	Wall(glm::vec3 pos, glm::vec3 dim);
+	inline glm::vec3 getDimensions() { return dimensions; }
+	inline glm::vec3 getOrigin() { return originPosition; }
+};
+
 class Tile
 {
 protected:
@@ -18,6 +29,8 @@ public:
 	inline Tile() :prop(TileProp::ROUGH), friction(.5f), priority(-1) {};
 };
 
+#define COLLISION_DISTANCE .1f
+#define RESTITUTION .95f
 #define TILESCALE .0625f
 class Map : public GameEntity
 {
@@ -26,6 +39,8 @@ private:
 	GLint numElements;
 	const glm::vec3 scale = glm::vec3(4.0f, 4.0f, 4.0f);
 	std::vector<std::vector<Tile>> data;
+	glm::vec3 topLeft;
+	std::vector<Wall> walls;
 	std::vector<glm::vec3> startPositions;
 	std::vector<glm::vec3> aiFlags;
 public:
@@ -40,12 +55,4 @@ public:
 	void populateData(char * fileName);
 
 	void CalculateCarCollisions(Car * A);
-};
-
-class Wall {
-	glm::vec3 topLeftPosition;
-	glm::vec3 dimensions;
-	glm::vec3 normal;
-	Wall(glm::vec3 pos, glm::vec3 dim);
-	inline glm::vec3 getNormal() { return normal; }
 };

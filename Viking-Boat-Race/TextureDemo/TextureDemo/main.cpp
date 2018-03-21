@@ -120,19 +120,11 @@ int main(void){
 
 		// Setup game objects
 		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 9.0f), 0.0f, tex[0], size);
-<<<<<<< HEAD
-		Car player = Car(glm::vec3(0.0f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent enemy0 = Opponent(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent enemy1 = Opponent(glm::vec3(-1.1f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent enemy2 = Opponent(glm::vec3(-1.2f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent enemy3 = Opponent(glm::vec3(-1.3f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-=======
-		Car* player = new Car(glm::vec3(0.65f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy0 = new Opponent(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy1 = new Opponent(glm::vec3(-1.1f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy2 = new Opponent(glm::vec3(-1.2f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy3 = new Opponent(glm::vec3(-1.3f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
->>>>>>> de9ddf87018b7eaf5a6ad919631e7834b8baa130
+		Car* player = new Car(glm::vec3(0.0f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent* enemy0 = new Opponent(glm::vec3(0.0f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent* enemy1 = new Opponent(glm::vec3(0.1f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent* enemy2 = new Opponent(glm::vec3(0.2f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent* enemy3 = new Opponent(glm::vec3(0.3f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
 
         // Run the main loop
 		glm::vec3 position = glm::vec3();
@@ -193,11 +185,8 @@ int main(void){
 			}
 
 			// Update entities
-<<<<<<< HEAD
-			map.CalculateCarCollisions(&player);
-=======
+			map.CalculateCarCollisions(player);
 			/*
->>>>>>> de9ddf87018b7eaf5a6ad919631e7834b8baa130
 			player.update(deltaTime);
 			enemy0.update(deltaTime);
 			enemy1.update(deltaTime);
