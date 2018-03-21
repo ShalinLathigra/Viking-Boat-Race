@@ -120,16 +120,34 @@ int main(void){
 
 		// Setup game objects
 		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 9.0f), 0.0f, tex[0], size);
-		Car player = Car(glm::vec3(0.65f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+<<<<<<< HEAD
+		Car player = Car(glm::vec3(0.0f, 3.75f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
 		Opponent enemy0 = Opponent(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
 		Opponent enemy1 = Opponent(glm::vec3(-1.1f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
 		Opponent enemy2 = Opponent(glm::vec3(-1.2f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
 		Opponent enemy3 = Opponent(glm::vec3(-1.3f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+=======
+		Car* player = new Car(glm::vec3(0.65f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent* enemy0 = new Opponent(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent* enemy1 = new Opponent(glm::vec3(-1.1f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent* enemy2 = new Opponent(glm::vec3(-1.2f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Opponent* enemy3 = new Opponent(glm::vec3(-1.3f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+>>>>>>> de9ddf87018b7eaf5a6ad919631e7834b8baa130
 
         // Run the main loop
 		glm::vec3 position = glm::vec3();
 		double lastTime = glfwGetTime();
-
+		std::vector<Opponent*> enemies;
+		std::vector<Car*> allCars;//this is used for checking collisions
+		enemies.push_back(enemy0);
+		enemies.push_back(enemy1);
+		enemies.push_back(enemy2);
+		enemies.push_back(enemy3);
+		allCars.push_back(enemy0);
+		allCars.push_back(enemy1);
+		allCars.push_back(enemy2);
+		allCars.push_back(enemy3);
+		allCars.push_back(player);
 
         while (!glfwWindowShouldClose(window.getWindow())){
             // Clear background
@@ -153,50 +171,62 @@ int main(void){
 
 			//Input
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_W) == GLFW_PRESS) {//these ifs are used to get keyboard input;
-				player.drive(deltaTime, 1);
+				player->drive(deltaTime, 1);
 			}
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
-				player.turn(1, deltaTime);
+				player->turn(1, deltaTime);
 			}
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_S) == GLFW_PRESS) {
-				player.drive(deltaTime, 2);
+				player->drive(deltaTime, 2);
 			}
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_D) == GLFW_PRESS) {
-				player.turn(2, deltaTime);
+				player->turn(2, deltaTime);
 			}
 
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
 
 			}
 
-			enemy0.controller(deltaTime, 0.0f);
-			enemy1.controller(deltaTime, 0.0f);
-			enemy2.controller(deltaTime, 0.0f);
-			enemy3.controller(deltaTime, 0.0f);
+			for (int i = 0; i < allCars.size(); i++) {
+				allCars[i]->update(deltaTime);
+				allCars[i]->render(shader, player->getPosition());
+			}
 
 			// Update entities
+<<<<<<< HEAD
+			map.CalculateCarCollisions(&player);
+=======
+			/*
+>>>>>>> de9ddf87018b7eaf5a6ad919631e7834b8baa130
 			player.update(deltaTime);
 			enemy0.update(deltaTime);
 			enemy1.update(deltaTime);
 			enemy2.update(deltaTime);
 			enemy3.update(deltaTime);
-
+			*/
 		
 
 			// Render entities
+			/*
 			player.render(shader, player.getPosition());
 			enemy0.render(shader, player.getPosition());
 			enemy1.render(shader, player.getPosition());
 			enemy2.render(shader, player.getPosition());
 			enemy3.render(shader, player.getPosition());
+			*/
 
-			map.SetPosition(player.getPosition());
-
+			map.SetPosition(player->getPosition());
+			for (int i = 0; i < enemies.size(); i++) {
+				enemies[i]->SetPosition(player->getPosition());
+			}
+			/*
 			enemy0.SetPosition(player.getPosition());
 			enemy1.SetPosition(player.getPosition());
 			enemy2.SetPosition(player.getPosition());
 			enemy3.SetPosition(player.getPosition());
+			*/
 			//map.SetPosition(enemy0.getPosition());
+
 			map.render(shader);
 			//HELP
 
