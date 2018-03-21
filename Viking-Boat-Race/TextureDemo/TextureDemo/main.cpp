@@ -179,18 +179,18 @@ int main(void){
 
 			}
 
-			//for (int i = 0; i < allCars.size(); i++) {
-			//	allCars[i]->checkCollisions(allCars, deltaTime);
-			//	map.calculateCarCollisions(allCars[i]);
-			//	allCars[i]->update(deltaTime);
-			//
-			//	allCars[i]->render(shader, player->getPosition());
-			//}
+			for (int i = 0; i < allCars.size(); i++) {
+				allCars[i]->checkCollisions(allCars, deltaTime);
+				map.calculateCarCollisions(allCars[i]);
+				allCars[i]->update(deltaTime);
+			
+				allCars[i]->render(shader, player->getPosition());
+			}
 
-			map.getPropertyUnder(player);
-			map.calculateCarCollisions(player);
-			player->update(deltaTime);
-			player->render(shader, player->getPosition());
+			//map.getPropertyUnder(player);
+			//map.calculateCarCollisions(player);
+			//player->update(deltaTime);
+			//player->render(shader, player->getPosition());
 
 			// Update entities
 			/*
