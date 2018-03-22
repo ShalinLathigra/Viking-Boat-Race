@@ -27,11 +27,14 @@ void Map::populateData(char * fileName) {
 			addTile(Tile::Tile(Tile::TileProp::ROAD, .1f, 0));
 
 			if (isalpha(*iter)) {
+				float x = -9.0f + (data[data.size() - 1.0f].size() - 1.0f) / 64.0f * 18.0f;
+				float y = 4.5f - (data.size() - 1.0f) / 32.0f * 9.0f;
+
 				if (*iter >= 97) {
-					aiFlags.insert(std::pair<int, glm::vec3>(*iter - 'a', glm::vec3((float)(-9.0f + data[data.size() - 1].size() - 1.0f) * TILEWIDTH, (float)(4.5f - data.size() - 1.0f) * TILEHEIGHT, 0.0f)));		//flags == lowercase alpha
+					aiFlags.insert(std::pair<int, glm::vec3>(*iter - 'a', glm::vec3(x, y, 0.0f)));		//flags == lowercase alpha
 				}
 				else {
-					startPositions.insert(std::pair<int, glm::vec3>(*iter - 'A', glm::vec3((float)(-9.0f + data[data.size() - 1].size() - 1.0f) * TILEWIDTH, (float)(4.5f - data.size() - 1.0f) * TILEHEIGHT, 0.0f)));	//starts == uppercase alpha
+					startPositions.insert(std::pair<int, glm::vec3>(*iter - 'A', glm::vec3(x, y, 0.0f)));	//starts == uppercase alpha
 				}
 			}
 		}
@@ -56,6 +59,13 @@ void Map::populateData(char * fileName) {
 			addTile(Tile::Tile(Tile::TileProp::WALL, -.5f, 2));
 		}
 	}
+
+	//for (int i = 0; i < aiFlags.size(); i++) {
+	//	std::cout << "FLAG: " << i << ": (" << aiFlags.at(i).x << ", " << aiFlags.at(i).y << ")" << std::endl;
+	//}
+	//for (int i = 0; i < startPositions.size(); i++) {
+	//	std::cout << "START: " << i << ": (" << startPositions.at(i).x << ", " << startPositions.at(i).y << ")" << std::endl;
+	//}
 }
 glm::vec3 Map::getFlag(int i) {
 	if (i >= 0 && i < aiFlags.size()) {
