@@ -191,7 +191,9 @@ int main(void){
 			//}
 
 			map.getPropertyUnder(player);
-			map.calculateCarCollisions(player);
+			if (map.getPropertyUnder(player) == Tile::TileProp::WALL) {
+				map.calculateCarCollisions(player);
+			}
 			player->update(deltaTime);
 			player->render(shader, player->getPosition());
 
