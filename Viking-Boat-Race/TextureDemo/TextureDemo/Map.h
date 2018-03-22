@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <algorithm>
+#include <map>
 #include "GameEntity.h"
 #include "ResourceManager.h"
 #include "Car.h"
@@ -44,8 +45,8 @@ private:
 	std::vector<std::vector<Tile>> data;
 	glm::vec3 topLeft;
 	std::vector<Wall> walls;
-	std::vector<glm::vec3> startPositions;
-	std::vector<glm::vec3> aiFlags;
+	std::map<int, glm::vec3> startPositions;
+	std::map<int, glm::vec3> aiFlags;
 public:
 	Map(glm::vec3 & entityPos, glm::vec3 & entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
 	~Map();
@@ -56,6 +57,10 @@ public:
 	inline void addRow() { data.push_back(std::vector<Tile>()); }
 	inline void addTile(Tile t) { data[data.size() - 1].push_back(t); }
 	void populateData(char * fileName);
+
+	glm::vec3 getFlag(int i);
+
+	glm::vec3 getStartPosition(int i);
 
 	void calculateCarCollisions(Car * A);
 	Tile::TileProp getPropertyUnder(Car * A);

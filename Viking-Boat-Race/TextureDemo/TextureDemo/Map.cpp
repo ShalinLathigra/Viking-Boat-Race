@@ -12,38 +12,88 @@ void Map::populateData(char * fileName) {
 	addRow();
 	int index = 0;
 
-	for (std::string::iterator iter = mapString.begin(); iter != mapString.end(); ++iter) {
-		if (*iter == '\n') { addRow(); }
-		else if (*iter == ' ') { addTile(Tile::Tile()); }
-		else if (*iter - '0' >= 1 && *iter - '0' <= 3 || isalpha(*iter)) {
+	for (std::string::iterator iter = mapString.begin(); iter != mapString.end(); ++iter) 
+	{
+		if (*iter == '\n') 
+		{ 
+			addRow(); 
+		}
+		else if (*iter == ' ') 
+		{ 
+			addTile(Tile::Tile()); 
+		}
+		else if (*iter - '0' >= 1 && *iter - '0' <= 3 || isalpha(*iter)) 
+		{
 			addTile(Tile::Tile(Tile::TileProp::ROAD, .1f, 0));
 
 			if (isalpha(*iter)) {
 				if (*iter >= 97) {
-					aiFlags.push_back(glm::vec3((float)(-9.0f + data[data.size() - 1].size() - 1.0f) * TILEWIDTH, (float)(4.5f - data.size() - 1.0f) * TILEHEIGHT, 0.0f));		//flags == lowercase alpha
+					aiFlags.insert(std::pair<int, glm::vec3>(*iter - 'a', glm::vec3((float)(-9.0f + data[data.size() - 1].size() - 1.0f) * TILEWIDTH, (float)(4.5f - data.size() - 1.0f) * TILEHEIGHT, 0.0f)));		//flags == lowercase alpha
 				}
 				else {
-					startPositions.push_back(glm::vec3((float)(-9.0f + data[data.size() - 1].size() - 1.0f) * TILEWIDTH, (float)(4.5f - data.size() - 1.0f) * TILEHEIGHT, 0.0f));	//starts == uppercase alpha
+					startPositions.insert(std::pair<int, glm::vec3>(*iter - 'A', glm::vec3((float)(-9.0f + data[data.size() - 1].size() - 1.0f) * TILEWIDTH, (float)(4.5f - data.size() - 1.0f) * TILEHEIGHT, 0.0f)));	//starts == uppercase alpha
 				}
 			}
 		}
-		else if (*iter == '4') {
+		else if (*iter == '4') 
+		{
 			addTile(Tile::Tile(Tile::TileProp::HOLE, 1.0f, -2));
 		}
-		else if (*iter == '5') {
+		else if (*iter == '5') 
+		{
 			addTile(Tile::Tile(Tile::TileProp::RAMP, 1.0f, -2));
 		}
-		else if (*iter == '6') {
+		else if (*iter == '6') 
+		{
 			addTile(Tile::Tile(Tile::TileProp::SLICK, 1.0f, -2));
 		}
-		else if (*iter == '|' || *iter == '-') {
+		else if (*iter == '|' || *iter == '-') 
+		{
 			addTile(Tile::Tile(Tile::TileProp::RAMP, -.5f, 2));
 		}
-		else if (*iter == '#') {
+		else if (*iter == '#') 
+		{
 			addTile(Tile::Tile(Tile::TileProp::WALL, -.5f, 2));
 		}
 	}
 }
+glm::vec3 Map::getFlag(int i) {
+	if (i >= 0 && i < aiFlags.size()) {
+		return aiFlags.at(i);
+	}
+}
+glm::vec3 Map::getStartPosition(int i) {
+	if (i >= 0 && i < startPositions.size()) {
+		return startPositions.at(i);
+	}
+}
+Tile::TileProp Map::getPropertyUnder(Car * A) 
+{
+	//64 wide
+	//32 tall
+	int col = (int)(64.0f * (A->getPosition().x + 9.0f) / 18.0f);		//x
+	int row = (int)(-32.0f * (A->getPosition().y - 4.5f) / 9.0f);		//y
+	//if (data[row][col].prop == Tile::TileProp::ROUGH) {
+	//	std::cout << "Rough" << std::endl;
+	//}
+	//else if (data[row][col].prop == Tile::TileProp::ROAD) {
+	//	std::cout << "Road" << std::endl;
+	//}
+	//else if (data[row][col].prop == Tile::TileProp::RAMP) {
+	//	std::cout << "Ramp" << std::endl;
+	//}
+	//else if (data[row][col].prop == Tile::TileProp::WALL) {
+	//	std::cout << "Wall" << std::endl;
+	//}
+	//else if (data[row][col].prop == Tile::TileProp::HOLE) {
+	//	std::cout << "Hole" << std::endl;
+	//}
+	//else if (data[row][col].prop == Tile::TileProp::SLICK) {
+	//	std::cout << "Slick" << std::endl;
+	//}
+	return data[row][col].prop;
+}
+
 void Map::calculateCarCollisions(Car * A)
 {
 	float minX = topLeft.x;
@@ -107,37 +157,8 @@ void Map::calculateCarCollisions(Car * A)
 		}
 	}
 }
-Tile::TileProp Map::getPropertyUnder(Car * A) 
-{
-	//64 wide
-	//32 tall
-	int col = (int)(64.0f * (A->getPosition().x + 9.0f) / 18.0f);		//x
-	//coord = -9.0f + scale * x
-	//x = (coord + 9.0f) / scale
-	int row = (int)(-32.0f * (A->getPosition().y - 4.5f) / 9.0f);		//y
-	//coord = 4.5f - scale * x
-	//scale = -(coord - 4.5f) / scale
-	//return Tile::TileProp::HOLE;
-	if (data[row][col].prop == Tile::TileProp::ROUGH) {
-		std::cout << "Rough" << std::endl;
-	}
-	else if (data[row][col].prop == Tile::TileProp::ROAD) {
-		std::cout << "Road" << std::endl;
-	}
-	else if (data[row][col].prop == Tile::TileProp::RAMP) {
-		std::cout << "Ramp" << std::endl;
-	}
-	else if (data[row][col].prop == Tile::TileProp::WALL) {
-		std::cout << "Wall" << std::endl;
-	}
-	else if (data[row][col].prop == Tile::TileProp::HOLE) {
-		std::cout << "Hole" << std::endl;
-	}
-	else if (data[row][col].prop == Tile::TileProp::SLICK) {
-		std::cout << "Slick" << std::endl;
-	}
-	return data[row][col].prop;
-}
+
+
 Map::~Map()
 {
 }
