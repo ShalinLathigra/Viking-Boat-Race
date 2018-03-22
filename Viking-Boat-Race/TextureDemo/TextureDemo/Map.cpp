@@ -15,7 +15,7 @@ void Map::populateData(char * fileName) {
 	for (std::string::iterator iter = mapString.begin(); iter != mapString.end(); ++iter) 
 	{
 		if (*iter == '\n') 
-		{ 
+		{
 			addRow(); 
 		}
 		else if (*iter == ' ') 
@@ -58,8 +58,8 @@ void Map::populateData(char * fileName) {
 		{
 			addTile(Tile::Tile(Tile::TileProp::WALL, -.5f, 2));
 		}
+		//std::cout << *iter;
 	}
-
 	//for (int i = 0; i < aiFlags.size(); i++) {
 	//	std::cout << "FLAG: " << i << ": (" << aiFlags.at(i).x << ", " << aiFlags.at(i).y << ")" << std::endl;
 	//}
@@ -101,7 +101,13 @@ Tile::TileProp Map::getPropertyUnder(Car * A)
 	//else if (data[row][col].prop == Tile::TileProp::SLICK) {
 	//	std::cout << "Slick" << std::endl;
 	//}
-	return data[row][col].prop;
+	//std::cout << A->id << " ";
+	//std::cout << data[0].size() << " " << col << " ";
+	//std::cout << data.size() << " " << row << std::endl;
+	if (row < data.size() && col < data[0].size()) {
+		return data[row][col].prop;
+	}
+	return Tile::TileProp::WALL;
 }
 
 void Map::calculateCarCollisions(Car * A)

@@ -121,9 +121,7 @@ int main(void){
 
 		// Setup game objects
 		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 9.0f), 0.0f, tex[0], size);
-		Car* player = new Car(map.getStartPosition(0), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-
-		//Car* temp10 = new Car(map.getStartPosition(11), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
+		Car* player = new Car(map.getStartPosition(4), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
 		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
 		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
 		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
@@ -182,20 +180,29 @@ int main(void){
 
 			}
 
-			//for (int i = 0; i < allCars.size(); i++) {
-			//	allCars[i]->checkCollisions(allCars, deltaTime);
-			//	map.calculateCarCollisions(allCars[i]);
-			//	allCars[i]->update(deltaTime);
-			//
-			//	allCars[i]->render(shader, player->getPosition());
-			//}
+			for (int i = 0; i < allCars.size(); i++) {
+				//std::cout << "COLLIDE WITH CARS" << std::endl;
+				allCars[i]->checkCollisions(allCars, deltaTime);
+				//std::cout << "CHECK PROPERTY UNDER I" << std::endl;
+				if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
 
-			map.getPropertyUnder(player);
-			if (map.getPropertyUnder(player) == Tile::TileProp::WALL) {
-				map.calculateCarCollisions(player);
+					//std::cout << "shouldn't be called" << std::endl;
+					map.calculateCarCollisions(allCars[i]);
+				}
+				//std::cout << "UPDATE" << std::endl;
+				allCars[i]->update(deltaTime);
+
+				//std::cout << "RENDER" << std::endl;
+				allCars[i]->render(shader, player->getPosition());
+				//std::cout << "LOOP" << std::endl;
 			}
-			player->update(deltaTime);
-			player->render(shader, player->getPosition());
+
+			//map.getPropertyUnder(player);
+			//if (map.getPropertyUnder(player) == Tile::TileProp::WALL) {
+			//	map.calculateCarCollisions(player);
+			//}
+			//player->update(deltaTime);
+			//player->render(shader, player->getPosition());
 
 			// Update entities
 			/*
