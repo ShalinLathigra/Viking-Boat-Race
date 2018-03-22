@@ -192,6 +192,7 @@ int main(void){
 			std::cout << "Car 1: X " << allCars[0]->getPosition().x << " Y " << allCars[0]->getPosition().y << std::endl;
 			std::cout << "Player: X " << player->getPosition().x << " Y " << player->getPosition().y << std::endl;
 			//map.getPropertyUnder(player);
+
 			//map.calculateCarCollisions(player);
 			//player->update(deltaTime);
 			//player->render(shader, player->getPosition());
