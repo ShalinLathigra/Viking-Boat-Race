@@ -118,6 +118,9 @@ void Map::calculateCarCollisions(Car * A)
 	float maxY = -minY;
 
 	//Bounding Position
+	if (A->id == 0) {
+		std::cout << A->getPosition().x << " " << A->getPosition().y << " " << minX << " " << minY << std::endl;
+	}
 	if (A->getPosition().x < minX + 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(minX + 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f)); A->applyImpulse(1.95f * glm::vec3(-A->getVel().x, A->getVel().y, 0.0f));}
 	if (A->getPosition().x > maxX - 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(maxX - 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f)); A->applyImpulse(1.95f * glm::vec3(-A->getVel().x, A->getVel().y, 0.0f));}
 	if (A->getPosition().y < minY + 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(A->getPosition().x, minY + 4.0f * COLLISION_DISTANCE, 0.0f)); A->applyImpulse(1.95f * glm::vec3(A->getVel().x, -A->getVel().y, 0.0f));}
