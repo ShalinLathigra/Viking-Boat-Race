@@ -18,7 +18,7 @@ public:
 	float speed;
 	void checkCollisions(std::vector<Car*>, float);
 	void render(Shader & shader, glm::vec3 offset);
-
+	void boxCollisions(std::vector<Car*>, float);
 	inline glm::vec3 getVel() { return velocity; }
 	void applyImpulse(glm::vec3 impulse);
 

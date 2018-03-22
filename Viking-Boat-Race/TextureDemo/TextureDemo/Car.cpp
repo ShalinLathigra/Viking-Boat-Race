@@ -74,6 +74,38 @@ void Car::checkCollisions(std::vector<Car*> ball, float deltaTime) {
 	}
 }
 
+
+void Car::boxCollisions(std::vector<Car*> cars, float)
+{
+	float forceX = cos(rotationAmount *(PI / 180.0f));
+	float forceY = sin(rotationAmount *(PI / 180.0f));
+	glm::vec3 L1, L2, L3, L4;
+	L1 = glm::vec3(cos((rotationAmount + 90)*(PI / 180.0f)), sin((rotationAmount + 90)*(PI / 180.0f)), 0);
+	L2 = glm::vec3(forceX, forceY, 0);
+	for (int i = 0; i < cars.size(); i++) {
+		if (equals(cars[i])) {
+			continue;
+		}
+		glm::vec3 Ax, Ay, Bx, By;
+		L3 = glm::vec3(cos((cars[i]->rotationAmount + 90)*(PI / 180.0f)), sin((cars[i]->rotationAmount + 90)*(PI / 180.0f)), 0);
+		L4 = glm::vec3(cos((cars[i]->rotationAmount + 90)*(PI / 180.0f)), sin((cars[i]->rotationAmount)*(PI / 180.0f)), 0);
+		Ax = L1;
+		Ay = L2;
+		Bx = L3;
+		By = L4;
+		bool comp1 = glm::dot((position - cars[i]->position), L1) < (abs(glm::dot(0.05f*Ax, L1)) + abs(glm::dot(0.05f*Ay, L1)) + abs(glm::dot(0.05f*Bx, L1)) + abs(glm::dot(0.05f*By, L1)));
+		bool comp2 = glm::dot((position - cars[i]->position), L2) < (abs(glm::dot(0.05f*Ax, L2)) + abs(glm::dot(0.05f*Ay, L2)) + abs(glm::dot(0.05f*Bx, L2)) + abs(glm::dot(0.05f*By, L2)));
+		bool comp3 = glm::dot((position - cars[i]->position), L3) < (abs(glm::dot(0.05f*Ax, L3)) + abs(glm::dot(0.05f*Ay, L3)) + abs(glm::dot(0.05f*Bx, L3)) + abs(glm::dot(0.05f*By, L3)));
+		bool comp4 = glm::dot((position - cars[i]->position), L4) < (abs(glm::dot(0.05f*Ax, L4)) + abs(glm::dot(0.05f*Ay, L4)) + abs(glm::dot(0.05f*Bx, L4)) + abs(glm::dot(0.05f*By, L4)));
+
+		if (!(comp1&&comp2&&comp3&&comp4)) {
+			//there was a collision that was detected properly
+			std::cout << "Collision detected properly" << std::endl << "comp1: " << comp1 << " comp2: " << comp2 << " comp3: " << comp3 << " comp4: " << comp4 << std::endl;
+		}
+
+	}
+}
+
 void Car::turn(int d,float deltaTime) {
 	//at MAX speed, rotation speed = 1 / 12s = 30 deg / second
 	//at MIN speed, rotation speed = 1 / s = 360 deg / second
@@ -91,4 +123,5 @@ void Car::applyImpulse(glm::vec3 impulse)
 {
 	momentum += impulse;
 	velocity = momentum / mass;
+	velocity *= 0.95f;
 }
