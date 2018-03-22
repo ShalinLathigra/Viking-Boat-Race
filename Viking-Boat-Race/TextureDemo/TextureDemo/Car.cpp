@@ -101,7 +101,7 @@ void Car::boxCollisions(std::vector<Car*> cars, float)
 
 		if ((!comp1&&!comp2&&!comp3&&!comp4)) {
 			//there was a collision that was detected properly
-			std::cout << "Collision detected properly" << std::endl << "comp1: " << comp1 << " comp2: " << comp2 << " comp3: " << comp3 << " comp4: " << comp4 << std::endl;
+			//std::cout << "Collision detected properly" << std::endl << "comp1: " << comp1 << " comp2: " << comp2 << " comp3: " << comp3 << " comp4: " << comp4 << std::endl;
 		}
 
 	}

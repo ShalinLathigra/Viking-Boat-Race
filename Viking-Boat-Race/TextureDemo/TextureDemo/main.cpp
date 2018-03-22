@@ -181,20 +181,14 @@ int main(void){
 			}
 
 			for (int i = 0; i < allCars.size(); i++) {
-				//std::cout << "COLLIDE WITH CARS" << std::endl;
 				allCars[i]->boxCollisions(allCars, deltaTime);
-				//std::cout << "CHECK PROPERTY UNDER I" << std::endl;
-				if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
 
-					//std::cout << "shouldn't be called" << std::endl;
+				//get property + setValues
+				if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
 					map.calculateCarCollisions(allCars[i]);
 				}
-				//std::cout << "UPDATE" << std::endl;
 				allCars[i]->update(deltaTime);
-
-				//std::cout << "RENDER" << std::endl;
 				allCars[i]->render(shader, player->getPosition());
-				//std::cout << "LOOP" << std::endl;
 			}
 
 			//map.getPropertyUnder(player);

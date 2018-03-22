@@ -58,14 +58,7 @@ void Map::populateData(char * fileName) {
 		{
 			addTile(Tile::Tile(Tile::TileProp::WALL, -.5f, 2));
 		}
-		//std::cout << *iter;
 	}
-	//for (int i = 0; i < aiFlags.size(); i++) {
-	//	std::cout << "FLAG: " << i << ": (" << aiFlags.at(i).x << ", " << aiFlags.at(i).y << ")" << std::endl;
-	//}
-	//for (int i = 0; i < startPositions.size(); i++) {
-	//	std::cout << "START: " << i << ": (" << startPositions.at(i).x << ", " << startPositions.at(i).y << ")" << std::endl;
-	//}
 }
 glm::vec3 Map::getFlag(int i) {
 	if (i >= 0 && i < aiFlags.size()) {
@@ -81,33 +74,16 @@ Tile::TileProp Map::getPropertyUnder(Car * A)
 {
 	//64 wide
 	//32 tall
+	Tile::TileProp ret = Tile::TileProp::WALL;
 	int col = (int)(64.0f * (A->getPosition().x + 9.0f) / 18.0f);		//x
 	int row = (int)(-32.0f * (A->getPosition().y - 4.5f) / 9.0f);		//y
-	//if (data[row][col].prop == Tile::TileProp::ROUGH) {
-	//	std::cout << "Rough" << std::endl;
-	//}
-	//else if (data[row][col].prop == Tile::TileProp::ROAD) {
-	//	std::cout << "Road" << std::endl;
-	//}
-	//else if (data[row][col].prop == Tile::TileProp::RAMP) {
-	//	std::cout << "Ramp" << std::endl;
-	//}
-	//else if (data[row][col].prop == Tile::TileProp::WALL) {
-	//	std::cout << "Wall" << std::endl;
-	//}
-	//else if (data[row][col].prop == Tile::TileProp::HOLE) {
-	//	std::cout << "Hole" << std::endl;
-	//}
-	//else if (data[row][col].prop == Tile::TileProp::SLICK) {
-	//	std::cout << "Slick" << std::endl;
-	//}
 	//std::cout << A->id << " ";
 	//std::cout << data[0].size() << " " << col << " ";
 	//std::cout << data.size() << " " << row << std::endl;
 	if (row >= 0 && row < data.size() && col >= 0 && col < data[0].size()) {
-		return data[row][col].prop;
+		ret = data[row][col].prop;
 	}
-	return Tile::TileProp::WALL;
+	return ret;
 }
 
 void Map::calculateCarCollisions(Car * A)
