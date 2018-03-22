@@ -53,7 +53,7 @@ void Car::drive(double deltaTime,int dir) {
 //void Car::render(Shader &s) :GameEntity(s) {}
 
 bool Car::equals(Car* car) {
-	return(carNum == car->carNum);
+	return(id == car->id);
 }
 
 //CHECKING COLLISIONS BETWEEN CARS ONLY
@@ -77,12 +77,13 @@ void Car::checkCollisions(std::vector<Car*> ball, float deltaTime) {
 
 void Car::boxCollisions(std::vector<Car*> cars, float)
 {
-	float forceX = cos(rotationAmount *(PI / 180.0f));
-	float forceY = sin(rotationAmount *(PI / 180.0f));
-	glm::vec3 L1, L2, L3, L4;
-	L1 = glm::vec3(cos((rotationAmount + 90)*(PI / 180.0f)), sin((rotationAmount + 90)*(PI / 180.0f)), 0);
-	L2 = glm::vec3(forceX, forceY, 0);
+	
 	for (int i = 0; i < cars.size(); i++) {
+		glm::vec3 L1, L2, L3, L4;
+		float forceX = cos(rotationAmount *(PI / 180.0f));
+		float forceY = sin(rotationAmount *(PI / 180.0f));
+		L1 = glm::vec3(cos((rotationAmount + 90)*(PI / 180.0f)), sin((rotationAmount + 90)*(PI / 180.0f)), 0);
+		L2 = glm::vec3(forceX, forceY, 0);
 		if (equals(cars[i])) {
 			continue;
 		}
@@ -93,12 +94,12 @@ void Car::boxCollisions(std::vector<Car*> cars, float)
 		Ay = L2;
 		Bx = L3;
 		By = L4;
-		bool comp1 = glm::dot((position - cars[i]->position), L1) < (abs(glm::dot(0.05f*Ax, L1)) + abs(glm::dot(0.05f*Ay, L1)) + abs(glm::dot(0.05f*Bx, L1)) + abs(glm::dot(0.05f*By, L1)));
-		bool comp2 = glm::dot((position - cars[i]->position), L2) < (abs(glm::dot(0.05f*Ax, L2)) + abs(glm::dot(0.05f*Ay, L2)) + abs(glm::dot(0.05f*Bx, L2)) + abs(glm::dot(0.05f*By, L2)));
-		bool comp3 = glm::dot((position - cars[i]->position), L3) < (abs(glm::dot(0.05f*Ax, L3)) + abs(glm::dot(0.05f*Ay, L3)) + abs(glm::dot(0.05f*Bx, L3)) + abs(glm::dot(0.05f*By, L3)));
-		bool comp4 = glm::dot((position - cars[i]->position), L4) < (abs(glm::dot(0.05f*Ax, L4)) + abs(glm::dot(0.05f*Ay, L4)) + abs(glm::dot(0.05f*Bx, L4)) + abs(glm::dot(0.05f*By, L4)));
+		bool comp1 = abs(glm::dot((cars[i]->position-position), L1)) > (abs(glm::dot(0.05f*Ax, Ax)) + abs(glm::dot(0.05f*Ay, Ax)) + abs(glm::dot(0.05f*Bx, Ax)) + abs(glm::dot(0.05f*By, Ay)));
+		bool comp2 = abs(glm::dot((cars[i]->position - position), L2)) > (abs(glm::dot(0.05f*Ax, Ay)) + abs(glm::dot(0.05f*Ay, Ay)) + abs(glm::dot(0.05f*Bx, Ay)) + abs(glm::dot(0.05f*By, Ay)));
+		bool comp3 = abs(glm::dot((cars[i]->position - position), L3)) > (abs(glm::dot(0.05f*Ax, Bx)) + abs(glm::dot(0.05f*Ay, Bx)) + abs(glm::dot(0.05f*Bx, Bx)) + abs(glm::dot(0.05f*By, Bx)));
+		bool comp4 = abs(glm::dot((cars[i]->position - position), L4)) > (abs(glm::dot(0.05f*Ax, By)) + abs(glm::dot(0.05f*Ay, By)) + abs(glm::dot(0.05f*Bx, By)) + abs(glm::dot(0.05f*By, By)));
 
-		if (!(comp1&&comp2&&comp3&&comp4)) {
+		if ((!comp1&&!comp2&&!comp3&&!comp4)) {
 			//there was a collision that was detected properly
 			std::cout << "Collision detected properly" << std::endl << "comp1: " << comp1 << " comp2: " << comp2 << " comp3: " << comp3 << " comp4: " << comp4 << std::endl;
 		}

@@ -182,7 +182,7 @@ int main(void){
 
 			for (int i = 0; i < allCars.size(); i++) {
 				//std::cout << "COLLIDE WITH CARS" << std::endl;
-				allCars[i]->checkCollisions(allCars, deltaTime);
+				allCars[i]->boxCollisions(allCars, deltaTime);
 				//std::cout << "CHECK PROPERTY UNDER I" << std::endl;
 				if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
 

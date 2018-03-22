@@ -6,7 +6,7 @@ Opponent::Opponent(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRot
 	:Car(entityPos,entityScale, entityRotationAmount, entityTexture, entityNumElements, m, h)
 {
 	cameraPos = entityPos;
-	speed = 110;
+	speed = 50;
 }
 
 
