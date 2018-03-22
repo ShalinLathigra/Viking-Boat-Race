@@ -104,7 +104,7 @@ Tile::TileProp Map::getPropertyUnder(Car * A)
 	//std::cout << A->id << " ";
 	//std::cout << data[0].size() << " " << col << " ";
 	//std::cout << data.size() << " " << row << std::endl;
-	if (row < data.size() && col < data[0].size()) {
+	if (row >= 0 && row < data.size() && col >= 0 && col < data[0].size()) {
 		return data[row][col].prop;
 	}
 	return Tile::TileProp::WALL;

@@ -1,20 +1,9 @@
-﻿  main.cpp
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\gameentity.h(17): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(170): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(176): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(183): warning C4018: '<': signed/unsigned mismatch
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(185): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(227): warning C4018: '<': signed/unsigned mismatch
-  Map.cpp
+﻿  Map.cpp
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\gameentity.h(17): warning C4305: 'initializing': truncation from 'double' to 'float'
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\map.cpp(30): warning C4244: 'argument': conversion from 'float' to 'const unsigned int', possible loss of data
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\map.cpp(71): warning C4018: '<': signed/unsigned mismatch
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\map.cpp(76): warning C4018: '<': signed/unsigned mismatch
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\map.cpp(107): warning C4018: '<': signed/unsigned mismatch
-  Car.cpp
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\gameentity.h(17): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\car.cpp(63): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\map.cpp(74): warning C4715: 'Map::getFlag': not all control paths return a value
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\map.cpp(79): warning C4715: 'Map::getStartPosition': not all control paths return a value
   SOIL.lib(SOIL.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
