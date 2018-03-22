@@ -53,7 +53,7 @@ void Car::drive(double deltaTime,int dir) {
 //void Car::render(Shader &s) :GameEntity(s) {}
 
 bool Car::equals(Car* car) {
-	return(carNum == car->carNum);
+	return(id == car->id);
 }
 
 //CHECKING COLLISIONS BETWEEN CARS ONLY

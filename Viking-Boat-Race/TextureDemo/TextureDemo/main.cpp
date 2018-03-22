@@ -182,18 +182,19 @@ int main(void){
 
 			}
 
-			//for (int i = 0; i < allCars.size(); i++) {
-			//	allCars[i]->checkCollisions(allCars, deltaTime);
-			//	map.calculateCarCollisions(allCars[i]);
-			//	allCars[i]->update(deltaTime);
-			//
-			//	allCars[i]->render(shader, player->getPosition());
-			//}
-
-			map.getPropertyUnder(player);
-			map.calculateCarCollisions(player);
-			player->update(deltaTime);
-			player->render(shader, player->getPosition());
+			for (int i = 0; i < allCars.size(); i++) {
+				allCars[i]->checkCollisions(allCars, deltaTime);
+				map.calculateCarCollisions(allCars[i]);
+				allCars[i]->update(deltaTime);
+			
+				allCars[i]->render(shader, player->getPosition());
+			}
+			std::cout << "Car 1: X " << allCars[0]->getPosition().x << " Y " << allCars[0]->getPosition().y << std::endl;
+			std::cout << "Player: X " << player->getPosition().x << " Y " << player->getPosition().y << std::endl;
+			//map.getPropertyUnder(player);
+			//map.calculateCarCollisions(player);
+			//player->update(deltaTime);
+			//player->render(shader, player->getPosition());
 
 			// Update entities
 			/*
