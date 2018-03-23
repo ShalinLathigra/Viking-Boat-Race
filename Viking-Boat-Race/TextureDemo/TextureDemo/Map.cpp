@@ -60,11 +60,14 @@ void Map::populateData(char * fileName) {
 		}
 	}
 }
+
+//return the position, if it exists;
 glm::vec3 Map::getFlag(int i) {
 	if (i >= 0 && i < aiFlags.size()) {
 		return aiFlags.at(i);
 	}
 }
+//return the position, if it exists;
 glm::vec3 Map::getStartPosition(int i) {
 	if (i >= 0 && i < startPositions.size()) {
 		return startPositions.at(i);
@@ -77,22 +80,51 @@ Tile::TileProp Map::getPropertyUnder(Car * A)
 	Tile::TileProp ret = Tile::TileProp::WALL;
 	int col = (int)(64.0f * (A->getPosition().x + 9.0f) / 18.0f);		//x
 	int row = (int)(-32.0f * (A->getPosition().y - 4.5f) / 9.0f);		//y
-	//std::cout << A->id << " ";
-	//std::cout << data[0].size() << " " << col << " ";
-	//std::cout << data.size() << " " << row << std::endl;
-	if (row >= 0 && row < data.size() && col >= 0 && col < data[0].size()) {
+
+	if (row >= 0 && row < data.size() && col >= 0 && col < data[0].size()) 
+	{
 		ret = data[row][col].prop;
 	}
-	if (!A->isJumping()) {
+	if (!A->isJumping()) 
+	{
+		//set the car's speed mod
 		A->speedMod = (ret == Tile::TileProp::ROAD) ? 1.0f : (ret == Tile::TileProp::RAMP) ? 2.5f : (ret == Tile::TileProp::SLICK) ? 1.5f : (ret == Tile::TileProp::HOLE) ? .1f : .5f;
-		if (ret == Tile::TileProp::RAMP) {
+
+		//if on ramp, start the jump
+		if (ret == Tile::TileProp::RAMP) 
+		{
 			A->startJump();
 		}
+		//if in a hole, start fall
+		else if (ret == Tile::TileProp::HOLE) 
+		{
+			A->startFall();
+		}
 		A->rotationSpeed = (ret == Tile::TileProp::SLICK) ? -1.5f : A->rotationSpeed;
+
+		//reset falling if necessary
+		if (A->isFalling() && A->doneFalling())
+		{
+			A->resetFall(nearestFlag(A->getPosition()));
+		}
 	}
 	return ret;
 }
-
+glm::vec3 Map::nearestFlag(glm::vec3 pos) 
+{
+	float nearestDist = 100000.0f;
+	float currentDist;
+	glm::vec3 nearestFlag = aiFlags.at(0);
+	for (int i = 0; i < aiFlags.size(); i++) 
+	{
+		currentDist = glm::distance(pos, aiFlags.at(i));
+		if ( currentDist < nearestDist) {
+			nearestDist = currentDist;
+			nearestFlag = aiFlags.at(i);
+		}
+	}
+	return nearestFlag;
+}
 void Map::calculateCarCollisions(Car * A)
 {
 	float minX = topLeft.x;

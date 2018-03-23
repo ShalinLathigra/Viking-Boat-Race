@@ -1,7 +1,7 @@
 ﻿  Car.cpp
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\gameentity.h(17): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\car.cpp(67): warning C4018: '<': signed/unsigned mismatch
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\car.cpp(85): warning C4018: '<': signed/unsigned mismatch
+c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\car.cpp(74): warning C4018: '<': signed/unsigned mismatch
+c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\car.cpp(92): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
   Skipping... (no relevant changes detected)
   Window.cpp

@@ -25,6 +25,12 @@ public:
 
 	inline void setPosition(glm::vec3 pos) { position = pos; }
 
+	void startFall();
+	void advanceFall(double deltaTime);
+	int isFalling();
+	int doneFalling();
+	void resetFall(glm::vec3 pos);
+
 	void startJump();
 	void advanceTimers(double deltaTime);
 	inline int isJumping() {/* std::cout<< jumpTimer <<std::endl; */return jumpTimer > 0.0f; }
@@ -36,7 +42,8 @@ protected:
 	float jumpTimer;
 	const float jumpScaleMod = 1.1f;
 
-	const float holeScaleShrinkRate = .1f;
+	const float shrinkRate = .75f;
+	int falling;
 
 	glm::vec3 velocity;
 	glm::vec3 forces;

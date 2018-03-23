@@ -5,7 +5,7 @@
 #define MAX_ROT_SPEED 180
 int Car::carNum = 0;
 Car::Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h)
-	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), jumpTimer(0), scaleMod (1.0f)
+	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), jumpTimer(0), scaleMod(1.0f), falling(0)
 {
 	id = carNum;
 	speed = 0;
@@ -16,25 +16,32 @@ Car::Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmoun
 }
 void Car::update(double deltaTime){
 
-	advanceTimers(deltaTime);
+	if (falling) {
+		advanceFall(deltaTime);
+	}
+	else {
+		advanceTimers(deltaTime);
 
-	momentum = velocity * mass;
-	forces += momentum;
-	float forceX = cos(rotationAmount *(PI / 180.0f));
-	float forceY = sin(rotationAmount *(PI / 180.0f));
+		momentum = velocity * mass;
+		forces += momentum;
+		float forceX = cos(rotationAmount *(PI / 180.0f));
+		float forceY = sin(rotationAmount *(PI / 180.0f));
 
-	glm::vec3 f = glm::vec3(forceX, forceY, 0);
-	velocity = (float)speed * speedMod * (f/mass)*(float)deltaTime;
+		glm::vec3 f = glm::vec3(forceX, forceY, 0);
+		velocity = (float)speed * speedMod * (f / mass)*(float)deltaTime;
 
-	velocity += (forces / mass)*(float) deltaTime;
-	position += velocity;
-	forces = glm::vec3(0,0,0);
+		velocity += (forces / mass)*(float)deltaTime;
+		position += velocity;
+		forces = glm::vec3(0, 0, 0);
+	}
 }
 void Car::render(Shader & shader, glm::vec3 offset)
 {
 	position -= offset;
 	scale *= scaleMod;
+
 	GameEntity::render(shader);
+
 	scale /= scaleMod;
 	position += offset;
 }
@@ -129,6 +136,32 @@ void Car::applyImpulse(glm::vec3 impulse)
 	momentum += impulse;
 	velocity = momentum / mass;
 	velocity *= 0.95f;
+}
+
+void Car::startFall()
+{
+	falling = 1;
+}
+
+void Car::advanceFall(double deltaTime)
+{
+	scaleMod = std::max(0.0f, (float)(scaleMod - shrinkRate * deltaTime));
+}
+
+int Car::isFalling() {
+	return falling;
+}
+void Car::resetFall(glm::vec3 pos) {
+	std::cout << "a" << std::endl;
+	setPosition(pos);
+	scaleMod = 1.0f;
+	//need to reset the scale vector, when scaleMod == 0, numbers get lost, but this saves it
+	scale = glm::vec3(.1f, .1f, .1f);
+	falling = 0;
+}
+
+int Car::doneFalling() {
+	return scaleMod <= 0.0f;
 }
 
 void Car::startJump()

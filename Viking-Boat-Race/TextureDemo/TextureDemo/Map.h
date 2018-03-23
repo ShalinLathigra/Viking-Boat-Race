@@ -64,5 +64,6 @@ public:
 
 	void calculateCarCollisions(Car * A);
 	Tile::TileProp getPropertyUnder(Car * A);
-	Tile::TileProp getPropertyAt(glm::vec3 position);
+
+	glm::vec3 nearestFlag(glm::vec3 pos);
 };
