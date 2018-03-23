@@ -110,7 +110,7 @@ void Car::boxCollisions(std::vector<Car*> cars, float)
 void Car::turn(int d,float deltaTime) {
 	//at MAX speed, rotation speed = 1 / 12s = 30 deg / second
 	//at MIN speed, rotation speed = 1 / s = 360 deg / second
-	rotationSpeed = (speed > 0) ? MIN_ROT_SPEED + (MAX_ROT_SPEED - MIN_ROT_SPEED) * ((float)(MAX_SPEED - speed) / (float)MAX_SPEED) : 0;
+	rotationSpeed =(rotationSpeed == -1.5f) ? 0.0f : (speed > 0) ? MIN_ROT_SPEED + (MAX_ROT_SPEED - MIN_ROT_SPEED) * ((float)(MAX_SPEED - speed) / (float)MAX_SPEED) : 0;
 
 	if (d == 1) {//turn left
 		rotationAmount += rotationSpeed * deltaTime;		

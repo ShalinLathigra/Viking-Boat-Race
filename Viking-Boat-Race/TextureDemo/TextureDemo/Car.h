@@ -26,10 +26,10 @@ public:
 
 
 	float speedMod;	//Controls the different surfaces
+	float rotationSpeed;
 protected:
 	glm::vec3 velocity;
 	glm::vec3 forces;
-	float rotationSpeed;
 	int health;
 	float mass;
 	
