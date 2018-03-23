@@ -83,7 +83,7 @@ Tile::TileProp Map::getPropertyUnder(Car * A)
 	if (row >= 0 && row < data.size() && col >= 0 && col < data[0].size()) {
 		ret = data[row][col].prop;
 	}
-	A->speedMod = (ret == Tile::TileProp::ROAD) ? 1.0f : (ret == Tile::TileProp::RAMP) ? 25.0f : (ret == Tile::TileProp::SLICK) ? 1.5f : .5f;
+	A->speedMod = (ret == Tile::TileProp::ROAD) ? 1.0f : (ret == Tile::TileProp::RAMP) ? 25.0f : (ret == Tile::TileProp::SLICK) ? 1.5f : (ret == Tile::TileProp::HOLE) ? .1f : .5f;
 	return ret;
 }
 
