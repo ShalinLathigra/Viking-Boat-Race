@@ -87,210 +87,13 @@ void setthisTexture(GLuint w, char *fname)
 
 void setallTexture(void)
 {
-//	tex = new GLuint[3];
+	//	tex = new GLuint[3];
 	glGenTextures(4, tex);
 	setthisTexture(tex[0], "mapImage.png");
 	setthisTexture(tex[1], "car.png");
 	setthisTexture(tex[2], "other.png");
 	setthisTexture(tex[3], "orb.png");
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
-}
-
-GLuint SetupParticleShaders() // returns ID of newly created program
-{
-
-	// Set up shaders
-
-	// Create a shader from vertex program source code
-	std::string vp = ResourceManager::LoadTextFile("shaderPart.vert");
-	const char *source_vpart = vp.c_str();
-	std::string fp = ResourceManager::LoadTextFile("shader.frag");
-	const char *source_fp = fp.c_str();
-
-
-	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vs, 1, &source_vpart, NULL);
-	glCompileShader(vs);
-
-	// Check if shader compiled successfully
-	GLint status;
-	glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
-	if (status != GL_TRUE) {
-		char buffer[512];
-		glGetShaderInfoLog(vs, 512, NULL, buffer);
-		throw(std::ios_base::failure(std::string("Error compiling vertex shader:") + std::string(buffer)));
-	}
-
-	// Create a shader from the fragment program source code
-	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fs, 1, &source_fp, NULL);
-	glCompileShader(fs);
-
-	// Check if shader compiled successfully
-	glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
-	if (status != GL_TRUE) {
-		char buffer[512];
-		glGetShaderInfoLog(fs, 512, NULL, buffer);
-		throw(std::ios_base::failure(std::string("Error compiling fragmentshader: ") + std::string(buffer)));
-	}
-
-	// Create a shader program linking both vertex and fragment shaders
-	// together
-	GLuint program = glCreateProgram();
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
-
-	// Check if shaders were linked successfully
-	glGetProgramiv(program, GL_LINK_STATUS, &status);
-	if (status != GL_TRUE) {
-		char buffer[512];
-		glGetShaderInfoLog(program, 512, NULL, buffer);
-		throw(std::ios_base::failure(std::string("Error linking shaders: ") +
-			std::string(buffer)));
-	}
-
-	// Delete memory used by shaders, since they were already compiled
-	// and linked
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-
-	return program;
-
-}
-
-void AttributeBinding(GLuint program)
-{
-
-	// Set attributes for shaders
-	// Should be consistent with how we created the buffers for the particle elements
-
-		GLint vertex_att = glGetAttribLocation(program, "vertex");
-	glVertexAttribPointer(vertex_att, 2, GL_FLOAT, GL_FALSE, 7 *
-		sizeof(GLfloat), 0);
-	glEnableVertexAttribArray(vertex_att);
-
-	GLint dir_att = glGetAttribLocation(program, "dir");
-	glVertexAttribPointer(dir_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat),
-		(void *)(2 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(dir_att);
-
-	GLint time_att = glGetAttribLocation(program, "t");
-	glVertexAttribPointer(time_att, 1, GL_FLOAT, GL_FALSE, 7 *
-		sizeof(GLfloat), (void *)(4 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(time_att);
-
-	GLint tex_att = glGetAttribLocation(program, "uv");
-	glVertexAttribPointer(tex_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat),
-		(void *)(5 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(tex_att);
-
-}
-int CreateParticleArray(void) {
-
-	// Each particle is a square with four vertices and two triangles
-
-	// Number of attributes for vertices and faces
-	const int vertex_attr = 7;  // 7 attributes per vertex: 2D (or 3D): position(2), direction(2), colour(3), time(1), 2D texture coordinates(2)
-		//   const int face_att = 3; // Vertex indices (3)
-
-		GLfloat vertex[] = {
-		//  square (two triangles)
-		//  Position      Color             Texcoords
-	   -0.5f, 0.5f,    1.0f, 0.0f, 0.0f,		0.0f, 0.0f, // Top-left
-		0.5f, 0.5f,    0.0f, 1.0f, 0.0f,	    1.0f, 0.0f, // Top-right
-		0.5f, -0.5f,   0.0f, 0.0f, 1.0f,	    1.0f, 1.0f, // Bottom-right
-	   -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	    0.0f, 1.0f  // Bottom-left
-	};
-
-	GLfloat particleatt[1000 * vertex_attr];
-	float theta, r, tmod;
-
-	for (int i = 0; i < 1000; i++)
-	{
-		if (i % 4 == 0)
-		{
-			theta = (2.0f * (rand() % 10000) / 10000.0f - 1.0f)*0.13f;
-			r = 0.7f + 0.3*(rand() % 10000) / 10000.0f;
-			tmod = (rand() % 10000) / 10000.0f;
-		}
-
-		//position
-		particleatt[i*vertex_attr + 0] = vertex[(i % 4) * 7 + 0];
-		particleatt[i*vertex_attr + 1] = vertex[(i % 4) * 7 + 1];
-
-		//direction
-		particleatt[i*vertex_attr + 2] = sin(theta)*r;
-		particleatt[i*vertex_attr + 3] = cos(theta)*r;
-
-		//time
-		particleatt[i*vertex_attr + 4] = tmod;
-
-		//texture Coords
-		particleatt[i*vertex_attr + 5] = vertex[(i % 4) * 7 + 5];
-		particleatt[i*vertex_attr + 6] = vertex[(i % 4) * 7 + 6];
-
-
-	}
-
-
-	GLuint face[] = {
-		0, 1, 2, // t1
-		2, 3, 0  //t2
-	};
-
-	GLuint manyface[1000 * 6];
-
-	for (int i = 0; i < 1000; i++)
-	{
-		for (int j = 0; j < 6; j++)
-			manyface[i * 6 + j] = face[j] + i * 4;
-	}
-
-	GLuint vbo, ebo;
-
-	// Create buffer for vertices
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(particleatt), particleatt,
-		GL_STATIC_DRAW);
-
-	// Create buffer for faces (index buffer)
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(manyface), manyface,
-		GL_STATIC_DRAW);
-
-	// Return number of elements in array buffer
-	return sizeof(manyface);
-
-}
-
-void drawParticles(Shader particleprogram, int particlesize)
-{
-
-	// Select proper shader program to use
-	particleprogram.enable();
-
-	glDepthMask(GL_FALSE);
-	//set displacement
-
-	glm::mat4 rot = glm::mat4();
-	glm::mat4 world = glm::mat4();
-
-	float k = glfwGetTime();
-	rot = glm::rotate(rot, -k * 360 / 6.283f, glm::vec3(0, 0, 1));
-	rot = glm::translate(rot, glm::vec3());
-	rot = glm::scale(rot, glm::vec3(0.1, 0.1, 0.1));
-	// get ready to draw, load matrix
-	particleprogram.setUniformMat4("x", rot);
-	particleprogram.setUniform1f("time", k);
-
-	glBindTexture(GL_TEXTURE_2D, tex[3]);
-
-	// Draw 
-	glDrawElements(GL_TRIANGLES, 6 * particlesize, GL_UNSIGNED_INT, 0);
-	glDepthMask(GL_TRUE);
 }
 
 // Main function that builds and runs the game
@@ -305,8 +108,7 @@ int main(void){
 
 		// Enable Alpha blending
 		glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBlendFunc(GL_ONE, GL_ONE);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Create geometry of the square
 		int size = CreateSquare();
@@ -323,10 +125,6 @@ int main(void){
 		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
 		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
 		Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
-
-		//PARTICLE SYSTEM TEST
-		int system = CreateParticleArray();
-		Shader particleShader("shaderPart.vert", "shader.frag");
 
         // Run the main loop
 		glm::vec3 position = glm::vec3();
@@ -386,11 +184,6 @@ int main(void){
 			for (int i = 0; i < allCars.size(); i++) {
 				allCars[i]->boxCollisions(allCars, deltaTime);
 
-				//MORE PARTICLE TESTING
-				//if (i == allCars.size() - 1)
-					//drawParticles(particleShader, system);
-
-				//get property + setValues
 				if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
 					map.calculateCarCollisions(allCars[i]);
 				}
