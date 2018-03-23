@@ -23,6 +23,9 @@ public:
 	void applyImpulse(glm::vec3 impulse);
 
 	inline void setPosition(glm::vec3 pos) { position = pos; }
+
+
+	float speedMod;	//Controls the different surfaces
 protected:
 	glm::vec3 velocity;
 	glm::vec3 forces;

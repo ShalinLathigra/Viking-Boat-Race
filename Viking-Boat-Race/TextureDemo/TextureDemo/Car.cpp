@@ -21,7 +21,7 @@ void Car::update(double deltaTime){
 	float forceY = sin(rotationAmount *(PI / 180.0f));
 
 	glm::vec3 f = glm::vec3(forceX, forceY, 0);
-	velocity = (float)speed * (f/mass)*(float)deltaTime;
+	velocity = (float)speed * speedMod * (f/mass)*(float)deltaTime;
 
 	velocity += (forces / mass)*(float) deltaTime;
 	position += velocity;

@@ -4,16 +4,11 @@ c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\t
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\map.cpp(64): warning C4018: '<': signed/unsigned mismatch
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\map.cpp(69): warning C4018: '<': signed/unsigned mismatch
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\map.cpp(83): warning C4018: '<': signed/unsigned mismatch
-  Car.cpp
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\gameentity.h(17): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\car.cpp(63): warning C4018: '<': signed/unsigned mismatch
-c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\car.cpp(81): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\map.cpp(67): warning C4715: 'Map::getFlag': not all control paths return a value
 c:\users\shalin\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\map.cpp(72): warning C4715: 'Map::getStartPosition': not all control paths return a value
   Skipping... (no relevant changes detected)
   Window.cpp
-  Shader.cpp
   ResourceManager.cpp
   SOIL.lib(SOIL.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification

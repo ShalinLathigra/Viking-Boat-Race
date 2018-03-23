@@ -175,6 +175,7 @@
   <ItemGroup>
     <None Include="shader.frag" />
     <None Include="shader.vert" />
+    <None Include="shaderPart.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="map.txt" />
