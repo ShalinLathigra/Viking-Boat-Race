@@ -1,6 +1,7 @@
 #pragma once
 #include "GameEntity.h"
 #include <vector>
+#include <algorithm>
 class Car :
 	public GameEntity
 {
@@ -24,14 +25,23 @@ public:
 
 	inline void setPosition(glm::vec3 pos) { position = pos; }
 
+	void startJump();
+	void advanceTimers(double deltaTime);
+	inline int isJumping() {/* std::cout<< jumpTimer <<std::endl; */return jumpTimer > 0.0f; }
 
 	float speedMod;	//Controls the different surfaces
 	float rotationSpeed;
 protected:
+	const float maxJumpTimer = .5f;
+	float jumpTimer;
+	const float jumpScaleMod = 1.1f;
+
+	const float holeScaleShrinkRate = .1f;
+
 	glm::vec3 velocity;
 	glm::vec3 forces;
 	int health;
 	float mass;
-	
+	float scaleMod;
 };
 

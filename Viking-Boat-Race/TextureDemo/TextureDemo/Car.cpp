@@ -5,7 +5,7 @@
 #define MAX_ROT_SPEED 180
 int Car::carNum = 0;
 Car::Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h)
-	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements)
+	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), jumpTimer(0), scaleMod (1.0f)
 {
 	id = carNum;
 	speed = 0;
@@ -15,6 +15,9 @@ Car::Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmoun
 	rotationSpeed = 0.0f;
 }
 void Car::update(double deltaTime){
+
+	advanceTimers(deltaTime);
+
 	momentum = velocity * mass;
 	forces += momentum;
 	float forceX = cos(rotationAmount *(PI / 180.0f));
@@ -30,7 +33,9 @@ void Car::update(double deltaTime){
 void Car::render(Shader & shader, glm::vec3 offset)
 {
 	position -= offset;
+	scale *= scaleMod;
 	GameEntity::render(shader);
+	scale /= scaleMod;
 	position += offset;
 }
 
@@ -48,7 +53,6 @@ void Car::drive(double deltaTime,int dir) {
 	else if (speed < 0) {
 		speed = 0;
 	}
-	//std::cout << speed << std::endl;
 }
 //void Car::render(Shader &s) :GameEntity(s) {}
 
@@ -125,4 +129,22 @@ void Car::applyImpulse(glm::vec3 impulse)
 	momentum += impulse;
 	velocity = momentum / mass;
 	velocity *= 0.95f;
+}
+
+void Car::startJump()
+{
+	jumpTimer = maxJumpTimer;
+	rotationSpeed = -1.5f;
+}
+
+
+void Car::advanceTimers(double deltaTime) {
+	jumpTimer = std::max(0.0f, (float)(jumpTimer - deltaTime));
+	if (jumpTimer > 0.0f) {
+		rotationSpeed = -1.5f;
+		scaleMod = jumpScaleMod;
+	}
+	else {
+		scaleMod = std::min(1.0f, scaleMod);
+	}
 }
