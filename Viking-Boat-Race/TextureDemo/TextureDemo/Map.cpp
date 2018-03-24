@@ -65,6 +65,10 @@ glm::vec3 Map::getFlag(int i) {
 		return aiFlags.at(i);
 	}
 }
+int Map::getMaxFlags()
+{
+	return aiFlags.size();
+}
 glm::vec3 Map::getStartPosition(int i) {
 	if (i >= 0 && i < startPositions.size()) {
 		return startPositions.at(i);

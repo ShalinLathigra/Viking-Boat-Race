@@ -319,10 +319,10 @@ int main(void){
 		// Setup game objects
 		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 1.0f), 0.0f, tex[0], size);
 		Car* player = new Car(map.getStartPosition(4), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
-		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
-		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
-		Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10);
+		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0));
+		//Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0));
+		//Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0));
+		//Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0));
 
 		//PARTICLE SYSTEM TEST
 		int system = CreateParticleArray();
@@ -334,13 +334,13 @@ int main(void){
 		std::vector<Opponent*> enemies;
 		std::vector<Car*> allCars;//this is used for checking collisions
 		enemies.push_back(enemy0);
-		enemies.push_back(enemy1);
-		enemies.push_back(enemy2);
-		enemies.push_back(enemy3);
+		//enemies.push_back(enemy1);
+		//enemies.push_back(enemy2);
+		//enemies.push_back(enemy3);
 		allCars.push_back(enemy0);
-		allCars.push_back(enemy1);
-		allCars.push_back(enemy2);
-		allCars.push_back(enemy3);
+		//allCars.push_back(enemy1);
+		//allCars.push_back(enemy2);
+		//allCars.push_back(enemy3);
 		allCars.push_back(player);
 
         while (!glfwWindowShouldClose(window.getWindow())){
@@ -383,9 +383,9 @@ int main(void){
 			}
 			
 
+			//allCars[0]->setPosition(map.getFlag(0));
 			for (int i = 0; i < allCars.size(); i++) {
-				allCars[i]->boxCollisions(allCars, deltaTime);
-
+				allCars[i]->checkCollisions(allCars, deltaTime);
 				//MORE PARTICLE TESTING
 				//if (i == allCars.size() - 1)
 					//drawParticles(particleShader, system);
@@ -394,6 +394,7 @@ int main(void){
 				if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
 					map.calculateCarCollisions(allCars[i]);
 				}
+
 				allCars[i]->update(deltaTime);
 				allCars[i]->render(shader, player->getPosition());
 
@@ -406,10 +407,21 @@ int main(void){
 			//player->update(deltaTime);
 			//player->render(shader, player->getPosition());
 
-
 			map.setPosition(player->getPosition());
 			for (int i = 0; i < enemies.size(); i++) {
-				enemies[i]->SetPosition(player->getPosition());
+				//enemies[i]->SetPosition(player->getPosition());//Is this still needed?
+				//std::cout << "CURRENT ITERATION: " << i;
+				int result = enemies[i]->controller(deltaTime, 0);//Checks turning status for all vehicles
+				std::cout << "Player Position: " << player->getPosition().x << "," << player->getPosition().y << std::endl;
+				if (result == 1)//If we need to set a new flag
+				{
+					std::cout << "RESET " << i;
+					enemies[i]->setFlagIndex(enemies[i]->getFlagIndex() + 1);
+					if (enemies[i]->getFlagIndex() >= map.getMaxFlags())
+						enemies[i]->setFlagIndex(0);
+						
+					enemies[i]->setNextFlag(map.getFlag(enemies[i]->getFlagIndex()));
+				}
 			}
 
 			map.render(shader);

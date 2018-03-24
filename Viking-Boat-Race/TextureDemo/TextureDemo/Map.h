@@ -59,6 +59,7 @@ public:
 	void populateData(char * fileName);
 
 	glm::vec3 getFlag(int i);
+	int getMaxFlags();
 
 	glm::vec3 getStartPosition(int i);
 
