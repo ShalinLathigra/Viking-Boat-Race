@@ -141,6 +141,10 @@ int main(void){
 		allCars.push_back(enemy3);
 		allCars.push_back(player);
 
+
+		int state = 0;
+		bool escp = false;
+		bool space = false;
         while (!glfwWindowShouldClose(window.getWindow())){
             // Clear background
 			window.clear(glm::vec3(0.0f, .1f, 0.0f));
@@ -157,56 +161,77 @@ int main(void){
 			//}
 			// Calculate delta time
 
+			
+				double currentTime = glfwGetTime();
+				double deltaTime = currentTime - lastTime;
+				lastTime = currentTime;
+				if (state == 0) {
 
-			double currentTime = glfwGetTime();
-			double deltaTime = currentTime - lastTime;
-			lastTime = currentTime;
 
+				for (int i = 0; i < allCars.size(); i++) {
+					allCars[i]->checkCollisions(allCars, deltaTime);
+
+					if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
+						map.calculateCarCollisions(allCars[i]);
+					}
+					allCars[i]->update(deltaTime);
+					allCars[i]->render(shader, player->getPosition());
+
+				}
+
+				//map.getPropertyUnder(player);
+				//if (map.getPropertyUnder(player) == Tile::TileProp::WALL) {
+				//	map.calculateCarCollisions(player);
+				//}
+				//player->update(deltaTime);
+				//player->render(shader, player->getPosition());
+
+
+				map.setPosition(player->getPosition());
+				for (int i = 0; i < enemies.size(); i++) {
+					enemies[i]->SetPosition(player->getPosition());
+				}
+
+
+				map.render(shader);
+
+			}
+			else if (state == 1) {}
 			//Input
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_W) == GLFW_PRESS) {//these ifs are used to get keyboard input;
-				player->drive(deltaTime, 1);
+				if (state == 0) {
+					player->drive(deltaTime, 1);
+				}
 			}
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
-				player->turn(1, deltaTime);
+				if (state == 0) {
+					player->turn(1, deltaTime);
+				}
 			}
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_S) == GLFW_PRESS) {
-				player->drive(deltaTime, 2);
+				if (state == 0) {
+					player->drive(deltaTime, 2);
+				}
 			}
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_D) == GLFW_PRESS) {
-				player->turn(2, deltaTime);
+				if (state == 0) {
+					player->turn(2, deltaTime);
+				}
+			}
+
+			if (glfwGetKey(window.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+				escp = true;
+			}
+
+			if (glfwGetKey(window.getWindow(), GLFW_KEY_ESCAPE) == GLFW_RELEASE&&escp) {
+				if (state == 0) { state = 1; }
+				else if (state == 1) { state = 0; }
+				escp = false;
 			}
 
 			if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
 
 			}
-			
-
-			for (int i = 0; i < allCars.size(); i++) {
-				allCars[i]->boxCollisions(allCars, deltaTime);
-
-				if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
-					map.calculateCarCollisions(allCars[i]);
-				}
-				allCars[i]->update(deltaTime);
-				allCars[i]->render(shader, player->getPosition());
-
-			}
-
-			//map.getPropertyUnder(player);
-			//if (map.getPropertyUnder(player) == Tile::TileProp::WALL) {
-			//	map.calculateCarCollisions(player);
-			//}
-			//player->update(deltaTime);
-			//player->render(shader, player->getPosition());
-
-
-			map.setPosition(player->getPosition());
-			for (int i = 0; i < enemies.size(); i++) {
-				enemies[i]->SetPosition(player->getPosition());
-			}
-
-			map.render(shader);
-
 		//	glDrawArrays(GL_TRIANGLES, 0, 6); // if glDrawArrays be used, glDrawElements will be ignored 
 
             // Update other events like input handling
