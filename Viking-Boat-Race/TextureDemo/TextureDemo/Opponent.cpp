@@ -39,40 +39,61 @@ int Opponent::controller(float deltaTime, float skillMod)
 	//std::cout << hypot(hypot(nextFlag.x - position.x, nextFlag.y - position.y), nextFlag.z - position.z)<<std::endl;
 	//std::cout << rotationAmount << std::endl;
 	glm::vec3 newDir = nextFlag - position;
+	currDir = glm::normalize(currDir);
 	newDir = glm::normalize(newDir);
-	if (rotationAmount > 0 && rotationAmount < 90)
+	std::cout << "currDir LENGTH = " << glm::length(currDir) << std::endl;
+	std::cout << "newDir LENGTH = " << glm::length(newDir) << std::endl;
+
+		std::cout << "currDir.x = " << currDir.x << std::endl;
+		std::cout << "newDir.x = " << newDir.x << std::endl;
+		std::cout << "currDir.y = " << currDir.y << std::endl;
+		std::cout << "newDir.y = " << newDir.y << std::endl;
+	if (rotationAmount >= 0 && rotationAmount <= 90)
 	{
 		//std::cout << "FIRST QUADRANT" << std::endl;
-		if (currDir.x < newDir.x && currDir.y > newDir.y)
-			turn(2, deltaTime);
-		else if (currDir.x > newDir.x && currDir.y < newDir.y)
-			turn(1, deltaTime);
+		std::cout << std::endl;
+		if (currDir.x > newDir.x)// && currDir.y > newDir.y
+		{ 
+			//std::cout << "Turning Left" << std::endl;
+			if (currDir.y > newDir.y)
+				turn(2, deltaTime);
+			else
+				turn(1, deltaTime);
+		}
+		else if (currDir.x < newDir.x)// && currDir.y < newDir.y
+		{
+			//std::cout << "Turning Right" << std::endl;
+			if (currDir.y < newDir.y)
+				turn(2, deltaTime);
+			else
+				turn(1, deltaTime);
+		}
 	}
-	else if (rotationAmount > 90 && rotationAmount < 180)
+	if (rotationAmount >= 90 && rotationAmount <= 180)
 	{
 		//std::cout << "SECOND QUADRANT" << std::endl;
-		if (currDir.x < newDir.x && currDir.y > newDir.y)
-			turn(2, deltaTime);
-		else if (currDir.x > newDir.x && currDir.y < newDir.y)
+		if (currDir.x > newDir.x)// && currDir.y > newDir.y
 			turn(1, deltaTime);
+		else if (currDir.x < newDir.x)// && currDir.y < newDir.y
+			turn(2, deltaTime);
 	}
-	else if (rotationAmount > 180 && rotationAmount < 270)
+	if (rotationAmount >= 180 && rotationAmount <= 270)
 	{
 		//std::cout << "THIRD QUADRANT" << std::endl;
-		if (currDir.x < newDir.x && currDir.y > newDir.y)
-			turn(2, deltaTime);
-		else if (currDir.x > newDir.x && currDir.y < newDir.y)
+		if (currDir.x > newDir.x)// && currDir.y > newDir.y
 			turn(1, deltaTime);
+		else if (currDir.x < newDir.x)// && currDir.y < newDir.y
+			turn(2, deltaTime);
 	}
-	else
+	if (rotationAmount >= 270 && rotationAmount <= 360)
 	{
 		//std::cout << "FOURTH QUADRANT"<<std::endl;
-		if (currDir.x > newDir.x && currDir.y < newDir.y)
-			turn(2, deltaTime);
-		else if (currDir.x < newDir.x && currDir.y > newDir.y)
+		if (currDir.x < newDir.x)// && currDir.y < newDir.y
 			turn(1, deltaTime);
+		else if (currDir.x > newDir.x)// && currDir.y > newDir.y
+			turn(2, deltaTime);
 	}
-	std::cout << "Current Waypoint: " << nextFlag.x << "," << nextFlag.y << std::endl;
+	//std::cout << "Current Waypoint: " << nextFlag.x << "," << nextFlag.y << std::endl;
 	drive(deltaTime, 1);
 }
 

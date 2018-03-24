@@ -412,7 +412,7 @@ int main(void){
 				//enemies[i]->SetPosition(player->getPosition());//Is this still needed?
 				//std::cout << "CURRENT ITERATION: " << i;
 				int result = enemies[i]->controller(deltaTime, 0);//Checks turning status for all vehicles
-				std::cout << "Player Position: " << player->getPosition().x << "," << player->getPosition().y << std::endl;
+				std::cout << "Enemy Position: " << enemies[0]->getPosition().x << "," << enemies[0]->getPosition().y << std::endl;
 				if (result == 1)//If we need to set a new flag
 				{
 					std::cout << "RESET " << i;

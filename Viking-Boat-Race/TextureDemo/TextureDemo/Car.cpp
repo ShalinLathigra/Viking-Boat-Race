@@ -117,9 +117,11 @@ void Car::turn(int d,float deltaTime) {
 	rotationSpeed =(rotationSpeed == -1.5f) ? 0.0f : (speed > 0) ? MIN_ROT_SPEED + (MAX_ROT_SPEED - MIN_ROT_SPEED) * ((float)(MAX_SPEED - speed) / (float)MAX_SPEED) : 0;
 
 	if (d == 1) {//turn left
-		rotationAmount += rotationSpeed * deltaTime;		
+		rotationAmount += rotationSpeed * deltaTime;
+		//std::cout << "TURNING LEFT" << std::endl;		
 	}
 	else if (d == 2) {//turn Right
+		//std::cout << "TURNING RIGHT" << std::endl;
 		rotationAmount -= rotationSpeed * deltaTime;
 	}
 }
