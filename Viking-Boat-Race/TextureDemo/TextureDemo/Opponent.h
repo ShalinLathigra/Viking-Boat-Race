@@ -4,7 +4,7 @@ class Opponent :
 	public Car
 {
 public:
-	Opponent(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h, glm::vec3 firstFlag);
+	Opponent(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h, glm::vec3 firstFlag, float setMAX_SPEED);
 	~Opponent();
 	void update(double deltaTime);
 	int controller(float deltaTime, float skillMod);

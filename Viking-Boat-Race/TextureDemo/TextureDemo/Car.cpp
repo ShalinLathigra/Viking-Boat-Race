@@ -1,6 +1,5 @@
 #include "Car.h"
 
-#define MAX_SPEED 25.0f
 #define MIN_ROT_SPEED 100
 #define MAX_ROT_SPEED 180
 int Car::carNum = 0;
@@ -115,14 +114,21 @@ void Car::turn(int d,float deltaTime) {
 	//at MAX speed, rotation speed = 1 / 12s = 30 deg / second
 	//at MIN speed, rotation speed = 1 / s = 360 deg / second
 	rotationSpeed =(rotationSpeed == -1.5f) ? 0.0f : (speed > 0) ? MIN_ROT_SPEED + (MAX_ROT_SPEED - MIN_ROT_SPEED) * ((float)(MAX_SPEED - speed) / (float)MAX_SPEED) : 0;
-
 	if (d == 1) {//turn left
 		rotationAmount += rotationSpeed * deltaTime;
+		if (rotationAmount >= 360)
+		{
+			rotationAmount -= 360;
+		}
 		//std::cout << "TURNING LEFT" << std::endl;		
 	}
 	else if (d == 2) {//turn Right
 		//std::cout << "TURNING RIGHT" << std::endl;
 		rotationAmount -= rotationSpeed * deltaTime;
+		if (rotationAmount < 0)
+		{
+			rotationAmount += 360;
+		}
 	}
 }
 

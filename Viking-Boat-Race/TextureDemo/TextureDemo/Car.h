@@ -36,6 +36,8 @@ protected:
 	float jumpTimer;
 	const float jumpScaleMod = 1.1f;
 
+	float MAX_SPEED = 25.0f;
+
 	const float holeScaleShrinkRate = .1f;
 
 	glm::vec3 velocity;

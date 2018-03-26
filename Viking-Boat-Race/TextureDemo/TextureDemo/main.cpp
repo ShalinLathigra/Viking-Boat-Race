@@ -296,6 +296,11 @@ void drawParticles(Shader particleprogram, int particlesize)
 // Main function that builds and runs the game
 int main(void){
     try {
+		std::cout << "TESTVAL: " << atan2(1, 1) * (180 / 3.141592653589793238463) << ", ";
+		std::cout << "TESTVAL: " << atan2(1, -1)  * (180 / 3.141592653589793238463) << ", ";
+		std::cout << "TESTVAL: " << atan2(-1, -1) * (180 / 3.141592653589793238463) << ", ";
+		std::cout << "TESTVAL: " << atan2(-1, 1) * (180 / 3.141592653589793238463) << ", ";
+
 		// Setup window
 		Window window(window_width_g, window_height_g, window_title_g);
 
@@ -319,10 +324,10 @@ int main(void){
 		// Setup game objects
 		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 1.0f), 0.0f, tex[0], size);
 		Car* player = new Car(map.getStartPosition(4), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0));
-		//Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0));
-		//Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0));
-		//Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0));
+		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 10);
+		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 10);
+		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 10);
+		Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 10);
 
 		//PARTICLE SYSTEM TEST
 		int system = CreateParticleArray();
@@ -334,13 +339,13 @@ int main(void){
 		std::vector<Opponent*> enemies;
 		std::vector<Car*> allCars;//this is used for checking collisions
 		enemies.push_back(enemy0);
-		//enemies.push_back(enemy1);
-		//enemies.push_back(enemy2);
-		//enemies.push_back(enemy3);
+		enemies.push_back(enemy1);
+		enemies.push_back(enemy2);
+		enemies.push_back(enemy3);
 		allCars.push_back(enemy0);
-		//allCars.push_back(enemy1);
-		//allCars.push_back(enemy2);
-		//allCars.push_back(enemy3);
+		allCars.push_back(enemy1);
+		allCars.push_back(enemy2);
+		allCars.push_back(enemy3);
 		allCars.push_back(player);
 
         while (!glfwWindowShouldClose(window.getWindow())){
@@ -408,6 +413,10 @@ int main(void){
 			//player->render(shader, player->getPosition());
 
 			map.setPosition(player->getPosition());
+			std::cout << "FLAG NUMBER: " << enemies[0]->getFlagIndex() << std::endl;
+			std::cout << "FLAG COORDS: " << enemies[0]->getNextFlag().x << "," << enemies[0]->getNextFlag().y << std::endl;
+			std::cout << "AI COORDS:   " << enemies[0]->getPosition().x << "," << enemies[0]->getPosition().y << std::endl;
+
 			for (int i = 0; i < enemies.size(); i++) {
 				//enemies[i]->SetPosition(player->getPosition());//Is this still needed?
 				//std::cout << "CURRENT ITERATION: " << i;

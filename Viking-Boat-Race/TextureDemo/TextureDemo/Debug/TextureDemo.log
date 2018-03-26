@@ -1,6 +1,14 @@
-﻿  Opponent.cpp
+﻿  main.cpp
 c:\users\ben campbell\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\gameentity.h(17): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\ben campbell\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\opponent.cpp(98): warning C4715: 'Opponent::controller': not all control paths return a value
+c:\users\ben campbell\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(214): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ben campbell\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(281): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ben campbell\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(377): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\ben campbell\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(383): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\ben campbell\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(392): warning C4018: '<': signed/unsigned mismatch
+c:\users\ben campbell\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(393): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\ben campbell\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(420): warning C4018: '<': signed/unsigned mismatch
+c:\users\ben campbell\documents\github\viking-boat-race\viking-boat-race\texturedemo\texturedemo\main.cpp(423): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  GLM: rotate function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   SOIL.lib(SOIL.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
