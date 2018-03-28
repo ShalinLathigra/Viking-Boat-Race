@@ -16,6 +16,7 @@
 #include "Map.h"
 #include "Car.h"
 #include "Opponent.h"
+
 // Macro for printing exceptions
 #define PrintException(exception_object)\
 	std::cerr << exception_object.what() << std::endl
@@ -27,7 +28,7 @@ const unsigned int window_height_g = 800;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
 // Global texture info
-GLuint tex[4];
+GLuint tex[5];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -40,13 +41,17 @@ int CreateSquare(void) {
 
 	GLfloat vertex[]  = {
 		//  square (two triangles)
-		   //  Position      Color             Texcoords
-		-0.5f, 0.5f,	 1.0f, 0.0f, 0.0f,		0.0f, 0.0f, // Top-left
-		0.5f, 0.5f,		 0.0f, 1.0f, 0.0f,		1.0f, 0.0f, // Top-right
-		0.5f, -0.5f,	 0.0f, 0.0f, 1.0f,		1.0f, 1.0f, // Bottom-right
-		-0.5f, -0.5f,	 1.0f, 1.0f, 1.0f,		0.0f, 1.0f  // Bottom-left
+		   //  Position      Direction		Time	        uvCoords
+		-0.5f, 0.5f,		0.0f, 0.0f,		0.0f,		0.0f, 0.0f, // Top-left
+		0.5f, 0.5f,			0.0f, 0.0f,		0.0f,		1.0f, 0.0f, // Top-right
+		0.5f, -0.5f,		0.0f, 0.0f,		0.0f,		1.0f, 1.0f, // Bottom-right
+		-0.5f, -0.5f,		0.0f, 0.0f,		0.0f,		0.0f, 1.0f  // Bottom-left
 	};
 
+	//in vec2 vertex;
+	//in vec2 dir;
+	//in float t;
+	//in vec2 uv;
 
 	GLuint face[] = {
 		0, 1, 2, // t1
@@ -88,14 +93,37 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 	//	tex = new GLuint[3];
-	glGenTextures(4, tex);
+	glGenTextures(5, tex);
 	setthisTexture(tex[0], "mapImage.png");
 	setthisTexture(tex[1], "car.png");
 	setthisTexture(tex[2], "other.png");
 	setthisTexture(tex[3], "orb.png");
+	setthisTexture(tex[4], "smoke.png");
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
 
+void AttributeBinding(GLuint program)
+{
+
+	// Set attributes for shaders
+	// Should be consistent with how we created the buffers for the particle elements
+	GLint vertex_att = glGetAttribLocation(program, "vertex");
+	glVertexAttribPointer(vertex_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(vertex_att);
+
+	GLint dir_att = glGetAttribLocation(program, "dir");
+	glVertexAttribPointer(dir_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(dir_att);
+
+	GLint time_att = glGetAttribLocation(program, "t");
+	glVertexAttribPointer(time_att, 1, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(4 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(time_att);
+
+	GLint tex_att = glGetAttribLocation(program, "uv");
+	glVertexAttribPointer(tex_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(5 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(tex_att);
+
+}
 // Main function that builds and runs the game
 int main(void){
     try {
@@ -108,13 +136,19 @@ int main(void){
 
 		// Enable Alpha blending
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc(GL_ONE, GL_ONE);
 
 		// Create geometry of the square
 		int size = CreateSquare();
 
         // Set up shaders
 		Shader shader("shader.vert", "shader.frag");
+
+		//Particles
+		Shader partShader("shaderPart.vert", "shader.frag");
+		AttributeBinding(partShader.getShaderID());
+		//int carParticles = CreateParticleArray(.5f);
 
 		setallTexture();
 
@@ -181,6 +215,7 @@ int main(void){
 			}
 			
 
+
 			for (int i = 0; i < allCars.size(); i++) {
 				allCars[i]->boxCollisions(allCars, deltaTime);
 
@@ -191,6 +226,17 @@ int main(void){
 				allCars[i]->render(shader, player->getPosition());
 
 			}
+
+			//Draw Particles after drawing the Cars, makes it look a bit better
+			partShader.enable();
+			AttributeBinding(partShader.getShaderID());
+			drawParticles(partShader.getShaderID(), carParticles, player);
+
+
+			//Draw/Update Everything Else
+			shader.enable();
+			AttributeBinding(shader.getShaderID());
+
 
 			//map.getPropertyUnder(player);
 			//if (map.getPropertyUnder(player) == Tile::TileProp::WALL) {

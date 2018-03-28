@@ -159,6 +159,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Opponent.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -168,11 +169,14 @@
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Opponent.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="boomShader.frag" />
+    <None Include="boomShader.vert" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
     <None Include="shaderPart.vert" />

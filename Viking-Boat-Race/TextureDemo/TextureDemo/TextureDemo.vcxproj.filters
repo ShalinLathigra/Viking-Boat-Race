@@ -39,6 +39,9 @@
     <ClCompile Include="Opponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEntity.h">
@@ -62,6 +65,9 @@
     <ClInclude Include="Opponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.vert">
@@ -71,6 +77,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="shaderPart.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="boomShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="boomShader.frag">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
