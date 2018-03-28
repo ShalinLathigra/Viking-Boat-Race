@@ -1,11 +1,10 @@
 #include "Car.h"
 
-#define MAX_SPEED 25.0f
 #define MIN_ROT_SPEED 100
 #define MAX_ROT_SPEED 180
 int Car::carNum = 0;
 Car::Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h)
-	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), jumpTimer(0), scaleMod(1.0f), falling(0)
+	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), jumpTimer(0), scaleMod (1.0f)
 {
 	id = carNum;
 	speed = 0;
@@ -16,32 +15,25 @@ Car::Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmoun
 }
 void Car::update(double deltaTime){
 
-	if (falling) {
-		advanceFall(deltaTime);
-	}
-	else {
-		advanceTimers(deltaTime);
+	advanceTimers(deltaTime);
 
-		momentum = velocity * mass;
-		forces += momentum;
-		float forceX = cos(rotationAmount *(PI / 180.0f));
-		float forceY = sin(rotationAmount *(PI / 180.0f));
+	momentum = velocity * mass;
+	forces += momentum;
+	float forceX = cos(rotationAmount *(PI / 180.0f));
+	float forceY = sin(rotationAmount *(PI / 180.0f));
 
-		glm::vec3 f = glm::vec3(forceX, forceY, 0);
-		velocity = (float)speed * speedMod * (f / mass)*(float)deltaTime;
+	glm::vec3 f = glm::vec3(forceX, forceY, 0);
+	velocity = (float)speed * speedMod * (f/mass)*(float)deltaTime;
 
-		velocity += (forces / mass)*(float)deltaTime;
-		position += velocity;
-		forces = glm::vec3(0, 0, 0);
-	}
+	velocity += (forces / mass)*(float) deltaTime;
+	position += velocity;
+	forces = glm::vec3(0,0,0);
 }
 void Car::render(Shader & shader, glm::vec3 offset)
 {
 	position -= offset;
 	scale *= scaleMod;
-
 	GameEntity::render(shader);
-
 	scale /= scaleMod;
 	position += offset;
 }
@@ -122,12 +114,21 @@ void Car::turn(int d,float deltaTime) {
 	//at MAX speed, rotation speed = 1 / 12s = 30 deg / second
 	//at MIN speed, rotation speed = 1 / s = 360 deg / second
 	rotationSpeed =(rotationSpeed == -1.5f) ? 0.0f : (speed > 0) ? MIN_ROT_SPEED + (MAX_ROT_SPEED - MIN_ROT_SPEED) * ((float)(MAX_SPEED - speed) / (float)MAX_SPEED) : 0;
-
 	if (d == 1) {//turn left
-		rotationAmount += rotationSpeed * deltaTime;		
+		rotationAmount += rotationSpeed * deltaTime;
+		if (rotationAmount >= 360)
+		{
+			rotationAmount -= 360;
+		}
+		//std::cout << "TURNING LEFT" << std::endl;		
 	}
 	else if (d == 2) {//turn Right
+		//std::cout << "TURNING RIGHT" << std::endl;
 		rotationAmount -= rotationSpeed * deltaTime;
+		if (rotationAmount < 0)
+		{
+			rotationAmount += 360;
+		}
 	}
 }
 
@@ -136,32 +137,6 @@ void Car::applyImpulse(glm::vec3 impulse)
 	momentum += impulse;
 	velocity = momentum / mass;
 	velocity *= 0.95f;
-}
-
-void Car::startFall()
-{
-	falling = 1;
-}
-
-void Car::advanceFall(double deltaTime)
-{
-	scaleMod = std::max(0.0f, (float)(scaleMod - shrinkRate * deltaTime));
-}
-
-int Car::isFalling() {
-	return falling;
-}
-void Car::resetFall(glm::vec3 pos) {
-	std::cout << "a" << std::endl;
-	setPosition(pos);
-	scaleMod = 1.0f;
-	//need to reset the scale vector, when scaleMod == 0, numbers get lost, but this saves it
-	scale = glm::vec3(.1f, .1f, .1f);
-	falling = 0;
-}
-
-int Car::doneFalling() {
-	return scaleMod <= 0.0f;
 }
 
 void Car::startJump()

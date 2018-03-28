@@ -59,11 +59,11 @@ public:
 	void populateData(char * fileName);
 
 	glm::vec3 getFlag(int i);
+	int getMaxFlags();
 
 	glm::vec3 getStartPosition(int i);
 
 	void calculateCarCollisions(Car * A);
 	Tile::TileProp getPropertyUnder(Car * A);
-
-	glm::vec3 nearestFlag(glm::vec3 pos);
+	Tile::TileProp getPropertyAt(glm::vec3 position);
 };

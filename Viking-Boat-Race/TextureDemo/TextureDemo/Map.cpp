@@ -60,14 +60,15 @@ void Map::populateData(char * fileName) {
 		}
 	}
 }
-
-//return the position, if it exists;
 glm::vec3 Map::getFlag(int i) {
 	if (i >= 0 && i < aiFlags.size()) {
 		return aiFlags.at(i);
 	}
 }
-//return the position, if it exists;
+int Map::getMaxFlags()
+{
+	return aiFlags.size();
+}
 glm::vec3 Map::getStartPosition(int i) {
 	if (i >= 0 && i < startPositions.size()) {
 		return startPositions.at(i);
@@ -80,53 +81,22 @@ Tile::TileProp Map::getPropertyUnder(Car * A)
 	Tile::TileProp ret = Tile::TileProp::WALL;
 	int col = (int)(64.0f * (A->getPosition().x + 9.0f) / 18.0f);		//x
 	int row = (int)(-32.0f * (A->getPosition().y - 4.5f) / 9.0f);		//y
-
-	if (row >= 0 && row < data.size() && col >= 0 && col < data[0].size()) 
-	{
+	//std::cout << A->id << " ";
+	//std::cout << data[0].size() << " " << col << " ";
+	//std::cout << data.size() << " " << row << std::endl;
+	if (row >= 0 && row < data.size() && col >= 0 && col < data[0].size()) {
 		ret = data[row][col].prop;
 	}
-	if (!A->isJumping()) 
-	{
-		//set the car's speed mod
+	if (!A->isJumping()) {
 		A->speedMod = (ret == Tile::TileProp::ROAD) ? 1.0f : (ret == Tile::TileProp::RAMP) ? 2.5f : (ret == Tile::TileProp::SLICK) ? 1.5f : (ret == Tile::TileProp::HOLE) ? .1f : .5f;
-
-		//if on ramp, start the jump
-		if (ret == Tile::TileProp::RAMP) 
-		{
+		if (ret == Tile::TileProp::RAMP) {
 			A->startJump();
 		}
-		//if in a hole, start fall
-		else if (ret == Tile::TileProp::HOLE) 
-		{
-			A->startFall();
-		}
 		A->rotationSpeed = (ret == Tile::TileProp::SLICK) ? -1.5f : A->rotationSpeed;
-
-		//reset falling if necessary
-		if (A->isFalling() && A->doneFalling())
-		{
-			A->resetFall(nearestFlag(A->getPosition()));
-		}
 	}
 	return ret;
 }
-glm::vec3 Map::nearestFlag(glm::vec3 pos) 
-{
-	float nearestDist = 100000.0f;
-	float currentDist;
-	glm::vec3 nearestFlag = aiFlags.at(0);
-	for (int i = 0; i < aiFlags.size(); i++) 
-	{
-		currentDist = glm::distance(pos, aiFlags.at(i));
-		if ( currentDist < nearestDist) {
-			nearestDist = currentDist;
-			nearestFlag = aiFlags.at(i);
-		}
-	}
-	return nearestFlag;
-}
 
-//Car collisions with walls
 void Map::calculateCarCollisions(Car * A)
 {
 	float minX = topLeft.x;
@@ -135,10 +105,10 @@ void Map::calculateCarCollisions(Car * A)
 	float maxY = -minY;
 
 	//Bounding Position
-	if (A->getPosition().x < minX + 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(minX + 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f));}
-	if (A->getPosition().x > maxX - 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(maxX - 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f));}
-	if (A->getPosition().y < minY + 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(A->getPosition().x, minY + 4.0f * COLLISION_DISTANCE, 0.0f));}
-	if (A->getPosition().y > maxY - 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(A->getPosition().x, maxY - 4.0f * COLLISION_DISTANCE, 0.0f));}
+	if (A->getPosition().x < minX + 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(minX + 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f)); A->applyImpulse(1.95f * glm::vec3(-A->getVel().x, A->getVel().y, 0.0f));}
+	if (A->getPosition().x > maxX - 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(maxX - 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f)); A->applyImpulse(1.95f * glm::vec3(-A->getVel().x, A->getVel().y, 0.0f));}
+	if (A->getPosition().y < minY + 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(A->getPosition().x, minY + 4.0f * COLLISION_DISTANCE, 0.0f)); A->applyImpulse(1.95f * glm::vec3(A->getVel().x, -A->getVel().y, 0.0f));}
+	if (A->getPosition().y > maxY - 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(A->getPosition().x, maxY - 4.0f * COLLISION_DISTANCE, 0.0f)); A->applyImpulse(1.95f * glm::vec3(A->getVel().x, -A->getVel().y, 0.0f));}
 
 	//Colliding with walls
 	for (std::vector<Wall>::iterator wall = walls.begin(); wall != walls.end(); ++wall) 

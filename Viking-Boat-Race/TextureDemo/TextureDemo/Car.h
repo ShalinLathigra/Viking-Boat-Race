@@ -24,12 +24,15 @@ public:
 	void applyImpulse(glm::vec3 impulse);
 
 	inline void setPosition(glm::vec3 pos) { position = pos; }
+<<<<<<< HEAD
 	inline float getRotationAmount() { return rotationAmount; }
 	void startFall();
 	void advanceFall(double deltaTime);
 	int isFalling();
 	int doneFalling();
 	void resetFall(glm::vec3 pos);
+=======
+>>>>>>> 45a943505b80a5a1da166f513bce83b28827a2fe
 
 	void startJump();
 	void advanceTimers(double deltaTime);
@@ -42,8 +45,9 @@ protected:
 	float jumpTimer;
 	const float jumpScaleMod = 1.1f;
 
-	const float shrinkRate = .75f;
-	int falling;
+	float MAX_SPEED = 25.0f;
+
+	const float holeScaleShrinkRate = .1f;
 
 	glm::vec3 velocity;
 	glm::vec3 forces;
