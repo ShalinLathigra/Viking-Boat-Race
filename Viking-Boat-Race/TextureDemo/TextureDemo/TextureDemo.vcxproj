@@ -179,6 +179,7 @@
     <None Include="boomShader.vert" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
+    <None Include="shaderPart.frag" />
     <None Include="shaderPart.vert" />
   </ItemGroup>
   <ItemGroup>

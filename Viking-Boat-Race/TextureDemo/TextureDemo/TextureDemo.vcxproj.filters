@@ -79,6 +79,9 @@
     <None Include="shaderPart.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shaderPart.frag">
+      <Filter>Resource Files</Filter>
+    </None>
     <None Include="boomShader.vert">
       <Filter>Resource Files</Filter>
     </None>

@@ -62,8 +62,8 @@ public:
 	int getMaxFlags();
 
 	glm::vec3 getStartPosition(int i);
+	glm::vec3 nearestFlag(glm::vec3 pos);
 
 	void calculateCarCollisions(Car * A);
 	Tile::TileProp getPropertyUnder(Car * A);
-	Tile::TileProp getPropertyAt(glm::vec3 position);
 };

@@ -12,17 +12,17 @@ void Map::populateData(char * fileName) {
 	addRow();
 	int index = 0;
 
-	for (std::string::iterator iter = mapString.begin(); iter != mapString.end(); ++iter) 
+	for (std::string::iterator iter = mapString.begin(); iter != mapString.end(); ++iter)
 	{
-		if (*iter == '\n') 
+		if (*iter == '\n')
 		{
-			addRow(); 
+			addRow();
 		}
-		else if (*iter == ' ') 
-		{ 
-			addTile(Tile::Tile()); 
+		else if (*iter == ' ')
+		{
+			addTile(Tile::Tile());
 		}
-		else if (*iter - '0' >= 1 && *iter - '0' <= 3 || isalpha(*iter)) 
+		else if (*iter - '0' >= 1 && *iter - '0' <= 3 || isalpha(*iter))
 		{
 			addTile(Tile::Tile(Tile::TileProp::ROAD, .1f, 0));
 
@@ -38,23 +38,23 @@ void Map::populateData(char * fileName) {
 				}
 			}
 		}
-		else if (*iter == '4') 
+		else if (*iter == '4')
 		{
 			addTile(Tile::Tile(Tile::TileProp::HOLE, 1.0f, -2));
 		}
-		else if (*iter == '5') 
+		else if (*iter == '5')
 		{
 			addTile(Tile::Tile(Tile::TileProp::RAMP, 1.0f, -2));
 		}
-		else if (*iter == '6') 
+		else if (*iter == '6')
 		{
 			addTile(Tile::Tile(Tile::TileProp::SLICK, 1.0f, -2));
 		}
-		else if (*iter == '|' || *iter == '-') 
+		else if (*iter == '|' || *iter == '-')
 		{
 			addTile(Tile::Tile(Tile::TileProp::RAMP, -.5f, 2));
 		}
-		else if (*iter == '#') 
+		else if (*iter == '#')
 		{
 			addTile(Tile::Tile(Tile::TileProp::WALL, -.5f, 2));
 		}
@@ -74,16 +74,16 @@ glm::vec3 Map::getStartPosition(int i) {
 		return startPositions.at(i);
 	}
 }
-Tile::TileProp Map::getPropertyUnder(Car * A) 
+Tile::TileProp Map::getPropertyUnder(Car * A)
 {
 	//64 wide
 	//32 tall
 	Tile::TileProp ret = Tile::TileProp::WALL;
 	int col = (int)(64.0f * (A->getPosition().x + 9.0f) / 18.0f);		//x
 	int row = (int)(-32.0f * (A->getPosition().y - 4.5f) / 9.0f);		//y
-	//std::cout << A->id << " ";
-	//std::cout << data[0].size() << " " << col << " ";
-	//std::cout << data.size() << " " << row << std::endl;
+																		//std::cout << A->id << " ";
+																		//std::cout << data[0].size() << " " << col << " ";
+																		//std::cout << data.size() << " " << row << std::endl;
 	if (row >= 0 && row < data.size() && col >= 0 && col < data[0].size()) {
 		ret = data[row][col].prop;
 	}
@@ -92,9 +92,28 @@ Tile::TileProp Map::getPropertyUnder(Car * A)
 		if (ret == Tile::TileProp::RAMP) {
 			A->startJump();
 		}
+		else if (ret == Tile::TileProp::HOLE) {
+			A->startFall();
+		}
 		A->rotationSpeed = (ret == Tile::TileProp::SLICK) ? -1.5f : A->rotationSpeed;
+
+		if (A->isFalling() && A->doneFalling()) {
+			A->resetFall(nearestFlag(A->getPosition()));
+		}
 	}
 	return ret;
+}
+glm::vec3 Map::nearestFlag(glm::vec3 pos) {
+	float shortestDist = 100000.0f;
+	glm::vec3 nearestFlag = aiFlags.at(0);
+
+	for (int i = 0; i < aiFlags.size(); i++) {
+		if (glm::distance(pos, aiFlags.at(i)) < shortestDist) {
+			shortestDist = glm::distance(pos, aiFlags.at(i));
+			nearestFlag = aiFlags.at(i);
+		}
+	}
+	return nearestFlag;
 }
 
 void Map::calculateCarCollisions(Car * A)
@@ -105,17 +124,17 @@ void Map::calculateCarCollisions(Car * A)
 	float maxY = -minY;
 
 	//Bounding Position
-	if (A->getPosition().x < minX + 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(minX + 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f)); A->applyImpulse(1.95f * glm::vec3(-A->getVel().x, A->getVel().y, 0.0f));}
-	if (A->getPosition().x > maxX - 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(maxX - 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f)); A->applyImpulse(1.95f * glm::vec3(-A->getVel().x, A->getVel().y, 0.0f));}
-	if (A->getPosition().y < minY + 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(A->getPosition().x, minY + 4.0f * COLLISION_DISTANCE, 0.0f)); A->applyImpulse(1.95f * glm::vec3(A->getVel().x, -A->getVel().y, 0.0f));}
-	if (A->getPosition().y > maxY - 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(A->getPosition().x, maxY - 4.0f * COLLISION_DISTANCE, 0.0f)); A->applyImpulse(1.95f * glm::vec3(A->getVel().x, -A->getVel().y, 0.0f));}
+	if (A->getPosition().x < minX + 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(minX + 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f)); }
+	if (A->getPosition().x > maxX - 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(maxX - 4.0f * COLLISION_DISTANCE, A->getPosition().y, 0.0f)); }
+	if (A->getPosition().y < minY + 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(A->getPosition().x, minY + 4.0f * COLLISION_DISTANCE, 0.0f)); }
+	if (A->getPosition().y > maxY - 4.0f * COLLISION_DISTANCE) { A->setPosition(glm::vec3(A->getPosition().x, maxY - 4.0f * COLLISION_DISTANCE, 0.0f)); }
 
 	//Colliding with walls
-	for (std::vector<Wall>::iterator wall = walls.begin(); wall != walls.end(); ++wall) 
+	for (std::vector<Wall>::iterator wall = walls.begin(); wall != walls.end(); ++wall)
 	{
 		//Normal is a line directly to the ball, normalized. 
 		//need to find out what edge I am closest to, then use that to find the normal of the collision
-		
+
 		glm::vec3 normal = glm::vec3();
 		float distToLeft = abs(wall->getOrigin().x - A->getPosition().x);
 		float distToRight = abs((wall->getOrigin().x + wall->getDimensions().x) - A->getPosition().x);
@@ -129,9 +148,9 @@ void Map::calculateCarCollisions(Car * A)
 
 		//std::cout << "TOP: " << distToTop << ", BOT: " << distToBot << std::endl;
 
-		if (minimumDist < COLLISION_DISTANCE) 
+		if (minimumDist < COLLISION_DISTANCE)
 		{
-			if (yWithinRange) 
+			if (yWithinRange)
 			{
 				if (minimumDist == distToLeft)
 				{
@@ -144,7 +163,7 @@ void Map::calculateCarCollisions(Car * A)
 					A->setPosition(glm::vec3(wall->getOrigin().x + wall->getDimensions().x + COLLISION_DISTANCE, A->getPosition().y, 0.0f));
 				}
 			}
-			if (xWithinRange) 
+			if (xWithinRange)
 			{
 				if (minimumDist == distToTop)
 				{
@@ -166,7 +185,7 @@ Map::~Map()
 {
 }
 Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
-	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), topLeft(glm::vec3(-9.0f+1.0f/32.0f, 4.5f+1.0f/32.0f, 0.0f))
+	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), topLeft(glm::vec3(-9.0f + 1.0f / 32.0f, 4.5f + 1.0f / 32.0f, 0.0f))
 {
 	float yScale = 9.0f / 32.0f;
 	float xScale = 18.0f / 64.0f;

@@ -1,21 +1,21 @@
 #pragma once
-#include "GameEntity.h"
 #include "Car.h"
 class ParticleSystem
 {
 public:
-	ParticleSystem(float range);
+	ParticleSystem(float range, GLuint tex);
+	ParticleSystem(float range, GLuint tex, glm::vec3 pos);
+	static int CreateParticleArray(float range, GLuint & vbo, GLuint & ebo);
 
-	int CreateParticleArray(float range);
-	void renderSystem(GLuint particleprogram, Car * A);
+	void bindBuffers();
 
-	~ParticleSystem();
+	void renderTrail(Shader & particleprogram, Car * A);
 
+	void renderBurst(Shader & shader, Car * A, glm::vec3 position, float startTime);
 private:
-	int particleSystem;
-	int matrixLoc, timeLoc, intLoc;
-	float rotationAmount;
-	glm::vec3 scale, position;
+	const float maxDuration = 3.0f;
+	int system;
 	GLuint texture;
+	GLuint partVBO, partEBO;
 };
 

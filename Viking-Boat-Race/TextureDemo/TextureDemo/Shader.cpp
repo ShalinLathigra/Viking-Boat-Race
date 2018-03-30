@@ -96,6 +96,28 @@ void Shader::setUniformMat4(const GLchar *name, const glm::mat4 &matrix) {
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
+void Shader::AttributeBinding()
+{
+
+	// Set attributes for shaders
+	// Should be consistent with how we created the buffers for the particle elements
+	GLint vertex_att = glGetAttribLocation(shaderProgram, "vertex");
+	glVertexAttribPointer(vertex_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(vertex_att);
+
+	GLint dir_att = glGetAttribLocation(shaderProgram, "dir");
+	glVertexAttribPointer(dir_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(dir_att);
+
+	GLint time_att = glGetAttribLocation(shaderProgram, "t");
+	glVertexAttribPointer(time_att, 1, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(4 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(time_att);
+
+	GLint tex_att = glGetAttribLocation(shaderProgram, "uv");
+	glVertexAttribPointer(tex_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(5 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(tex_att);
+}
+
 Shader::~Shader() {
 	glDeleteProgram(shaderProgram);
 }

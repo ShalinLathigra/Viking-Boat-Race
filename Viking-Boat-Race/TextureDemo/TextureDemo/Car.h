@@ -9,9 +9,9 @@ public:
 	static int carNum;
 	glm::vec3 momentum;
 	int id;
-	Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements,float m, int h);
-	void drive(double deltaTime,int dir);
-	void turn(int d,float deltaTime);
+	Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h);
+	void drive(double deltaTime, int dir);
+	void turn(int d, float deltaTime);
 	void attack(int weaponType);
 	bool equals(Car*);
 	const float MAX_VELOCITY = 175;
@@ -24,22 +24,20 @@ public:
 	void applyImpulse(glm::vec3 impulse);
 
 	inline void setPosition(glm::vec3 pos) { position = pos; }
-<<<<<<< HEAD
 	inline float getRotationAmount() { return rotationAmount; }
 	void startFall();
 	void advanceFall(double deltaTime);
-	int isFalling();
-	int doneFalling();
-	void resetFall(glm::vec3 pos);
-=======
->>>>>>> 45a943505b80a5a1da166f513bce83b28827a2fe
-
+	inline int isFalling() { return falling; }
+	inline int doneFalling() { return scaleMod <= 0.0f; }
+	inline void resetFall(glm::vec3 pos) { position = pos; scaleMod = 1.0f; falling = 0; velocity = glm::vec3(); }
 	void startJump();
 	void advanceTimers(double deltaTime);
 	inline int isJumping() {/* std::cout<< jumpTimer <<std::endl; */return jumpTimer > 0.0f; }
 
 	float speedMod;	//Controls the different surfaces
 	float rotationSpeed;
+
+	inline float speedPercentage() { return speed / MAX_SPEED; }
 protected:
 	const float maxJumpTimer = .5f;
 	float jumpTimer;
@@ -47,7 +45,8 @@ protected:
 
 	float MAX_SPEED = 25.0f;
 
-	const float holeScaleShrinkRate = .1f;
+	const float holeScaleShrinkRate = .5f;
+	int falling;
 
 	glm::vec3 velocity;
 	glm::vec3 forces;
