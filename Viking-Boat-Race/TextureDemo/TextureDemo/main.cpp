@@ -136,14 +136,9 @@ int main(void){
 		float explosionTimer = 3.0f;
 		ParticleSystem explosion(3.0f, tex[3]);
 		std::vector<glm::vec3> explosions = std::vector<glm::vec3>();//x, y, time
-		
-		float x = (float)(rand() % 2) - 1.0f;
-		float y = (float)(rand() % 2) - 1.0f;
-		explosions.push_back(glm::vec3(x, y, glfwGetTime()));
-		numExplosions++;
 
-		const float maxTimer = 3.0f / (float)maxExplosions;
-		float timer = maxTimer;
+		//const float maxTimer = 3.0f / (float)maxExplosions;
+		//float timer = maxTimer;
 
 
 		// Setup game objects
@@ -238,7 +233,7 @@ int main(void){
 			//*****************************   Update and Render Explosions   ***********************
 			//*****************************   							     ***********************
 			//**************************************************************************************
-
+			/*
 			if (numExplosions < maxExplosions ) 
 			{
 				if (timer <= 0.0f) 
@@ -273,10 +268,7 @@ int main(void){
 					explosion.renderBurst(boomShader, player, glm::vec3(explosions[i].x, explosions[i].y, 0.0f), explosions[i].z);
 				}
 			}
-			//burst.bindBuffers();
-			//boomShader.AttributeBinding();
-			//burst.renderBurst(boomShader, player->getPosition() - glm::vec3(.5f, 0.0f, 0.0f), player);
-			
+			*/
 			//**************************************************************************************
 			//********************************							  **************************
 			//********************************     Finish Explosions      **************************
