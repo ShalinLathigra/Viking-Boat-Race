@@ -103,6 +103,9 @@ void setallTexture(void)
 int main(void){
     try {
 
+		// Set seed for random
+		srand(time(NULL));
+
 		// Setup window
 		Window window(window_width_g, window_height_g, window_title_g);
 
@@ -144,10 +147,10 @@ int main(void){
 		// Setup game objects
 		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 1.0f), 0.0f, tex[0], size);
 		Car* player = new Car(map.getStartPosition(4), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 10);
-		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 10);
-		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 10);
-		Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 10);
+		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20);
+		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20);
+		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20);
+		Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20);
 
 
         // Run the main loop
@@ -280,15 +283,25 @@ int main(void){
 
 			map.setPosition(player->getPosition());
 
+			//std::cout << "Player Pos: " << player->getPosition().x << ", " << player->getPosition().y << std::endl;
+
 			for (int i = 0; i < enemies.size(); i++) {
 				int result = enemies[i]->controller(deltaTime, 0);//Checks turning status for all vehicles
 				if (result == 1)//If we need to set a new flag
 				{
 					enemies[i]->setFlagIndex(enemies[i]->getFlagIndex() + 1);
 					if (enemies[i]->getFlagIndex() >= map.getMaxFlags())
+					{
 						enemies[i]->setFlagIndex(0);
-						
-					enemies[i]->setNextFlag(map.getFlag(enemies[i]->getFlagIndex()));
+						enemies[i]->setCurrentLap(enemies[i]->getCurrentLap() + 1);
+					}
+					//This all just adds slight variation to the points the AI are targeting so they don't follow each other//
+					double diffx = rand() % 40 - 20;
+					double diffy = rand() % 40 - 20;
+					glm::vec3 newFlag = map.getFlag(enemies[i]->getFlagIndex());
+					newFlag.x += diffx/100;
+					newFlag.y += diffy/100;
+					enemies[i]->setNextFlag(newFlag);
 				}
 			}
 

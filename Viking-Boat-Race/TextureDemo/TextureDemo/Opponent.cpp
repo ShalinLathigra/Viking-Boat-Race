@@ -10,6 +10,8 @@ Opponent::Opponent(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRot
 	flagIndex = 0;
 	nextFlag = firstFlag;
 	MAX_SPEED = setMAX_SPEED;
+	natSteerDir = 0;
+	natSteerTimer = 0;
 }
 
 
@@ -28,8 +30,6 @@ int Opponent::controller(float deltaTime, float skillMod)
 	float forceX = cos(rotationAmount *(PI / 180.0f));
 	float forceY = sin(rotationAmount *(PI / 180.0f));
 	glm::vec3 currDir = glm::vec3(forceX, forceY, 0);
-	
-	//turn(1, deltaTime);
 
 	if (hypot(hypot(nextFlag.x - position.x, nextFlag.y - position.y), nextFlag.z - position.z) < 0.1)
 		return 1;
@@ -47,12 +47,43 @@ int Opponent::controller(float deltaTime, float skillMod)
 	if (result >= 360)
 		result -= 360;
 
-	if (result == 180)
+	if (result == 180 && natSteerDir == 0)
 		turn(1, deltaTime);
-	else if (result < 180)
+	else if (result < 180 && natSteerDir == 0)
 		turn(2, deltaTime);
-	else
+	else if (natSteerDir == 0)
 		turn(1, deltaTime);
+
+	//Basically adding some slight turning in natural movement to add realism//
+	if (natSteerDir == 0)
+	{
+		if (natSteerTimer == 0)
+		{
+			int chance = rand() % 200;
+			std::cout << chance << std::endl;
+			if (chance == 1)
+			{
+				natSteerDir = 1;
+				natSteerTimer = 30;
+			}
+			else if (chance == 2)
+			{
+				natSteerDir = 2;
+				natSteerTimer = 30;
+			}
+		}
+	}
+	else
+	{
+		std::cout << "YEEEEEEEEEET" << std::endl;
+		if (natSteerDir == 1)
+			turn(1, deltaTime);
+		else
+			turn(2, deltaTime);
+		natSteerTimer--;
+		if (natSteerTimer == 0)
+			natSteerDir = 0;
+	}
 
 	drive(deltaTime, 1);
 	return 0;
@@ -81,4 +112,14 @@ glm::vec3 Opponent::getNextFlag()
 int Opponent::getFlagIndex()
 {
 	return flagIndex;
+}
+
+int Opponent::getCurrentLap()
+{
+	return currentLap;
+}
+
+void Opponent::setCurrentLap(int lap)
+{
+	currentLap = lap;
 }

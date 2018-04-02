@@ -42,7 +42,7 @@ protected:
 	const float maxJumpTimer = .5f;
 	float jumpTimer;
 	const float jumpScaleMod = 1.1f;
-
+	int currentLap;
 	float MAX_SPEED = 25.0f;
 
 	const float holeScaleShrinkRate = .5f;

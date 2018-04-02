@@ -12,6 +12,7 @@ Car::Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmoun
 	mass = m;
 	carNum++;
 	rotationSpeed = 0.0f;
+	currentLap = 0;
 }
 void Car::update(double deltaTime) {
 
