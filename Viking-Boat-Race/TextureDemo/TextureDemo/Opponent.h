@@ -13,10 +13,14 @@ public:
 	void setFlagIndex(int fIndex);
 	glm::vec3 getNextFlag();
 	int getFlagIndex();
+	int getCurrentLap();
+	void setCurrentLap(int lap);
 	void render(Shader & shader);
 private:
 	glm::vec3 cameraPos;
 	glm::vec3 nextFlag;
 	int flagIndex;
+	int natSteerDir;
+	int natSteerTimer;
 };
 
