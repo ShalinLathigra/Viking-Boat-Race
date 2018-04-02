@@ -11,6 +11,7 @@ class Wall {
 private:
 	glm::vec3 originPosition;
 	glm::vec3 dimensions;
+	const int numLaps = 3;
 public:
 	Wall(glm::vec3 pos, glm::vec3 dim);
 	inline glm::vec3 getDimensions() { return dimensions; }

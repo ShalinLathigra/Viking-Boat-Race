@@ -18,7 +18,7 @@ void ParticleSystem::bindBuffers() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, partEBO);
 
 }
-void ParticleSystem::renderWind(Shader & particleprogram, Car * A)
+void ParticleSystem::renderWind(Shader & particleprogram, Car * A, glm::vec3 playerOffset)
 {
 	glDepthMask(GL_FALSE);
 
@@ -31,7 +31,7 @@ void ParticleSystem::renderWind(Shader & particleprogram, Car * A)
 	glm::mat4 world = glm::mat4();
 
 	float k = glfwGetTime();
-	rot = glm::translate(rot, .1f * glm::vec3(cos(A->getRotationAmount() * 3.14159/180.0f), sin(A->getRotationAmount() * 3.14159 / 180.0f), 0.0f));
+	rot = glm::translate(rot, A->getPosition() + .1f * glm::vec3(cos(A->getRotationAmount() * 3.14159/180.0f), sin(A->getRotationAmount() * 3.14159 / 180.0f) , 0.0f) - playerOffset);
 	rot = glm::rotate(rot, A->getRotationAmount() + 45.0f, glm::vec3(0, 0, 1));
 	float scale = 0.025;
 	rot = glm::scale(rot, glm::vec3(scale, scale, scale));
@@ -58,7 +58,7 @@ void ParticleSystem::renderWind(Shader & particleprogram, Car * A)
 
 	glDepthMask(GL_TRUE);
 }
-void ParticleSystem::renderTrail(Shader & particleprogram, Car * A)
+void ParticleSystem::renderTrail(Shader & particleprogram, Car * A, glm::vec3 playerOffset)
 {
 
 	// Select proper shader program to use
@@ -71,8 +71,8 @@ void ParticleSystem::renderTrail(Shader & particleprogram, Car * A)
 	glm::mat4 world = glm::mat4();
 
 	float k = glfwGetTime();
+	rot = glm::translate(rot, A->getPosition() - playerOffset);
 	rot = glm::rotate(rot, A->getRotationAmount() + 90.0f, glm::vec3(0, 0, 1));
-	rot = glm::translate(rot, glm::vec3());
 	float scale = 0.05;
 	rot = glm::scale(rot, glm::vec3(scale, scale, scale));
 	// get ready to draw, load matrix

@@ -9,9 +9,9 @@ public:
 
 	void bindBuffers();
 
-	void renderWind(Shader & particleprogram, Car * A);
+	void renderWind(Shader & particleprogram, Car * A, glm::vec3 playerOffset);
 
-	void renderTrail(Shader & particleprogram, Car * A);
+	void renderTrail(Shader & particleprogram, Car * A, glm::vec3 playerOffset);
 
 	void renderBurst(Shader & shader, Car * A, glm::vec3 position, float startTime);
 private:

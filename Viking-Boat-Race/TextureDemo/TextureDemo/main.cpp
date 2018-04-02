@@ -30,7 +30,7 @@ const unsigned int window_height_g = 800;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
 // Global texture info
-GLuint tex[5];
+GLuint tex[10];
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -89,12 +89,14 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[3];
-	glGenTextures(5, tex);
+	glGenTextures(10, tex);
 	setthisTexture(tex[0], "mapImage.png");
 	setthisTexture(tex[1], "car.png");
 	setthisTexture(tex[2], "other.png");
 	setthisTexture(tex[3], "orb.png");
 	setthisTexture(tex[4], "fireEffect.png");
+	setthisTexture(tex[5], "smoke.png");
+	setthisTexture(tex[6], "MainMenu.png");
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
 
@@ -132,20 +134,7 @@ int main(void){
 		Shader boomShader("boomShader.vert", "boomShader.frag");
 
 		//PARTICLE SYSTEMS
-		ParticleSystem exhaust( .1, tex[4] );
-
-		//EXPLOSION SYSTEMS
-		int numExplosions = 0;
-		const int maxExplosions = 7;
-		float explosionTimer = 3.0f;
-		ParticleSystem explosion(3.0f, tex[3]);
-		std::vector<glm::vec3> explosions = std::vector<glm::vec3>();//x, y, time
-
-		const float maxTimer = 3.0f / (float)maxExplosions;
-		float timer = maxTimer;
-
-		//SPEED SYSTEMS
-		//draw two lines on either side of the player when at max speed
+		ParticleSystem exhaust( .1, tex[5] );
 		ParticleSystem windStream(0.0f, tex[3]);
 
 		// Setup game objects
@@ -173,6 +162,9 @@ int main(void){
 		allCars.push_back(player);
 		std::vector<Arrow> arrows;
 		bool space = false;
+
+		int started = 0;
+
         while (!glfwWindowShouldClose(window.getWindow())){
             // Clear background
 			window.clear(glm::vec3(0.0f, .1f, 0.0f));
@@ -250,60 +242,26 @@ int main(void){
 			partShader.enable();
 			exhaust.bindBuffers();
 			partShader.AttributeBinding();
-			exhaust.renderTrail(partShader, player);
 
-			if (player->isSpeeding()) 
+			for (std::vector<Car *>::iterator c = allCars.begin(); c != allCars.end(); ++c)
 			{
-				windStream.bindBuffers();
-				partShader.AttributeBinding();
-				windStream.renderWind(partShader, player);
+				exhaust.renderTrail(partShader, *c, player->getPosition());
+			}
+
+			windStream.bindBuffers();
+			partShader.AttributeBinding();
+			for (std::vector<Car *>::iterator c = allCars.begin(); c != allCars.end(); ++c) 
+			{
+				if ((*c)->isSpeeding())
+				{
+					windStream.renderWind(partShader, *c, player->getPosition());
+				}
 			}
 			//**************************************************************************************
 			//*****************************   							     ***********************
 			//*****************************          Finish Exhaust          ***********************
-			//*****************************   Update and Render Explosions   ***********************
 			//*****************************   							     ***********************
-			//**************************************************************************************
-			
-			if (numExplosions < maxExplosions ) 
-			{
-				if (timer <= 0.0f) 
-				{
-					float x = (float)(rand() % 200) / 100.0f - 1.0f;
-					float y = (float)(rand() % 200) / 100.0f - 1.0f; 
-					//std::cout << x << ", " << y << std::endl;
-					explosions.push_back(glm::vec3(x, y, glfwGetTime()));
-					numExplosions++;
-					timer = maxTimer;
-				}
-				else
-				{
-					timer -= deltaTime;
-				}
-			}
-			//std::cout << numExplosions << " ";
-			boomShader.enable();
-			for (int i = 0; i < numExplosions; i++)
-			{
-				float count = 0;
-				if (lastTime > explosions[i].z + explosionTimer) 
-				{
-					numExplosions--;
-					explosions.erase(explosions.begin() + i);
-					i--;
-				}
-				else
-				{
-					explosion.bindBuffers();
-					boomShader.AttributeBinding();
-					explosion.renderBurst(boomShader, player, glm::vec3(explosions[i].x, explosions[i].y, 0.0f), explosions[i].z);
-				}
-			}
-			
-			//**************************************************************************************
-			//********************************							  **************************
-			//********************************     Finish Explosions      **************************
-			//********************************							  **************************
+			//*****************************   							     ***********************
 			//**************************************************************************************
 			shader.enable();
 			shader.AttributeBinding();

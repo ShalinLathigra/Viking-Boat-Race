@@ -30,41 +30,32 @@ void main()
     color_interp = vec4(uv,0.5, 1.0);
     uv_interp = uv;
 
-	float numShifts = 7.0;
+	float numShifts = 3.0;
 	float timeToShift = maxTime / numShifts;
 	
-	vec4 red = vec4(1, 0, 0, 1);
-	vec4 yellow = vec4(1, 1, 0, .75);
-	vec4 green = vec4(0, 1, 0, .5);
-	vec4 blue = vec4(0, 0, 1, .3);
-	vec4 violet = vec4(1, 0, 1, .2);
-	vec4 black = vec4(0, 0, 0, 0);
+	//vec4 red = vec4(1, 0, 0, 1);
+	//vec4 yellow = vec4(1, 1, 0, .75);
+	//vec4 green = vec4(0, 1, 0, .5);
+	//vec4 blue = vec4(0, 0, 1, .3);
+	//vec4 violet = vec4(1, 0, 1, .2);
+	
+	vec4 white = vec4(.7, .7, .7, 1);
+	vec4 lGray = vec4(.5, .5, .5, 1);
+	vec4 black = vec4(0, 0, 0, 1);
 	
 	if (isTrail == 1)
 	{
-		if (acttime < 2 * timeToShift)
+		if (acttime <  timeToShift)
 		{
-			colour = red;
+			colour = white;
+		}
+		else if (acttime < 2 * timeToShift)
+		{
+			colour = white * (1 - (acttime - 1.0 * timeToShift) / timeToShift) + lGray * ((acttime - 1.0 * timeToShift) / timeToShift);
 		}
 		else if (acttime < 3 * timeToShift)
 		{
-			colour = red * (1 - (acttime - 2.0 * timeToShift) / timeToShift) + yellow * ((acttime - 2.0 * timeToShift) / timeToShift);
-		}
-		else if (acttime < 4 * timeToShift)
-		{
-			colour = yellow * (1 - (acttime-3.0*timeToShift)/ (timeToShift)) + green * ((acttime-3.0*timeToShift) / (timeToShift));
-		}
-		else if (acttime < 5 * timeToShift)
-		{
-			colour = green * (1 - (acttime-4.0*timeToShift)/ (timeToShift)) + blue * ((acttime-4.0*timeToShift) / (timeToShift));
-		}
-		else if (acttime < 6 * timeToShift)
-		{
-			colour = blue * (1 - (acttime-5.0*timeToShift)/ (timeToShift)) + violet * ((acttime-5.0*timeToShift) / (timeToShift));
-		}
-		else
-		{
-			colour = violet * (1 - (acttime-6.0*timeToShift)/ (timeToShift));
+			colour = lGray * (1 - (acttime - 2.0 * timeToShift) / timeToShift) + black * ((acttime - 2.0 * timeToShift) / timeToShift);
 		}
 	} 
 	else 
