@@ -134,6 +134,58 @@ void Car::turn(int d, float deltaTime) {
 	}
 }
 
+void Car::attack(int dir, std::vector<Arrow>& arrows)
+{
+	if (dir == 1) {
+		arrows.push_back(Arrow(position, scale, rotationAmount, numElements, 10, 10, 0.1f, 0.02f, this->id));
+	}
+	else if (dir == 2) {
+		arrows.push_back(Arrow(position, scale, rotationAmount + 90, numElements, 10, 10, 0.1f, 0.02f, this->id));
+	}
+	else {
+		arrows.push_back(Arrow(position, scale, rotationAmount - 90, numElements, 10, 10, 0.1f, 0.02f, this->id));
+	}
+
+}
+
+
+void Car::checkArrows(std::vector<Arrow>& arrows)
+{
+	for (int i = 0; i < arrows.size(); i++) {
+		if (arrows[i].id == this->id) { continue; }
+		glm::vec3 L1, L2, L3, L4;
+		float forceX = cos(rotationAmount *(PI / 180.0f));
+		float forceY = sin(rotationAmount *(PI / 180.0f));
+		L1 = glm::vec3(cos((rotationAmount + 90)*(PI / 180.0f)), sin((rotationAmount + 90)*(PI / 180.0f)), 0);
+		L2 = glm::vec3(forceX, forceY, 0);
+		glm::vec3 Ax, Ay, Bx, By;
+		L3 = glm::vec3(cos((arrows[i].rotation() + 90)*(PI / 180.0f)), sin((arrows[i].rotation() + 90)*(PI / 180.0f)), 0);
+		L4 = glm::vec3(cos((arrows[i].rotation() + 90)*(PI / 180.0f)), sin((arrows[i].rotation() + 90)*(PI / 180.0f)), 0);
+		Ax = L1;
+		Ay = L2;
+		Bx = L3;
+		By = L4;
+		bool comp1 = abs(glm::dot((position - arrows[i].getPosition()), L1)) > (abs(glm::dot(0.05f*Ax, Ax)) + abs(glm::dot(0.05f*Ay, Ax)) + abs(glm::dot(0.05f*Bx, Ax)) + abs(glm::dot(0.05f*By, Ay)));
+		bool comp2 = abs(glm::dot((position - arrows[i].getPosition()), L2)) > (abs(glm::dot(0.05f*Ax, Ay)) + abs(glm::dot(0.05f*Ay, Ay)) + abs(glm::dot(0.05f*Bx, Ay)) + abs(glm::dot(0.05f*By, Ay)));
+		bool comp3 = abs(glm::dot((position - arrows[i].getPosition()), L3)) > (abs(glm::dot(0.05f*Ax, Bx)) + abs(glm::dot(0.05f*Ay, Bx)) + abs(glm::dot(0.05f*Bx, Bx)) + abs(glm::dot(0.05f*By, Bx)));
+		bool comp4 = abs(glm::dot((position - arrows[i].getPosition()), L4)) > (abs(glm::dot(0.05f*Ax, By)) + abs(glm::dot(0.05f*Ay, By)) + abs(glm::dot(0.05f*Bx, By)) + abs(glm::dot(0.05f*By, By)));
+
+		if ((!comp1 && !comp2 && !comp3 && !comp4)) {
+			//there was a collision that was detected properly
+			//	std::cout << this->id << std::endl;
+			//	std::cout << arrows[i].id << std::endl;
+			arrows.erase(arrows.begin() + i);
+			std::cout << "Collision detected properly" << std::endl << "comp1: " << comp1 << " comp2: " << comp2 << " comp3: " << comp3 << " comp4: " << comp4 << std::endl;
+		}
+		else {
+			//std::cout << "did a thing" << std::endl;
+		}
+
+	}
+
+}
+
+
 void Car::applyImpulse(glm::vec3 impulse)
 {
 	momentum += impulse;

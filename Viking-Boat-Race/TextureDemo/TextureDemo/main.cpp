@@ -11,6 +11,7 @@
 #include <thread>
 #include <math.h>
 
+#include "Arrow.h"
 #include "Shader.h"
 #include "Window.h"
 #include "Map.h"
@@ -167,7 +168,8 @@ int main(void){
 		allCars.push_back(enemy2);
 		allCars.push_back(enemy3);
 		allCars.push_back(player);
-
+		std::vector<Arrow> arrows;
+		bool space = false;
         while (!glfwWindowShouldClose(window.getWindow())){
             // Clear background
 			window.clear(glm::vec3(0.0f, .1f, 0.0f));
@@ -204,10 +206,20 @@ int main(void){
 				player->turn(2, deltaTime);
 			}
 
-			if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
-
+			if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_RELEASE&&space) {
+				space = false;
+				//std::cout << player->id << std::endl;
+				player->attack(1, arrows);
 			}
-			
+
+			if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
+				space = true;
+			}
+
+			for (int i = 0; i < arrows.size(); i++) {
+				arrows[i].update((double)deltaTime);
+				arrows[i].render(shader);
+			}
 
 			for (int i = 0; i < allCars.size(); i++) {
 				allCars[i]->checkCollisions(allCars, deltaTime);
@@ -215,10 +227,16 @@ int main(void){
 				if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
 					map.calculateCarCollisions(allCars[i]);
 				}
-
+				allCars[i]->checkArrows(arrows);
 				allCars[i]->update(deltaTime);
 				allCars[i]->render(shader, player->getPosition());
 			}
+			for (int i = 0; i < arrows.size(); i++) {
+				arrows[i].update((double)deltaTime);
+				arrows[i].render(shader);
+			}
+
+
 
 
 			//**************************************************************************************

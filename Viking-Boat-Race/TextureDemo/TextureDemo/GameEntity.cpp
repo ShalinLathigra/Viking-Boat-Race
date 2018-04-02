@@ -5,6 +5,9 @@ GameEntity::GameEntity(glm::vec3 &entityPos, glm::vec3 &entityScale, float entit
 {
 }
 
+GameEntity::GameEntity(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLint entityNumElements)
+	: position(entityPos), scale(entityScale), rotationAmount(entityRotationAmount), numElements(entityNumElements) {}
+
 void GameEntity::render(Shader &shader) {
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, texture);

@@ -1,10 +1,16 @@
 #pragma once
+#ifndef CAR_H
+#define CAR_H
+
+
 #include "GameEntity.h"
+#include "Arrow.h"
 #include <vector>
 #include <algorithm>
 class Car :
 	public GameEntity
 {
+	friend class Arrow;
 public:
 	static int carNum;
 	glm::vec3 momentum;
@@ -12,7 +18,7 @@ public:
 	Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h);
 	void drive(double deltaTime, int dir);
 	void turn(int d, float deltaTime);
-	void attack(int weaponType);
+	void attack(int dir, std::vector<Arrow>& arrows);
 	bool equals(Car*);
 	const float MAX_VELOCITY = 175;
 	void update(double deltaTime) override;
@@ -22,6 +28,8 @@ public:
 	void boxCollisions(std::vector<Car*>, float);
 	inline glm::vec3 getVel() { return velocity; }
 	void applyImpulse(glm::vec3 impulse);
+
+	void checkArrows(std::vector<Arrow>& arrows);
 
 	inline void setPosition(glm::vec3 pos) { position = pos; }
 	inline float getRotationAmount() { return rotationAmount; }
@@ -55,3 +63,4 @@ protected:
 	float scaleMod;
 };
 
+#endif
