@@ -18,6 +18,46 @@ void ParticleSystem::bindBuffers() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, partEBO);
 
 }
+void ParticleSystem::renderWind(Shader & particleprogram, Car * A)
+{
+	glDepthMask(GL_FALSE);
+
+	particleprogram.enable();
+	particleprogram.AttributeBinding();
+
+	//set displacement
+
+	glm::mat4 rot = glm::mat4();
+	glm::mat4 world = glm::mat4();
+
+	float k = glfwGetTime();
+	rot = glm::translate(rot, .1f * glm::vec3(cos(A->getRotationAmount() * 3.14159/180.0f), sin(A->getRotationAmount() * 3.14159 / 180.0f), 0.0f));
+	rot = glm::rotate(rot, A->getRotationAmount() + 45.0f, glm::vec3(0, 0, 1));
+	float scale = 0.025;
+	rot = glm::scale(rot, glm::vec3(scale, scale, scale));
+	// get ready to draw, load matrix
+	particleprogram.setUniformMat4("x", rot);
+	particleprogram.setUniform1f("time", k);
+
+	particleprogram.setUniform1i("isTrail", 0);
+
+	float minSpeed = 1.25f;
+	float maxSpeed = 2.5f;
+	float speed = minSpeed + (maxSpeed - minSpeed) * A->speedPercentage();
+	particleprogram.setUniform1f("speed", speed);
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	// Draw First
+	glDrawElements(GL_TRIANGLES, 6 * system, GL_UNSIGNED_INT, 0);
+
+	//Draw Second
+	rot = glm::rotate(rot, 90.0f, glm::vec3(0, 0, 1));
+	particleprogram.setUniformMat4("x", rot);
+	glDrawElements(GL_TRIANGLES, 6 * system, GL_UNSIGNED_INT, 0);
+
+	glDepthMask(GL_TRUE);
+}
 void ParticleSystem::renderTrail(Shader & particleprogram, Car * A)
 {
 
@@ -38,6 +78,8 @@ void ParticleSystem::renderTrail(Shader & particleprogram, Car * A)
 	// get ready to draw, load matrix
 	particleprogram.setUniformMat4("x", rot);
 	particleprogram.setUniform1f("time", k);
+
+	particleprogram.setUniform1i("isTrail", 1);
 
 	float minSpeed = 2.0f;
 	float maxSpeed = 7.5f;

@@ -38,6 +38,7 @@ public:
 	float rotationSpeed;
 
 	inline float speedPercentage() { return speed / MAX_SPEED; }
+	inline int isSpeeding() { return (speedPercentage() > .9f); }
 protected:
 	const float maxJumpTimer = .5f;
 	float jumpTimer;

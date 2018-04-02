@@ -137,9 +137,12 @@ int main(void){
 		ParticleSystem explosion(3.0f, tex[3]);
 		std::vector<glm::vec3> explosions = std::vector<glm::vec3>();//x, y, time
 
-		//const float maxTimer = 3.0f / (float)maxExplosions;
-		//float timer = maxTimer;
+		const float maxTimer = 3.0f / (float)maxExplosions;
+		float timer = maxTimer;
 
+		//SPEED SYSTEMS
+		//draw two lines on either side of the player when at max speed
+		ParticleSystem windStream(0.0f, tex[3]);
 
 		// Setup game objects
 		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 1.0f), 0.0f, tex[0], size);
@@ -227,20 +230,27 @@ int main(void){
 			exhaust.bindBuffers();
 			partShader.AttributeBinding();
 			exhaust.renderTrail(partShader, player);
+
+			if (player->isSpeeding()) 
+			{
+				windStream.bindBuffers();
+				partShader.AttributeBinding();
+				windStream.renderWind(partShader, player);
+			}
 			//**************************************************************************************
 			//*****************************   							     ***********************
 			//*****************************          Finish Exhaust          ***********************
 			//*****************************   Update and Render Explosions   ***********************
 			//*****************************   							     ***********************
 			//**************************************************************************************
-			/*
+			
 			if (numExplosions < maxExplosions ) 
 			{
 				if (timer <= 0.0f) 
 				{
 					float x = (float)(rand() % 200) / 100.0f - 1.0f;
 					float y = (float)(rand() % 200) / 100.0f - 1.0f; 
-					std::cout << x << ", " << y << std::endl;
+					//std::cout << x << ", " << y << std::endl;
 					explosions.push_back(glm::vec3(x, y, glfwGetTime()));
 					numExplosions++;
 					timer = maxTimer;
@@ -268,7 +278,7 @@ int main(void){
 					explosion.renderBurst(boomShader, player, glm::vec3(explosions[i].x, explosions[i].y, 0.0f), explosions[i].z);
 				}
 			}
-			*/
+			
 			//**************************************************************************************
 			//********************************							  **************************
 			//********************************     Finish Explosions      **************************

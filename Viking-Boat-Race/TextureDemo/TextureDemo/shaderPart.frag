@@ -5,7 +5,6 @@
 in vec4 color_interp;
 in vec2 uv_interp;
 in vec4 colour;
-in float alpha;
 
 out vec4 FragColor;
 
@@ -15,11 +14,10 @@ void main()
 {
 	vec4 color = texture2D(onetex, uv_interp);
 	FragColor = vec4(color.r, color.g, color.b, color.a);
-    if(FragColor.a < 1)
+    if(FragColor.a < .05)
 	{
 		discard;
 	}  else {
 		FragColor = colour;
-		FragColor.a = alpha;
 	}
 }

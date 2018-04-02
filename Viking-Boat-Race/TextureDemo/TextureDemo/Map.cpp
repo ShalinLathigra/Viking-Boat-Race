@@ -38,6 +38,12 @@ void Map::populateData(char * fileName) {
 				}
 			}
 		}
+		else if (*iter == '3')
+		{
+			float x = -9.0f + (data[data.size() - 1.0f].size() - 1.0f) / 64.0f * 18.0f;
+			float y = 4.5f - (data.size() - 1.0f) / 32.0f * 9.0f;
+			lapMarkers.insert(std::pair<int, glm::vec3>(*iter - 'a', glm::vec3(x, y, 0.0f)));
+		}
 		else if (*iter == '4')
 		{
 			addTile(Tile::Tile(Tile::TileProp::HOLE, 1.0f, -2));

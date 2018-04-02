@@ -45,6 +45,7 @@ private:
 	std::vector<std::vector<Tile>> data;
 	glm::vec3 topLeft;
 	std::vector<Wall> walls;
+	std::map<int, glm::vec3> lapMarkers;
 	std::map<int, glm::vec3> startPositions;
 	std::map<int, glm::vec3> aiFlags;
 public:
