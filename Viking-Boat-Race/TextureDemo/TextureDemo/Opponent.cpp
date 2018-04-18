@@ -2,8 +2,8 @@
 
 
 
-Opponent::Opponent(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h, glm::vec3 firstFlag, float setMAX_SPEED)
-	:Car(entityPos,entityScale, entityRotationAmount, entityTexture, entityNumElements, m, h)
+Opponent::Opponent(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h, glm::vec3 firstFlag, float setMAX_SPEED, GLuint arrow)
+	:Car(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements, m, h, arrow)
 {
 	cameraPos = entityPos;
 	speed = 0;
@@ -12,6 +12,7 @@ Opponent::Opponent(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRot
 	MAX_SPEED = setMAX_SPEED;
 	natSteerDir = 0;
 	natSteerTimer = 0;
+	currentLap = 1;	//Player counter starts at 0, increments immediately to 1. This does same for AI.
 }
 
 
@@ -31,7 +32,7 @@ int Opponent::controller(float deltaTime, float skillMod)
 	float forceY = sin(rotationAmount *(PI / 180.0f));
 	glm::vec3 currDir = glm::vec3(forceX, forceY, 0);
 
-	if (hypot(hypot(nextFlag.x - position.x, nextFlag.y - position.y), nextFlag.z - position.z) < 0.1)
+	if (hypot(hypot(nextFlag.x - position.x, nextFlag.y - position.y), nextFlag.z - position.z) < 0.2)
 		return 1;
 	glm::vec3 newDir = nextFlag - position;
 	currDir = glm::normalize(currDir);
@@ -60,7 +61,7 @@ int Opponent::controller(float deltaTime, float skillMod)
 		if (natSteerTimer == 0)
 		{
 			int chance = rand() % 200;
-			std::cout << chance << std::endl;
+			//std::cout << chance << std::endl;
 			if (chance == 1)
 			{
 				natSteerDir = 1;
@@ -75,7 +76,7 @@ int Opponent::controller(float deltaTime, float skillMod)
 	}
 	else
 	{
-		std::cout << "YEEEEEEEEEET" << std::endl;
+		//std::cout << "YEEEEEEEEEET" << std::endl;
 		if (natSteerDir == 1)
 			turn(1, deltaTime);
 		else
@@ -122,4 +123,14 @@ int Opponent::getCurrentLap()
 void Opponent::setCurrentLap(int lap)
 {
 	currentLap = lap;
+}
+
+void Opponent::setNatSteerDir(int steerDir)
+{
+	natSteerDir = steerDir;
+}
+
+void Opponent::setNatSteerTimer(int steerTimer)
+{
+	natSteerTimer = steerTimer;
 }

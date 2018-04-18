@@ -81,8 +81,8 @@ void ParticleSystem::renderTrail(Shader & particleprogram, Car * A, glm::vec3 pl
 
 	particleprogram.setUniform1i("isTrail", 1);
 
-	float minSpeed = 2.0f;
-	float maxSpeed = 7.5f;
+	float minSpeed = .5f;
+	float maxSpeed = 2.5f;
 
 
 	float speed = minSpeed + (maxSpeed - minSpeed) * A->speedPercentage();
@@ -133,11 +133,11 @@ int ParticleSystem::CreateParticleArray(float range, GLuint & vbo, GLuint & ebo)
 		0.5f, -0.5f,   0.0f, 0.0f, 1.0f,	  1.0f, 1.0f, // Bottom-right
 		-0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 1.0f  // Bottom-left
 	};
-
-	GLfloat particleatt[1000 * vertex_attr];
+	const int verts = 400;
+	GLfloat particleatt[verts * vertex_attr];
 	float theta, r, tmod;
 
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < verts; i++)
 	{
 		if (i % 4 == 0) {
 			theta = (2 * (rand() % 10000) / 10000.0f - 1.0f)*range;
@@ -162,9 +162,9 @@ int ParticleSystem::CreateParticleArray(float range, GLuint & vbo, GLuint & ebo)
 		2, 3, 0  //t2
 	};
 
-	GLuint manyface[1000 * 6];
+	GLuint manyface[verts / 4 * 6];
 
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < verts / 4; i++)
 	{
 		for (int j = 0; j < 6; j++)
 		{

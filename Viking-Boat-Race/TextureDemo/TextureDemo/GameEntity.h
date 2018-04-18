@@ -16,14 +16,18 @@ public:
 	GameEntity(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
 	GameEntity(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLint entityNumElements);
 	float PI = 3.14159265358979;
-	virtual void update(double deltaTime) = 0;
+	virtual void update(double deltaTime)=0;
 	void render(Shader &shader);
+	void render(Shader &shader, glm::mat4);
+	GameEntity(GLint entityTexture,GLint entityNumElements);
 	GLuint texture;
-	
+	glm::mat4 transform;
+	float rotationAmount;//IN DEGREES
+	glm::vec3 position;
 	inline const glm::vec3 getPosition(){ return position; }
 protected:
-	glm::vec3 position, scale;
-	float rotationAmount;//IN DEGREES
+	glm::vec3 scale;
+	
 
 	GLint numElements;
 };

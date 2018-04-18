@@ -22,7 +22,7 @@ void Map::populateData(char * fileName) {
 		{
 			addTile(Tile::Tile());
 		}
-		else if (*iter - '0' >= 1 && *iter - '0' <= 3 || isalpha(*iter))
+		else if (*iter - '0' >= 1 && *iter - '0' <= 3 || isalpha(*iter) || *iter - '0' == 7)
 		{
 			addTile(Tile::Tile(Tile::TileProp::ROAD, .1f, 0));
 
@@ -37,12 +37,20 @@ void Map::populateData(char * fileName) {
 					startPositions.insert(std::pair<int, glm::vec3>(*iter - 'A', glm::vec3(x, y, 0.0f)));	//starts == uppercase alpha
 				}
 			}
-		}
-		else if (*iter == '3')
-		{
-			float x = -9.0f + (data[data.size() - 1.0f].size() - 1.0f) / 64.0f * 18.0f;
-			float y = 4.5f - (data.size() - 1.0f) / 32.0f * 9.0f;
-			lapMarkers.insert(std::pair<int, glm::vec3>(*iter - 'a', glm::vec3(x, y, 0.0f)));
+			if (*iter == '3' || *iter == '7')
+			{
+				float x = -9.0f + (data[data.size() - 1.0f].size() - 1.0f) / 64.0f * 18.0f;
+				float y = 4.5f - (data.size() - 1.0f) / 32.0f * 9.0f;
+				std::cout << x << ", " << y << std::endl;
+
+				if (*iter == '3')
+				{
+					lapFlags.push_back(glm::vec3(x, y, 1.0f));	//START OFF WITH ALL FLAGS TRUE, SO THAT PASSING FINISH LINE ONCE MAKES YOU ON FIRST LAP
+				}
+				else {
+					finalMarker = glm::vec3(x, y, 0.0f);
+				}
+			}
 		}
 		else if (*iter == '4')
 		{
@@ -122,6 +130,63 @@ glm::vec3 Map::nearestFlag(glm::vec3 pos) {
 	return nearestFlag;
 }
 
+void Map::checkProgress(Car * A)
+{
+	//std::cout << "A" << std::endl;
+	for (std::vector<glm::vec3>::iterator iter = lapFlags.begin(); iter != lapFlags.end(); ++iter)
+	{
+		//std::cout << A->getPosition().x << ", " << A->getPosition().y << "		" << iter->x << ", " << iter->y << ": " << (glm::distance(A->getPosition(), *iter) < 3.5f) << std::endl;
+		if (iter->z == 0)
+		{
+			if (glm::length(*iter - A->getPosition()) < 3.5f)
+			{
+				iter->z = 1;
+
+				std::cout << "Progress: (";
+				for (std::vector<glm::vec3>::iterator iter = lapFlags.begin(); iter != lapFlags.end(); ++iter)
+				{
+					std::cout << iter->z << ",";
+				}
+				std::cout << ")\n";
+			}
+		}
+	}
+}
+
+int Map::checkFinish(Car * A)
+{
+	float done = 1;
+	for (std::vector<glm::vec3>::iterator iter = lapFlags.begin(); iter != lapFlags.end(); ++iter)
+	{
+		std::cout << iter->z << ",";
+		if (iter->z < 1.0f)
+		{
+			done = 0;
+		}
+	}
+
+	std::cout << glm::distance(A->getPosition(), finalMarker) << " " << (glm::distance(A->getPosition(), finalMarker) > .5f) << std::endl;
+	std::cout << "\n";
+
+	if (!done || glm::distance(A->getPosition(), finalMarker) > .5f)
+		return 0;
+
+	A->nextLap();
+	for (std::vector<glm::vec3>::iterator iter = lapFlags.begin(); iter != lapFlags.end(); ++iter)
+	{
+		iter->z = 0.0f;
+	}
+
+	std::cout << "current: " << A->getCurrentLap() << " total: " << numLaps << " current > total: " << (A->getCurrentLap() > numLaps) << std::endl;
+	if (A->getCurrentLap() > numLaps)
+	{
+		return 1;
+	}
+
+	return 0;
+}
+
+
 void Map::calculateCarCollisions(Car * A)
 {
 	float minX = topLeft.x;
@@ -185,7 +250,10 @@ void Map::calculateCarCollisions(Car * A)
 		}
 	}
 }
-
+int Map::getNumLaps()
+{
+	return numLaps;
+}
 
 Map::~Map()
 {

@@ -39,8 +39,8 @@ void main()
 	//vec4 blue = vec4(0, 0, 1, .3);
 	//vec4 violet = vec4(1, 0, 1, .2);
 	
-	vec4 white = vec4(.7, .7, .7, 1);
-	vec4 lGray = vec4(.5, .5, .5, 1);
+	vec4 white = vec4(.9, .9, .9, 1);
+	vec4 lGray = vec4(.7, .7, .7, 1);
 	vec4 black = vec4(0, 0, 0, 1);
 	
 	if (isTrail == 1)

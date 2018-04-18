@@ -1,12 +1,10 @@
 #include "Arrow.h"
 
-Arrow::Arrow(glm::vec3 pos, glm::vec3 scale, float rot, GLint entityNumElements, float spd, int dmg, float x, float y, int idNum)
+Arrow::Arrow(glm::vec3 pos, glm::vec3 scale, float rot, GLint entityNumElements, float spd, int dmg, float x, float y, int idNum, GLuint tex)
 	:GameEntity(pos, scale, rot, entityNumElements)
 {
-	speed = spd;
-	glGenTextures(1, tex);
-	setthisTexture(tex[0], "arrow.png");
-	id = idNum;
+	speed = spd * 2.5;
+	texture = tex;	id = idNum;
 	std::cout << id << std::endl;
 }
 
@@ -36,10 +34,17 @@ void Arrow::setthisTexture(GLuint w, char * fname)
 
 }
 
+void Arrow::render(Shader & shader, glm::vec3 offset)
+{
+	position -= offset;
+	GameEntity::render(shader);
+	position += offset;
+}
+
 void Arrow::update(double deltaTime)
 {
-	position.x += speed*cos(rotationAmount*PI / 180.0f)*deltaTime;
-	position.y += speed*sin(rotationAmount*PI / 180.0f)*deltaTime;
+	position.x += speed*cos((rotationAmount + 90)*PI / 180.0f)*deltaTime;
+	position.y += speed*sin((rotationAmount + 90)*PI / 180.0f)*deltaTime;
 
 }
 

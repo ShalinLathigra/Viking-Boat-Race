@@ -12,24 +12,27 @@ class Car :
 {
 	friend class Arrow;
 public:
+	int place;
+	int money;
 	static int carNum;
 	glm::vec3 momentum;
 	int id;
-	Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h);
+	Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h, GLuint arrow);
 	void drive(double deltaTime, int dir);
 	void turn(int d, float deltaTime);
-	void attack(int dir, std::vector<Arrow>& arrows);
+	void attack(float dir, std::vector<Arrow>& arrows);
 	bool equals(Car*);
-	const float MAX_VELOCITY = 175;
+	
 	void update(double deltaTime) override;
 	float speed;
 	void checkCollisions(std::vector<Car*>, float);
 	void render(Shader & shader, glm::vec3 offset);
+	GLuint arrowTex;
 	void boxCollisions(std::vector<Car*>, float);
 	inline glm::vec3 getVel() { return velocity; }
 	void applyImpulse(glm::vec3 impulse);
 
-	void checkArrows(std::vector<Arrow>& arrows);
+	int checkArrows(std::vector<Arrow>& arrows);
 
 	inline void setPosition(glm::vec3 pos) { position = pos; }
 	inline float getRotationAmount() { return rotationAmount; }
@@ -47,12 +50,17 @@ public:
 
 	inline float speedPercentage() { return speed / MAX_SPEED; }
 	inline int isSpeeding() { return (speedPercentage() > .9f); }
+
+	inline void nextLap() { currentLap++; }
+	inline int getCurrentLap() { return currentLap; }
+	float mass;
+	float MAX_SPEED = 25.0f;
 protected:
 	const float maxJumpTimer = .5f;
 	float jumpTimer;
 	const float jumpScaleMod = 1.1f;
 	int currentLap;
-	float MAX_SPEED = 25.0f;
+	
 
 	const float holeScaleShrinkRate = .5f;
 	int falling;
@@ -60,7 +68,7 @@ protected:
 	glm::vec3 velocity;
 	glm::vec3 forces;
 	int health;
-	float mass;
+	
 	float scaleMod;
 };
 

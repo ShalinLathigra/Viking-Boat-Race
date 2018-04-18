@@ -45,6 +45,9 @@
     <ClCompile Include="Arrow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ballista.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEntity.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Arrow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ballista.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -17,7 +17,7 @@
 class Arrow :public GameEntity
 {
 public:
-	Arrow(glm::vec3 pos, glm::vec3 scale, float rot, GLint entityNumElements, float spd, int dmg, float x, float y, int idNum);
+	Arrow(glm::vec3 pos, glm::vec3 scale, float rot, GLint entityNumElements, float spd, int dmg, float x, float y, int idNum, GLuint tex);
 	~Arrow();
 	int id;
 	void setthisTexture(GLuint w, char *fname);
@@ -27,6 +27,7 @@ public:
 	float xSize;
 	float ySize;
 	int damage;
+	void render(Shader & shader, glm::vec3 offset);
 private:
 	float speed;
 };

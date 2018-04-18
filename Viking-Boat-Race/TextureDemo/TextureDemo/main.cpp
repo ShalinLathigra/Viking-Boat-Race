@@ -9,8 +9,12 @@
 #include <SOIL/SOIL.h> // read image file
 #include <chrono>
 #include <thread>
+//#include <GL/fgl.h>
+//#include <GL/fglut.h>
+//#include <GL/tube.h>
+//#include <GL/fglu.h>
 #include <math.h>
-
+#include "Ballista.h"
 #include "Arrow.h"
 #include "Shader.h"
 #include "Window.h"
@@ -19,6 +23,14 @@
 #include "Opponent.h"
 #include "ParticleSystem.h"
 
+
+//RACE STATES
+#define MENU 0
+#define RACING 1
+#define SHOP 2
+
+
+using namespace std;
 // Macro for printing exceptions
 #define PrintException(exception_object)\
 	std::cerr << exception_object.what() << std::endl
@@ -97,6 +109,8 @@ void setallTexture(void)
 	setthisTexture(tex[4], "fireEffect.png");
 	setthisTexture(tex[5], "smoke.png");
 	setthisTexture(tex[6], "MainMenu.png");
+	setthisTexture(tex[7], "arrow.png");
+	setthisTexture(tex[8], "ballistaA1.png");
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
 
@@ -104,6 +118,7 @@ void setallTexture(void)
 
 // Main function that builds and runs the game
 int main(void){
+	float PI = 3.1415926535;
     try {
 
 		// Set seed for random
@@ -134,17 +149,17 @@ int main(void){
 		Shader boomShader("boomShader.vert", "boomShader.frag");
 
 		//PARTICLE SYSTEMS
-		ParticleSystem exhaust( .1, tex[5] );
-		ParticleSystem windStream(0.0f, tex[3]);
+		ParticleSystem exhaust( .3, tex[5] );
+		ParticleSystem windStream(.1f, tex[3]);
 
 		// Setup game objects
 		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 1.0f), 0.0f, tex[0], size);
-		Car* player = new Car(map.getStartPosition(4), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10);
-		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20);
-		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20);
-		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20);
-		Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20);
-
+		Car* player = new Car(map.getStartPosition(4), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10,tex[7]);
+		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
+		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
+		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
+		Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
+		Ballista ballista = Ballista(tex[8], size);
 
         // Run the main loop
 		glm::vec3 position = glm::vec3();
@@ -163,141 +178,237 @@ int main(void){
 		std::vector<Arrow> arrows;
 		bool space = false;
 
-		int started = 0;
-
-        while (!glfwWindowShouldClose(window.getWindow())){
-            // Clear background
+		int mode = MENU;
+		int raceOver = 0;
+		int weightUpgrade = 1;
+		int speedUpgrade = 1;
+		int placeSystem = 1;
+		while (!glfwWindowShouldClose(window.getWindow())) {
+			// Clear background
 			window.clear(glm::vec3(0.0f, .1f, 0.0f));
 
-            // Select proper shader program to use
+			// Select proper shader program to use
 			shader.enable();
 			shader.AttributeBinding();
 			// Get mouse position relative to screenspace [-1, 1]
 			//if (agent.getState() != Agent::State::WANDER) {
-			//	double mouseX, mouseY;
-			//	glfwGetCursorPos(window.getWindow(), &mouseX, &mouseY);
-			//	float screenSpaceMouseX = (mouseX / window_width_g) * 2 - 1;
-			//	float screenSpaceMouseY = -((mouseY / window_height_g) * 2 - 1);
+			double mouseX, mouseY;
+			glfwGetCursorPos(window.getWindow(), &mouseX, &mouseY);
+			float screenSpaceMouseX = (mouseX / window_width_g) * 2 - 1;
+			float screenSpaceMouseY = -((mouseY / window_height_g) * 2 - 1);
+			float mouseAngle = -atan2(screenSpaceMouseX, screenSpaceMouseY)* 180.0f / PI;
 			//	agent.setTargetPos(glm::vec3(screenSpaceMouseX, screenSpaceMouseY, 0.0f));
 			//}
 			// Calculate delta time
-
-
-			double currentTime = glfwGetTime();
-			double deltaTime = currentTime - lastTime;
-			lastTime = currentTime;
-
-			//Input
-			if (glfwGetKey(window.getWindow(), GLFW_KEY_W) == GLFW_PRESS) {//these ifs are used to get keyboard input;
-				player->drive(deltaTime, 1);
-			}
-			if (glfwGetKey(window.getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
-				player->turn(1, deltaTime);
-			}
-			if (glfwGetKey(window.getWindow(), GLFW_KEY_S) == GLFW_PRESS) {
-				player->drive(deltaTime, 2);
-			}
-			if (glfwGetKey(window.getWindow(), GLFW_KEY_D) == GLFW_PRESS) {
-				player->turn(2, deltaTime);
-			}
-
-			if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_RELEASE&&space) {
-				space = false;
-				//std::cout << player->id << std::endl;
-				player->attack(1, arrows);
-			}
-
-			if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
-				space = true;
-			}
-
-			for (int i = 0; i < arrows.size(); i++) {
-				arrows[i].update((double)deltaTime);
-				arrows[i].render(shader);
-			}
-
-			for (int i = 0; i < allCars.size(); i++) {
-				allCars[i]->checkCollisions(allCars, deltaTime);
-				//get property + setValues
-				if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
-					map.calculateCarCollisions(allCars[i]);
-				}
-				allCars[i]->checkArrows(arrows);
-				allCars[i]->update(deltaTime);
-				allCars[i]->render(shader, player->getPosition());
-			}
-			for (int i = 0; i < arrows.size(); i++) {
-				arrows[i].update((double)deltaTime);
-				arrows[i].render(shader);
-			}
-
-
-
-
-			//**************************************************************************************
-			//************************        							  **************************
-			//************************        Render Exhaust Trail        **************************
-			//************************        							  **************************
-			//**************************************************************************************
-			partShader.enable();
-			exhaust.bindBuffers();
-			partShader.AttributeBinding();
-
-			for (std::vector<Car *>::iterator c = allCars.begin(); c != allCars.end(); ++c)
+			if (mode == MENU)
 			{
-				exhaust.renderTrail(partShader, *c, player->getPosition());
-			}
+				player->position = map.getStartPosition(4);
+				enemies[0]->position = map.getStartPosition(0);
+				enemies[3]->position = map.getStartPosition(3);
+				enemies[2]->position = map.getStartPosition(2);
+				enemies[1]->position = map.getStartPosition(1);
 
-			windStream.bindBuffers();
-			partShader.AttributeBinding();
-			for (std::vector<Car *>::iterator c = allCars.begin(); c != allCars.end(); ++c) 
-			{
-				if ((*c)->isSpeeding())
+				if (glfwGetKey(window.getWindow(), GLFW_KEY_P) == GLFW_PRESS)
 				{
-					windStream.renderWind(partShader, *c, player->getPosition());
+					mode = RACING;
 				}
+
+				// Bind the entities texture
+				glBindTexture(GL_TEXTURE_2D, tex[6]);
+
+				// Setup the transformation matrix for the shader 
+				glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
+				glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(2, 2, 1));
+				glm::mat4 transformationMatrix = translationMatrix * scaleMatrix;
+				shader.setUniformMat4("x", transformationMatrix);
+
+				// Draw the entity
+				glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+
+				glfwPollEvents();
+				// Push buffer drawn in the background onto the display
+				glfwSwapBuffers(window.getWindow());
 			}
-			//**************************************************************************************
-			//*****************************   							     ***********************
-			//*****************************          Finish Exhaust          ***********************
-			//*****************************   							     ***********************
-			//*****************************   							     ***********************
-			//**************************************************************************************
-			shader.enable();
-			shader.AttributeBinding();
 
 
-			map.setPosition(player->getPosition());
+			else if (mode == RACING)
+			{
+				double currentTime = glfwGetTime();
+				double deltaTime = currentTime - lastTime;
+				lastTime = currentTime;
 
-			//std::cout << "Player Pos: " << player->getPosition().x << ", " << player->getPosition().y << std::endl;
-
-			for (int i = 0; i < enemies.size(); i++) {
-				int result = enemies[i]->controller(deltaTime, 0);//Checks turning status for all vehicles
-				if (result == 1)//If we need to set a new flag
+				if (!raceOver) //Turn off player movement when race over
 				{
-					enemies[i]->setFlagIndex(enemies[i]->getFlagIndex() + 1);
-					if (enemies[i]->getFlagIndex() >= map.getMaxFlags())
-					{
-						enemies[i]->setFlagIndex(0);
-						enemies[i]->setCurrentLap(enemies[i]->getCurrentLap() + 1);
+					//PLAYER INPUT
+					if (glfwGetKey(window.getWindow(), GLFW_KEY_W) == GLFW_PRESS) {//these ifs are used to get keyboard input;
+						player->drive(deltaTime, 1);
 					}
-					//This all just adds slight variation to the points the AI are targeting so they don't follow each other//
-					double diffx = rand() % 40 - 20;
-					double diffy = rand() % 40 - 20;
-					glm::vec3 newFlag = map.getFlag(enemies[i]->getFlagIndex());
-					newFlag.x += diffx/100;
-					newFlag.y += diffy/100;
-					enemies[i]->setNextFlag(newFlag);
+					if (glfwGetKey(window.getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
+						player->turn(1, deltaTime);
+					}
+					if (glfwGetKey(window.getWindow(), GLFW_KEY_S) == GLFW_PRESS) {
+						player->drive(deltaTime, 2);
+					}
+					if (glfwGetKey(window.getWindow(), GLFW_KEY_D) == GLFW_PRESS) {
+						player->turn(2, deltaTime);
+					}
+
+					if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_RELEASE&&space) {
+						space = false;
+						//std::cout << player->id << std::endl;
+						player->attack(ballista.rotationAmount, arrows);
+					}
+
+					if (glfwGetKey(window.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
+						space = true;
+					}
+
+					map.checkProgress(player);
+					if (map.checkFinish(player) > 0) 
+					{
+						if (player->place == 0) {
+							player->place = placeSystem;
+							placeSystem++;
+							std::cout << "Player got " << player->place << " place." << std::endl;
+							player->money += (int)(2000.0f*(5.0f/(float)player->place));
+							if (player->place == 5) { player->money -= 3000; }
+							mode = SHOP; 
+						}
+					}
+
+					ballista.rotationAmount = mouseAngle-90;
+					ballista.render(shader, player->transform);
+					//ENEMY UPDATING
+					for (int i = 0; i < enemies.size(); i++) {
+						bool colliding = enemies[i]->checkArrows(arrows);
+						if (colliding)
+						{
+							enemies[i]->setNatSteerDir(1);
+							enemies[i]->setNatSteerTimer(00);
+						}
+
+						int result = enemies[i]->controller(deltaTime, 0);//Checks turning status for all vehicles
+						if (result == 1)//If we need to set a new flag
+						{
+							enemies[i]->setFlagIndex(enemies[i]->getFlagIndex() + 1);
+							if (enemies[i]->getFlagIndex() >= map.getMaxFlags())
+							{
+								enemies[i]->setFlagIndex(0);
+								enemies[i]->setCurrentLap(enemies[i]->getCurrentLap() + 1);
+
+								std::cout << enemies[i]->getCurrentLap() << ", " << map.getNumLaps() << ": " << (enemies[i]->getCurrentLap() > map.getNumLaps()) << std::endl;
+								if (enemies[i]->getCurrentLap() > map.getNumLaps())
+								{
+									if (enemies[i]->place == 0) {
+										enemies[i]->place = placeSystem;
+										placeSystem += 1;
+										//raceOver = 1;
+										std::cout << "ENEMY " << i << " got " << enemies[i]->place << " place." << std::endl;
+										if (placeSystem > 5) { mode = SHOP; }
+									}
+
+								}
+							}
+							//This all just adds slight variation to the points the AI are targeting so they don't follow each other//
+							double diffx = rand() % 30 - 15;
+							double diffy = rand() % 30 - 15;
+							glm::vec3 newFlag = map.getFlag(enemies[i]->getFlagIndex());
+							newFlag.x += diffx / 100;
+							newFlag.y += diffy / 100;
+							enemies[i]->setNextFlag(newFlag);
+						}
+					}
 				}
+				for (int i = 0; i < allCars.size(); i++) {
+					allCars[i]->checkCollisions(allCars, deltaTime);
+					allCars[i]->boxCollisions(allCars, deltaTime);
+					//get property + setValues
+					if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
+						map.calculateCarCollisions(allCars[i]);
+					}
+					allCars[i]->update(deltaTime);
+					allCars[i]->render(shader, player->getPosition());
+				}
+				for (int i = 0; i < arrows.size(); i++) {
+					arrows[i].update((double)deltaTime);
+					arrows[i].render(shader, player->getPosition());
+				}
+				partShader.enable();
+				exhaust.bindBuffers();
+				partShader.AttributeBinding();
+
+				for (std::vector<Car *>::iterator c = allCars.begin(); c != allCars.end(); ++c)
+				{
+					exhaust.renderTrail(partShader, *c, player->getPosition());
+				}
+
+				windStream.bindBuffers();
+				partShader.AttributeBinding();
+				for (std::vector<Car *>::iterator c = allCars.begin(); c != allCars.end(); ++c)
+				{
+					if ((*c)->isJumping())
+					{
+						windStream.renderWind(partShader, *c, player->getPosition());
+					}
+				}
+				shader.enable();
+				shader.AttributeBinding();
+
+
+				map.setPosition(player->getPosition());
+
+				//std::cout << "Player Pos: " << player->getPosition().x << ", " << player->getPosition().y << std::endl;
+				
+
+				map.render(shader);
+
+				// Update other events like input handling
+				glfwPollEvents();
+				// Push buffer drawn in the background onto the display
+				glfwSwapBuffers(window.getWindow());
+			}else if (mode == SHOP) {
+				string response;
+				std::cout << "Congratulations on finishing the race!" << std::endl;
+				std::cout << "You have: " << player->money << "$" << std::endl;
+				cout << "Upgrades (type yes or no to answer):" << endl;
+				cout << "Increase weight ($"<<weightUpgrade*5000<<"):" << endl;
+				player->position = map.getStartPosition(4);
+				enemies[0]->position = map.getStartPosition(0);
+				enemies[3]->position = map.getStartPosition(3);
+				enemies[2]->position = map.getStartPosition(2);
+				enemies[1]->position = map.getStartPosition(1);
+				for (int i = 0; i < allCars.size(); i++) {
+					allCars[i]->speed = 0;
+					allCars[i]->rotationAmount = 90;
+					//allCars[i]->velocity = glm::vec3(0, 0, 0);
+					allCars[i]->update(0.0f);
+					allCars[i]->render(shader, player->getPosition());
+				}
+				for (int i = 0; i < allCars.size(); i++) {
+					allCars[i]->place = 0;
+				}
+
+
+
+				while (response != "yes"&&response != "no") {
+					getline(cin, response);
+				}
+				if (response == "yes"&&player->money >= weightUpgrade*5000) {
+					weightUpgrade += 1.5;
+					player->mass *= 1.5;
+				}
+				response = "";
+				cout << "Increase speed ($" << speedUpgrade * 5000 << "):" << endl;
+				while (response != "yes"&&response != "no") {
+					getline(cin, response);
+				}
+				if (response == "yes"&&player->money >= speedUpgrade * 5000) {
+					speedUpgrade += 1;
+					player->MAX_SPEED *= 1.2;
+				}
+				mode = MENU;
 			}
-
-			map.render(shader);
-
-            // Update other events like input handling
-            glfwPollEvents();
-            // Push buffer drawn in the background onto the display
-            glfwSwapBuffers(window.getWindow());
-        }
+		}
     }
     catch (std::exception &e){
 		// print exception and sleep so error can be read
