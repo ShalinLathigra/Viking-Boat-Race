@@ -103,8 +103,8 @@ void setallTexture(void)
 //	tex = new GLuint[3];
 	glGenTextures(10, tex);
 	setthisTexture(tex[0], "mapImage.png");
-	setthisTexture(tex[1], "car.png");
-	setthisTexture(tex[2], "other.png");
+	setthisTexture(tex[1], "Boat.png");
+	setthisTexture(tex[2], "otherBoat.png");
 	setthisTexture(tex[3], "orb.png");
 	setthisTexture(tex[4], "fireEffect.png");
 	setthisTexture(tex[5], "smoke.png");
@@ -154,11 +154,11 @@ int main(void){
 
 		// Setup game objects
 		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 1.0f), 0.0f, tex[0], size);
-		Car* player = new Car(map.getStartPosition(4), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[1], size, 12, 10,tex[7]);
-		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
-		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
-		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
-		Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.1f, 0.1f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
+		Car* player = new Car(map.getStartPosition(4), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[1], size, 12, 10,tex[7]);
+		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
+		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
+		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
+		Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
 		Ballista ballista = Ballista(tex[8], size);
 
         // Run the main loop

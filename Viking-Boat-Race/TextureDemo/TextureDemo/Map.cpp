@@ -158,15 +158,15 @@ int Map::checkFinish(Car * A)
 	float done = 1;
 	for (std::vector<glm::vec3>::iterator iter = lapFlags.begin(); iter != lapFlags.end(); ++iter)
 	{
-		std::cout << iter->z << ",";
+		//std::cout << iter->z << ",";
 		if (iter->z < 1.0f)
 		{
 			done = 0;
 		}
 	}
 
-	std::cout << glm::distance(A->getPosition(), finalMarker) << " " << (glm::distance(A->getPosition(), finalMarker) > .5f) << std::endl;
-	std::cout << "\n";
+	//std::cout << glm::distance(A->getPosition(), finalMarker) << " " << (glm::distance(A->getPosition(), finalMarker) > .5f) << std::endl;
+	//std::cout << "\n";
 
 	if (!done || glm::distance(A->getPosition(), finalMarker) > .5f)
 		return 0;

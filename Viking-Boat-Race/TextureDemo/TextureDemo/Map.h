@@ -51,8 +51,8 @@ private:
 
 	std::vector<glm::vec3> lapFlags;
 	glm::vec3 finalMarker;
-	//const int numLaps = 3;
-	const int numLaps = 1;
+	const int numLaps = 3;
+	//const int numLaps = 1;
 public:
 	Map(glm::vec3 & entityPos, glm::vec3 & entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
 	~Map();
