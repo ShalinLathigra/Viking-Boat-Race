@@ -17,6 +17,7 @@ public:
 	static int carNum;
 	glm::vec3 momentum;
 	int id;
+	int shots;
 	Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h, GLuint arrow);
 	void drive(double deltaTime, int dir);
 	void turn(int d, float deltaTime);
