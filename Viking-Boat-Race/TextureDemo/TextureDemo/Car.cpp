@@ -161,11 +161,11 @@ int Car::checkArrows(std::vector<Arrow>& arrows)
 		Ax = L1;
 		Ay = L2;
 		Bx = L3;
-		By = L4;
-		bool comp1 = abs(glm::dot((position- arrows[i].getPosition()), L1)) > (abs(glm::dot(0.1f*Ax, Ax)) + abs(glm::dot(0.1f*Ay, Ax)) + abs(glm::dot(0.1f*Bx, Ax)) + abs(glm::dot(0.1f*By, Ay)));
-		bool comp2 = abs(glm::dot((position - arrows[i].getPosition()), L2)) > (abs(glm::dot(0.1f*Ax, Ay)) + abs(glm::dot(0.1f*Ay, Ay)) + abs(glm::dot(0.1f*Bx, Ay)) + abs(glm::dot(0.1f*By, Ax)));
-		bool comp3 = abs(glm::dot((position - arrows[i].getPosition()), L3)) > (abs(glm::dot(0.1f*Ax, Bx)) + abs(glm::dot(0.1f*Ay, Bx)) + abs(glm::dot(0.1f*Bx, Bx)) + abs(glm::dot(0.1f*By, Bx)));
-		bool comp4 = abs(glm::dot((position - arrows[i].getPosition()), L4)) > (abs(glm::dot(0.1f*Ax, By)) + abs(glm::dot(0.1f*Ay, By)) + abs(glm::dot(0.1f*Bx, By)) + abs(glm::dot(0.1f*By, By)));
+		By = L4; 
+		bool comp1 = abs(glm::dot((position - arrows[i].getPosition()), L1)) > (abs(glm::dot(0.15f*Ax, Ax)) + abs(glm::dot(0.15f*Ay, Ax)) + abs(glm::dot(0.1f*Bx, Ax)) + abs(glm::dot(0.1f*By, Ay)));
+		bool comp2 = abs(glm::dot((position - arrows[i].getPosition()), L2)) > (abs(glm::dot(0.15f*Ax, Ay)) + abs(glm::dot(0.15f*Ay, Ay)) + abs(glm::dot(0.1f*Bx, Ay)) + abs(glm::dot(0.1f*By, Ax)));
+		bool comp3 = abs(glm::dot((position - arrows[i].getPosition()), L3)) > (abs(glm::dot(0.15f*Ax, Bx)) + abs(glm::dot(0.15f*Ay, Bx)) + abs(glm::dot(0.1f*Bx, Bx)) + abs(glm::dot(0.1f*By, Bx)));
+		bool comp4 = abs(glm::dot((position - arrows[i].getPosition()), L4)) > (abs(glm::dot(0.15f*Ax, By)) + abs(glm::dot(0.15f*Ay, By)) + abs(glm::dot(0.1f*Bx, By)) + abs(glm::dot(0.1f*By, By)));
 
 		if ((!comp1 && !comp2 && !comp3 && !comp4)) {
 			//there was a collision that was detected properly

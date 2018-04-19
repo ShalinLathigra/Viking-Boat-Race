@@ -31,7 +31,7 @@ void ParticleSystem::renderWind(Shader & particleprogram, Car * A, glm::vec3 pla
 	glm::mat4 world = glm::mat4();
 
 	float k = glfwGetTime();
-	rot = glm::translate(rot, A->getPosition() + .1f * glm::vec3(cos(A->getRotationAmount() * 3.14159/180.0f), sin(A->getRotationAmount() * 3.14159 / 180.0f) , 0.0f) - playerOffset);
+	rot = glm::translate(rot, A->getPosition() + .15f * glm::vec3(cos(A->getRotationAmount() * 3.14159/180.0f), sin(A->getRotationAmount() * 3.14159 / 180.0f) , 0.0f) - playerOffset);
 	rot = glm::rotate(rot, A->getRotationAmount() + 45.0f, glm::vec3(0, 0, 1));
 	float scale = 0.025;
 	rot = glm::scale(rot, glm::vec3(scale, scale, scale));

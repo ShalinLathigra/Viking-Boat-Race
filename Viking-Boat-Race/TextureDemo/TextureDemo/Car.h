@@ -37,6 +37,7 @@ public:
 
 	inline void setPosition(glm::vec3 pos) { position = pos; }
 	inline float getRotationAmount() { return rotationAmount; }
+	inline void setRotationAmount(float rotIn) { rotationAmount = rotIn; }
 	void startFall();
 	void advanceFall(double deltaTime);
 	inline int isFalling() { return falling; }

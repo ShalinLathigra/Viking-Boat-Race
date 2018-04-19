@@ -279,8 +279,8 @@ int main(void){
 							player->money += (int)(2000.0f*(5.0f/(float)player->place));
 							if (player->place == 5) { player->money -= 3000; }
 							mode = SHOP; 
-							map = (map->id == map->id) ? &map1 : &map0;
-							//player->setCurrentLap(0);
+							map = (map->id == map0.id) ? &map1 : &map0;
+							player->setCurrentLap(0);
 						}
 					}
 
@@ -380,28 +380,17 @@ int main(void){
 				std::cout << "You have: " << player->money << "$" << std::endl;
 				cout << "Upgrades (type yes or no to answer):" << endl;
 				cout << "Increase weight ($"<<weightUpgrade*5000<<"):" << endl;
-<<<<<<< HEAD
 				player->position = map->getStartPosition(4);
-				enemies[0]->position = map->getStartPosition(0);
-				enemies[3]->position = map->getStartPosition(3);
-				enemies[2]->position = map->getStartPosition(2);
-				enemies[1]->position = map->getStartPosition(1);
-=======
-				player->position = map.getStartPosition(4);
-				enemies[0]->position = map.getStartPosition(0);
-				enemies[3]->position = map.getStartPosition(3);
-				enemies[2]->position = map.getStartPosition(2);
-				enemies[1]->position = map.getStartPosition(1);
 				player->shots = 0;
 				for (int i = 0; i < enemies.size(); i++) {
 					enemies[i]->setCurrentLap(0);
 					enemies[i]->setFlagIndex(0);
-					enemies[i]->setNextFlag(map.getFlag(0));
+					enemies[i]->setNextFlag(map->getFlag(0));
+					enemies[i]->setPosition(map->getStartPosition(i));
 				}
->>>>>>> 70bb809dcaaffb081b030df1436838a726fa53da
 				for (int i = 0; i < allCars.size(); i++) {
 					allCars[i]->speed = 0;
-					allCars[i]->rotationAmount = 90;
+					allCars[i]->setRotationAmount((map->id == 0) ? 90.0f : 180.0f);
 					//allCars[i]->velocity = glm::vec3(0, 0, 0);
 					allCars[i]->update(0.0f);
 					allCars[i]->render(shader, player->getPosition());
