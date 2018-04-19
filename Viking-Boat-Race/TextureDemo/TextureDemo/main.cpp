@@ -208,14 +208,12 @@ int main(void){
 			// Calculate delta time
 			if (mode == MENU)
 			{
-				std::cout << "A" << std::endl;
 				player->position = map.getStartPosition(4);
 				enemies[0]->position = map.getStartPosition(0);
 				enemies[3]->position = map.getStartPosition(3);
 				enemies[2]->position = map.getStartPosition(2);
 				enemies[1]->position = map.getStartPosition(1);
 
-				std::cout << "B" << std::endl;
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_P) == GLFW_PRESS)
 				{
 					mode = RACING;
