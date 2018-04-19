@@ -164,9 +164,6 @@ int Map::checkFinish(Car * A)
 		}
 	}
 
-	//std::cout << glm::distance(A->getPosition(), finalMarker) << " " << (glm::distance(A->getPosition(), finalMarker) > .5f) << std::endl;
-	//std::cout << "\n";
-
 	if (!done || glm::distance(A->getPosition(), finalMarker) > .5f)
 		return 0;
 
@@ -257,14 +254,16 @@ int Map::getNumLaps()
 Map::~Map()
 {
 }
-Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
-	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), topLeft(glm::vec3(-9.0f + 1.0f / 32.0f, 4.5f + 1.0f / 32.0f, 0.0f))
+Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, char * fileName, int idin)
+	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), topLeft(glm::vec3(-9.0f + 1.0f / 32.0f, 4.5f + 1.0f / 32.0f, 0.0f)), id(idin)
 {
+	//std::cout << id;
 	float yScale = 9.0f / 32.0f;
 	float xScale = 18.0f / 64.0f;
 
 	walls.push_back(Wall::Wall(glm::vec3(-9.0f + xScale * 11.0f, 4.5f - yScale * 11.5f, 0.0f), glm::vec3(xScale * 42.0f, yScale * 10.0f, 0.0f)));
-	populateData("map.txt");
+	//std::cout << "A: " << fileName << std::endl;
+	populateData(fileName);
 }
 
 Wall::Wall(glm::vec3 pos, glm::vec3 dim)

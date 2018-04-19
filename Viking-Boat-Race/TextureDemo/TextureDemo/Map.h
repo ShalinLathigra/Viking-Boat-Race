@@ -39,6 +39,7 @@ public:
 class Map : public GameEntity
 {
 private:
+	int id;
 	GLuint texture;
 	GLint numElements;
 	const glm::vec3 scale = glm::vec3(4.0f, 4.0f, 4.0f);
@@ -53,7 +54,7 @@ private:
 	const int numLaps = 3;
 	//const int numLaps = 1;
 public:
-	Map(glm::vec3 & entityPos, glm::vec3 & entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
+	Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, char * fileName, int idin);
 	~Map();
 
 	void update(double deltaTime) override;

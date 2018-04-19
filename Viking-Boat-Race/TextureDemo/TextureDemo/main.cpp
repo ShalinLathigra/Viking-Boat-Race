@@ -102,7 +102,7 @@ void setallTexture(void)
 {
 //	tex = new GLuint[3];
 	glGenTextures(10, tex);
-	setthisTexture(tex[0], "mapImage.png");
+	setthisTexture(tex[0], "mapImage0.png");
 	setthisTexture(tex[1], "Boat.png");
 	setthisTexture(tex[2], "otherBoat.png");
 	setthisTexture(tex[3], "orb.png");
@@ -111,6 +111,7 @@ void setallTexture(void)
 	setthisTexture(tex[6], "MainMenu.png");
 	setthisTexture(tex[7], "arrow.png");
 	setthisTexture(tex[8], "ballistaA1.png");
+	setthisTexture(tex[9], "mapImage1.png");
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
 
@@ -153,13 +154,18 @@ int main(void){
 		ParticleSystem windStream(.1f, tex[3]);
 
 		// Setup game objects
-		Map map = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 1.0f), 0.0f, tex[0], size);
+		Map map0 = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 1.0f), 0.0f, tex[0], size, "map0.txt", 0);
+		Map map1 = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 1.0f), 0.0f, tex[9], size, "map1.txt", 1);
+		
+		Map map = map1;
+
 		Car* player = new Car(map.getStartPosition(4), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[1], size, 12, 10,tex[7]);
 		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
 		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
 		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
 		Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
 		Ballista ballista = Ballista(tex[8], size);
+
 
         // Run the main loop
 		glm::vec3 position = glm::vec3();
@@ -202,12 +208,14 @@ int main(void){
 			// Calculate delta time
 			if (mode == MENU)
 			{
+				std::cout << "A" << std::endl;
 				player->position = map.getStartPosition(4);
 				enemies[0]->position = map.getStartPosition(0);
 				enemies[3]->position = map.getStartPosition(3);
 				enemies[2]->position = map.getStartPosition(2);
 				enemies[1]->position = map.getStartPosition(1);
 
+				std::cout << "B" << std::endl;
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_P) == GLFW_PRESS)
 				{
 					mode = RACING;
