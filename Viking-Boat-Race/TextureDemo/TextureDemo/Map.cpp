@@ -173,7 +173,7 @@ int Map::checkFinish(Car * A)
 		iter->z = 0.0f;
 	}
 
-	//std::cout << "current: " << A->getCurrentLap() << " total: " << numLaps << " current > total: " << (A->getCurrentLap() > numLaps) << std::endl;
+	std::cout << "current: " << A->getCurrentLap() << " total: " << numLaps << " current > total: " << (A->getCurrentLap() > numLaps) << std::endl;
 	if (A->getCurrentLap() > numLaps)
 	{
 		return 1;
