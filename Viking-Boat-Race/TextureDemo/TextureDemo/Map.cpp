@@ -41,7 +41,7 @@ void Map::populateData(char * fileName) {
 			{
 				float x = -9.0f + (data[data.size() - 1.0f].size() - 1.0f) / 64.0f * 18.0f;
 				float y = 4.5f - (data.size() - 1.0f) / 32.0f * 9.0f;
-				std::cout << x << ", " << y << std::endl;
+				//std::cout << x << ", " << y << std::endl;
 
 				if (*iter == '3')
 				{
@@ -95,9 +95,9 @@ Tile::TileProp Map::getPropertyUnder(Car * A)
 	Tile::TileProp ret = Tile::TileProp::WALL;
 	int col = (int)(64.0f * (A->getPosition().x + 9.0f) / 18.0f);		//x
 	int row = (int)(-32.0f * (A->getPosition().y - 4.5f) / 9.0f);		//y
-																		//std::cout << A->id << " ";
-																		//std::cout << data[0].size() << " " << col << " ";
-																		//std::cout << data.size() << " " << row << std::endl;
+																		////std::cout << A->id << " ";
+																		////std::cout << data[0].size() << " " << col << " ";
+																		////std::cout << data.size() << " " << row << std::endl;
 	if (row >= 0 && row < data.size() && col >= 0 && col < data[0].size()) {
 		ret = data[row][col].prop;
 	}
@@ -132,10 +132,10 @@ glm::vec3 Map::nearestFlag(glm::vec3 pos) {
 
 void Map::checkProgress(Car * A)
 {
-	//std::cout << "A" << std::endl;
+	////std::cout << "A" << std::endl;
 	for (std::vector<glm::vec3>::iterator iter = lapFlags.begin(); iter != lapFlags.end(); ++iter)
 	{
-		//std::cout << A->getPosition().x << ", " << A->getPosition().y << "		" << iter->x << ", " << iter->y << ": " << (glm::distance(A->getPosition(), *iter) < 3.5f) << std::endl;
+		////std::cout << A->getPosition().x << ", " << A->getPosition().y << "		" << iter->x << ", " << iter->y << ": " << (glm::distance(A->getPosition(), *iter) < 3.5f) << std::endl;
 		if (iter->z == 0)
 		{
 			if (glm::length(*iter - A->getPosition()) < 3.5f)
@@ -158,7 +158,6 @@ int Map::checkFinish(Car * A)
 	float done = 1;
 	for (std::vector<glm::vec3>::iterator iter = lapFlags.begin(); iter != lapFlags.end(); ++iter)
 	{
-		//std::cout << iter->z << ",";
 		if (iter->z < 1.0f)
 		{
 			done = 0;
@@ -217,7 +216,7 @@ void Map::calculateCarCollisions(Car * A)
 		int xWithinRange = wall->getOrigin().x < A->getPosition().x && A->getPosition().x < wall->getOrigin().x + wall->getDimensions().x;
 		int yWithinRange = wall->getOrigin().y > A->getPosition().y && A->getPosition().y > wall->getOrigin().y - wall->getDimensions().y;
 
-		//std::cout << "TOP: " << distToTop << ", BOT: " << distToBot << std::endl;
+		////std::cout << "TOP: " << distToTop << ", BOT: " << distToBot << std::endl;
 
 		if (minimumDist < COLLISION_DISTANCE)
 		{

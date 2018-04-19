@@ -48,7 +48,6 @@ private:
 	std::map<int, glm::vec3> startPositions;
 	std::map<int, glm::vec3> aiFlags;
 
-
 	std::vector<glm::vec3> lapFlags;
 	glm::vec3 finalMarker;
 	const int numLaps = 3;
