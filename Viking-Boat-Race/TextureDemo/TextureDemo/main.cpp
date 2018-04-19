@@ -157,13 +157,13 @@ int main(void){
 		Map map0 = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 1.0f), 0.0f, tex[0], size, "map0.txt", 0);
 		Map map1 = Map::Map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(18.0f, 9.0f, 1.0f), 0.0f, tex[9], size, "map1.txt", 1);
 		
-		Map map = map1;
+		Map * map = &map0;
 
-		Car* player = new Car(map.getStartPosition(4), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[1], size, 12, 10,tex[7]);
-		Opponent* enemy0 = new Opponent(map.getStartPosition(0), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
-		Opponent* enemy1 = new Opponent(map.getStartPosition(1), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
-		Opponent* enemy2 = new Opponent(map.getStartPosition(2), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
-		Opponent* enemy3 = new Opponent(map.getStartPosition(3), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map.getFlag(0), 20, tex[7]);
+		Car* player = new Car(map->getStartPosition(4), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[1], size, 12, 10,tex[7]);
+		Opponent* enemy0 = new Opponent(map->getStartPosition(0), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map->getFlag(0), 20, tex[7]);
+		Opponent* enemy1 = new Opponent(map->getStartPosition(1), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map->getFlag(0), 20, tex[7]);
+		Opponent* enemy2 = new Opponent(map->getStartPosition(2), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map->getFlag(0), 20, tex[7]);
+		Opponent* enemy3 = new Opponent(map->getStartPosition(3), glm::vec3(0.15f, 0.15f, 0.1f), 90.0f, tex[2], size, 12, 10, map->getFlag(0), 20, tex[7]);
 		Ballista ballista = Ballista(tex[8], size);
 
 
@@ -208,11 +208,11 @@ int main(void){
 			// Calculate delta time
 			if (mode == MENU)
 			{
-				player->position = map.getStartPosition(4);
-				enemies[0]->position = map.getStartPosition(0);
-				enemies[3]->position = map.getStartPosition(3);
-				enemies[2]->position = map.getStartPosition(2);
-				enemies[1]->position = map.getStartPosition(1);
+				player->position = map->getStartPosition(4);
+				enemies[0]->position = map->getStartPosition(0);
+				enemies[3]->position = map->getStartPosition(3);
+				enemies[2]->position = map->getStartPosition(2);
+				enemies[1]->position = map->getStartPosition(1);
 
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_P) == GLFW_PRESS)
 				{
@@ -269,8 +269,8 @@ int main(void){
 						space = true;
 					}
 
-					map.checkProgress(player);
-					if (map.checkFinish(player) > 0) 
+					map->checkProgress(player);
+					if (map->checkFinish(player) > 0) 
 					{
 						if (player->place == 0) {
 							player->place = placeSystem;
@@ -279,6 +279,8 @@ int main(void){
 							player->money += (int)(2000.0f*(5.0f/(float)player->place));
 							if (player->place == 5) { player->money -= 3000; }
 							mode = SHOP; 
+							map = (map->id == map->id) ? &map1 : &map0;
+							//player->setCurrentLap(0);
 						}
 					}
 
@@ -297,13 +299,13 @@ int main(void){
 						if (result == 1)//If we need to set a new flag
 						{
 							enemies[i]->setFlagIndex(enemies[i]->getFlagIndex() + 1);
-							if (enemies[i]->getFlagIndex() >= map.getMaxFlags())
+							if (enemies[i]->getFlagIndex() >= map->getMaxFlags())
 							{
 								enemies[i]->setFlagIndex(0);
 								enemies[i]->setCurrentLap(enemies[i]->getCurrentLap() + 1);
 
-								std::cout << enemies[i]->getCurrentLap() << ", " << map.getNumLaps() << ": " << (enemies[i]->getCurrentLap() > map.getNumLaps()) << std::endl;
-								if (enemies[i]->getCurrentLap() > map.getNumLaps())
+								std::cout << enemies[i]->getCurrentLap() << ", " << map->getNumLaps() << ": " << (enemies[i]->getCurrentLap() > map->getNumLaps()) << std::endl;
+								if (enemies[i]->getCurrentLap() > map->getNumLaps())
 								{
 									if (enemies[i]->place == 0) {
 										enemies[i]->place = placeSystem;
@@ -318,7 +320,7 @@ int main(void){
 							//This all just adds slight variation to the points the AI are targeting so they don't follow each other//
 							double diffx = rand() % 30 - 15;
 							double diffy = rand() % 30 - 15;
-							glm::vec3 newFlag = map.getFlag(enemies[i]->getFlagIndex());
+							glm::vec3 newFlag = map->getFlag(enemies[i]->getFlagIndex());
 							newFlag.x += diffx / 100;
 							newFlag.y += diffy / 100;
 							enemies[i]->setNextFlag(newFlag);
@@ -329,8 +331,8 @@ int main(void){
 					allCars[i]->checkCollisions(allCars, deltaTime);
 					allCars[i]->boxCollisions(allCars, deltaTime);
 					//get property + setValues
-					if (map.getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
-						map.calculateCarCollisions(allCars[i]);
+					if (map->getPropertyUnder(allCars[i]) == Tile::TileProp::WALL) {
+						map->calculateCarCollisions(allCars[i]);
 					}
 					allCars[i]->update(deltaTime);
 					allCars[i]->render(shader, player->getPosition());
@@ -361,12 +363,12 @@ int main(void){
 				shader.AttributeBinding();
 
 
-				map.setPosition(player->getPosition());
+				map->setPosition(player->getPosition());
 
 				//std::cout << "Player Pos: " << player->getPosition().x << ", " << player->getPosition().y << std::endl;
 				
 
-				map.render(shader);
+				map->render(shader);
 
 				// Update other events like input handling
 				glfwPollEvents();
@@ -378,11 +380,11 @@ int main(void){
 				std::cout << "You have: " << player->money << "$" << std::endl;
 				cout << "Upgrades (type yes or no to answer):" << endl;
 				cout << "Increase weight ($"<<weightUpgrade*5000<<"):" << endl;
-				player->position = map.getStartPosition(4);
-				enemies[0]->position = map.getStartPosition(0);
-				enemies[3]->position = map.getStartPosition(3);
-				enemies[2]->position = map.getStartPosition(2);
-				enemies[1]->position = map.getStartPosition(1);
+				player->position = map->getStartPosition(4);
+				enemies[0]->position = map->getStartPosition(0);
+				enemies[3]->position = map->getStartPosition(3);
+				enemies[2]->position = map->getStartPosition(2);
+				enemies[1]->position = map->getStartPosition(1);
 				for (int i = 0; i < allCars.size(); i++) {
 					allCars[i]->speed = 0;
 					allCars[i]->rotationAmount = 90;

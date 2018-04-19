@@ -21,7 +21,7 @@ class Tile
 {
 protected:
 public:
-	enum class TileProp {
+	enum TileProp {
 		ROAD, ROUGH, RAMP, WALL, HOLE, SLICK
 	};
 	TileProp prop;
@@ -39,7 +39,6 @@ public:
 class Map : public GameEntity
 {
 private:
-	int id;
 	GLuint texture;
 	GLint numElements;
 	const glm::vec3 scale = glm::vec3(4.0f, 4.0f, 4.0f);
@@ -54,8 +53,11 @@ private:
 	const int numLaps = 3;
 	//const int numLaps = 1;
 public:
-	Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, char * fileName, int idin);
+	//Map &Map::operator=(const Map & aMap);
+	Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, char * fileName, int idin);
 	~Map();
+
+	int id;
 
 	void update(double deltaTime) override;
 	void setPosition(glm::vec3 pos);

@@ -53,6 +53,7 @@ public:
 
 	inline void nextLap() { currentLap++; }
 	inline int getCurrentLap() { return currentLap; }
+	inline void setCurrentLap(int newLap) { currentLap = newLap; }
 	float mass;
 	float MAX_SPEED = 25.0f;
 protected:

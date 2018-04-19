@@ -95,9 +95,9 @@ Tile::TileProp Map::getPropertyUnder(Car * A)
 	Tile::TileProp ret = Tile::TileProp::WALL;
 	int col = (int)(64.0f * (A->getPosition().x + 9.0f) / 18.0f);		//x
 	int row = (int)(-32.0f * (A->getPosition().y - 4.5f) / 9.0f);		//y
-																		////std::cout << A->id << " ";
-																		////std::cout << data[0].size() << " " << col << " ";
-																		////std::cout << data.size() << " " << row << std::endl;
+																		//////std::cout << A->id << " ";
+																		//////std::cout << data[0].size() << " " << col << " ";
+																		//////std::cout << data.size() << " " << row << std::endl;
 	if (row >= 0 && row < data.size() && col >= 0 && col < data[0].size()) {
 		ret = data[row][col].prop;
 	}
@@ -132,22 +132,22 @@ glm::vec3 Map::nearestFlag(glm::vec3 pos) {
 
 void Map::checkProgress(Car * A)
 {
-	////std::cout << "A" << std::endl;
+	//////std::cout << "A" << std::endl;
 	for (std::vector<glm::vec3>::iterator iter = lapFlags.begin(); iter != lapFlags.end(); ++iter)
 	{
-		////std::cout << A->getPosition().x << ", " << A->getPosition().y << "		" << iter->x << ", " << iter->y << ": " << (glm::distance(A->getPosition(), *iter) < 3.5f) << std::endl;
+		//////std::cout << A->getPosition().x << ", " << A->getPosition().y << "		" << iter->x << ", " << iter->y << ": " << (glm::distance(A->getPosition(), *iter) < 3.5f) << std::endl;
 		if (iter->z == 0)
 		{
 			if (glm::length(*iter - A->getPosition()) < 3.5f)
 			{
 				iter->z = 1;
 
-				std::cout << "Progress: (";
+				//std::cout << "Progress: (";
 				for (std::vector<glm::vec3>::iterator iter = lapFlags.begin(); iter != lapFlags.end(); ++iter)
 				{
-					std::cout << iter->z << ",";
+					//std::cout << iter->z << ",";
 				}
-				std::cout << ")\n";
+				//std::cout << ")\n";
 			}
 		}
 	}
@@ -173,7 +173,7 @@ int Map::checkFinish(Car * A)
 		iter->z = 0.0f;
 	}
 
-	std::cout << "current: " << A->getCurrentLap() << " total: " << numLaps << " current > total: " << (A->getCurrentLap() > numLaps) << std::endl;
+	//std::cout << "current: " << A->getCurrentLap() << " total: " << numLaps << " current > total: " << (A->getCurrentLap() > numLaps) << std::endl;
 	if (A->getCurrentLap() > numLaps)
 	{
 		return 1;
@@ -213,7 +213,7 @@ void Map::calculateCarCollisions(Car * A)
 		int xWithinRange = wall->getOrigin().x < A->getPosition().x && A->getPosition().x < wall->getOrigin().x + wall->getDimensions().x;
 		int yWithinRange = wall->getOrigin().y > A->getPosition().y && A->getPosition().y > wall->getOrigin().y - wall->getDimensions().y;
 
-		////std::cout << "TOP: " << distToTop << ", BOT: " << distToBot << std::endl;
+		//////std::cout << "TOP: " << distToTop << ", BOT: " << distToBot << std::endl;
 
 		if (minimumDist < COLLISION_DISTANCE)
 		{
@@ -257,12 +257,12 @@ Map::~Map()
 Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, char * fileName, int idin)
 	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), topLeft(glm::vec3(-9.0f + 1.0f / 32.0f, 4.5f + 1.0f / 32.0f, 0.0f)), id(idin)
 {
-	//std::cout << id;
+	////std::cout << id;
 	float yScale = 9.0f / 32.0f;
 	float xScale = 18.0f / 64.0f;
 
 	walls.push_back(Wall::Wall(glm::vec3(-9.0f + xScale * 11.0f, 4.5f - yScale * 11.5f, 0.0f), glm::vec3(xScale * 42.0f, yScale * 10.0f, 0.0f)));
-	//std::cout << "A: " << fileName << std::endl;
+	////std::cout << "A: " << fileName << std::endl;
 	populateData(fileName);
 }
 
