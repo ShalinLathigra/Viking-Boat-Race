@@ -6,6 +6,7 @@ int Car::carNum = 0;
 Car::Car(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, float m, int h, GLuint arrow)
 	:GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), jumpTimer(0), scaleMod(1.0f), falling(0)
 {
+	shots = 0;
 	id = carNum;
 	speed = 0;
 	health = h;
@@ -103,7 +104,7 @@ void Car::boxCollisions(std::vector<Car*> cars, float)
 		Bx = L3;
 		By = L4;
 		bool comp1 = abs(glm::dot((cars[i]->position - position), L1)) > (abs(glm::dot(0.05f*Ax, Ax)) + abs(glm::dot(0.05f*Ay, Ax)) + abs(glm::dot(0.05f*Bx, Ax)) + abs(glm::dot(0.05f*By, Ay)));
-		bool comp2 = abs(glm::dot((cars[i]->position - position), L2)) > (abs(glm::dot(0.05f*Ax, Ay)) + abs(glm::dot(0.05f*Ay, Ay)) + abs(glm::dot(0.05f*Bx, Ay)) + abs(glm::dot(0.05f*By, Ay)));
+		bool comp2 = abs(glm::dot((cars[i]->position - position), L2)) > (abs(glm::dot(0.05f*Ax, Ay)) + abs(glm::dot(0.05f*Ay, Ay)) + abs(glm::dot(0.05f*Bx, Ay)) + abs(glm::dot(0.05f*By, Ax)));
 		bool comp3 = abs(glm::dot((cars[i]->position - position), L3)) > (abs(glm::dot(0.05f*Ax, Bx)) + abs(glm::dot(0.05f*Ay, Bx)) + abs(glm::dot(0.05f*Bx, Bx)) + abs(glm::dot(0.05f*By, Bx)));
 		bool comp4 = abs(glm::dot((cars[i]->position - position), L4)) > (abs(glm::dot(0.05f*Ax, By)) + abs(glm::dot(0.05f*Ay, By)) + abs(glm::dot(0.05f*Bx, By)) + abs(glm::dot(0.05f*By, By)));
 
@@ -139,9 +140,9 @@ void Car::turn(int d, float deltaTime) {
 
 void Car::attack(float dir, std::vector<Arrow>& arrows)
 {
-	
-		arrows.push_back(Arrow(position, scale, dir+rotationAmount, numElements, 2, 10, 0.1f, 0.02f, this->id, arrowTex));
-	
+	if (shots < 15) {
+		arrows.push_back(Arrow(position, scale, dir + rotationAmount, numElements, 2, 10, 0.1f, 0.02f, this->id, arrowTex));
+	}
 }
 
 
@@ -162,7 +163,7 @@ int Car::checkArrows(std::vector<Arrow>& arrows)
 		Bx = L3;
 		By = L4;
 		bool comp1 = abs(glm::dot((position- arrows[i].getPosition()), L1)) > (abs(glm::dot(0.1f*Ax, Ax)) + abs(glm::dot(0.1f*Ay, Ax)) + abs(glm::dot(0.1f*Bx, Ax)) + abs(glm::dot(0.1f*By, Ay)));
-		bool comp2 = abs(glm::dot((position - arrows[i].getPosition()), L2)) > (abs(glm::dot(0.1f*Ax, Ay)) + abs(glm::dot(0.1f*Ay, Ay)) + abs(glm::dot(0.1f*Bx, Ay)) + abs(glm::dot(0.1f*By, Ay)));
+		bool comp2 = abs(glm::dot((position - arrows[i].getPosition()), L2)) > (abs(glm::dot(0.1f*Ax, Ay)) + abs(glm::dot(0.1f*Ay, Ay)) + abs(glm::dot(0.1f*Bx, Ay)) + abs(glm::dot(0.1f*By, Ax)));
 		bool comp3 = abs(glm::dot((position - arrows[i].getPosition()), L3)) > (abs(glm::dot(0.1f*Ax, Bx)) + abs(glm::dot(0.1f*Ay, Bx)) + abs(glm::dot(0.1f*Bx, Bx)) + abs(glm::dot(0.1f*By, Bx)));
 		bool comp4 = abs(glm::dot((position - arrows[i].getPosition()), L4)) > (abs(glm::dot(0.1f*Ax, By)) + abs(glm::dot(0.1f*Ay, By)) + abs(glm::dot(0.1f*Bx, By)) + abs(glm::dot(0.1f*By, By)));
 

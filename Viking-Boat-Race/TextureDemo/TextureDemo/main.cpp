@@ -380,11 +380,25 @@ int main(void){
 				std::cout << "You have: " << player->money << "$" << std::endl;
 				cout << "Upgrades (type yes or no to answer):" << endl;
 				cout << "Increase weight ($"<<weightUpgrade*5000<<"):" << endl;
+<<<<<<< HEAD
 				player->position = map->getStartPosition(4);
 				enemies[0]->position = map->getStartPosition(0);
 				enemies[3]->position = map->getStartPosition(3);
 				enemies[2]->position = map->getStartPosition(2);
 				enemies[1]->position = map->getStartPosition(1);
+=======
+				player->position = map.getStartPosition(4);
+				enemies[0]->position = map.getStartPosition(0);
+				enemies[3]->position = map.getStartPosition(3);
+				enemies[2]->position = map.getStartPosition(2);
+				enemies[1]->position = map.getStartPosition(1);
+				player->shots = 0;
+				for (int i = 0; i < enemies.size(); i++) {
+					enemies[i]->setCurrentLap(0);
+					enemies[i]->setFlagIndex(0);
+					enemies[i]->setNextFlag(map.getFlag(0));
+				}
+>>>>>>> 70bb809dcaaffb081b030df1436838a726fa53da
 				for (int i = 0; i < allCars.size(); i++) {
 					allCars[i]->speed = 0;
 					allCars[i]->rotationAmount = 90;
